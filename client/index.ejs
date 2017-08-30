@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= htmlWebpackPlugin.options.title %></title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0" />
+    <style>
+body { font-family: Tahoma, Geneva, sans-serif; text-align: center; }
+.flex {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-around;
+}
+    </style>
+
+    <!-- dummy Symbol polyfill -->
+    <script>if (typeof(Symbol)==="undefined") { window.Symbol = function(arg) { return arg; } }</script>
+
+  </head>
+  <body>
+    <div class="flex">
+      <div class="">
+        <h3>Messages</h3>
+
+        <form id="form">
+          <input type="text" id="input" value="" />
+          <input type="submit" value="send" />
+        </form>
+
+        <div id="messages"></div>
+      </div>
+
+      <div class="">
+        <h3>Clients</h3>
+        <div id="clients"></div>
+      </div>
+    </div>
+  </body>
+</html>
