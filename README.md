@@ -13,3 +13,5 @@ Run the webpack-dev-server for the client-side code in the other terminal:
 Node server with WebSockets runs at `localhost:2657`
 
 You want to open `localhost:8080` in the browser!
+
+Directory `/static` contains html and js files bundled by webpack.
