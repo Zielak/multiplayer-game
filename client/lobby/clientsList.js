@@ -1,6 +1,5 @@
 const React = require('react')
 const PropTypes = require('prop-types')
-// const ReactDOM = require('react-dom')
 
 class ClientsList extends React.Component {
 
