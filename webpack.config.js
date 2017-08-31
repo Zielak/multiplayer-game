@@ -7,6 +7,16 @@ module.exports = {
     filename: 'index.js',
     path: path.resolve(__dirname, 'static')
   },
+  devtool: 'inline-source-map',
+  module: {
+    loaders: [
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        loaders: ['babel-loader'],
+      }
+    ],
+  },
   plugins: [
     new HtmlWebpackPlugin({
       template: 'client/index.ejs'

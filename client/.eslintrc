@@ -1,0 +1,16 @@
+{
+  "env": {
+    "es6": true,
+    "browser": true
+  },
+  "extends": ["plugin:react/recommended"],
+  "plugins": [
+    "react"
+  ],
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  }
+}
