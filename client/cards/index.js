@@ -2,11 +2,7 @@ const React = require('react')
 const PropTypes = require('prop-types')
 const Redux = require('redux')
 
-const ClientsList = require('./clientsList')
-const Messages = require('./messages')
-
-// TODO: don't load styles when not in view?
-require('./styles.css')
+// require('./styles.css')
 
 const messages = (state = [], action) => {
   switch (action.type) {
@@ -56,13 +52,12 @@ const clients = (state = [], action) => {
   }
 }
 
-const lobbyApp = Redux.combineReducers({
-  clients,
-  messages
+const cardsApp = Redux.combineReducers({
+  
 })
-const store = Redux.createStore(lobbyApp)
+const store = Redux.createStore(cardsApp)
 
-class Lobby extends React.Component{
+class Cards extends React.Component{
   constructor(props) {
     super(props)
     // Listen for initial state
@@ -99,31 +94,20 @@ class Lobby extends React.Component{
         message: change.value
       })
     })
-
-    // store.subscribe(() => {
-    //   this.render()
-    // })
   }
 
   render() {
     return (
       <div className="flex">
-        <Messages
-          messages={store.getState().messages}
-          sendMessageHandler={message => {
-            this.props.room.send({ message })
-          }}
-        ></Messages>
-        <ClientsList
-          clients={store.getState().clients}
-        ></ClientsList>
+        <PlayersList players={store.getState().players} />
+        
       </div>
     )
   }
 }
 
-Lobby.propTypes = {
+Cards.propTypes = {
   room: PropTypes.object
 }
 
-module.exports = Lobby
+module.exports = Cards

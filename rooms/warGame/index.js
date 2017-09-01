@@ -4,15 +4,19 @@ const isValidMessage = text => {
   return (''+text).length > 0
 }
 
-module.exports = class Lobby extends colyseus.Room {
+module.exports = class WarGame extends colyseus.Room {
 
   onInit(options) {
     this.setState({
-      messages: [],
       clients: [],
-      gameRooms: [],
+      maxClients: options.maxClients,
+      host: options.host,
     })
-    console.log('Lobby created!', options)
+    console.log('ChatRoom created!', options)
+  }
+
+  requestJoin(options) {
+    return this.clients.length < this.state.maxClients
   }
 
   onJoin(client) {
@@ -37,12 +41,12 @@ module.exports = class Lobby extends colyseus.Room {
         text: data.message,
         client: client.id
       })
-      console.log('Lobby:', client.id, data.message)
+      console.log('WarGame:', client.id, data.message)
     }
   }
 
   onDispose() {
-    console.log('Dispose Lobby')
+    console.log('Dispose WarGame')
   }
 
 }
