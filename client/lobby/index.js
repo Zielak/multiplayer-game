@@ -1,10 +1,21 @@
 const React = require('react')
 const PropTypes = require('prop-types')
-const ReactDOM = require('react-dom')
 const Redux = require('redux')
 
 const ClientsList = require('./clientsList')
 const Messages = require('./messages')
+
+const initReducer = (state = {}, action) => {
+  if(action.type === 'init'){
+    return {
+      ...state,
+      messaages: action.messages,
+      clients: action.clients,
+    }
+  }else{
+    return state
+  }
+}
 
 const messages = (state = [], action) => {
   switch (action.type) {
@@ -13,7 +24,7 @@ const messages = (state = [], action) => {
     case 'message.remove':
       return [
         ...state.slice(0, action.message.idx),
-        ...state.concat(state.slice(action.message.idx + 1))
+        ...state.slice(action.message.idx + 1)
       ]
     case 'message.replace':
       return state.map((message) => {
@@ -37,11 +48,11 @@ const clients = (state = [], action) => {
     case 'client.remove':
       return [
         ...state.slice(0, action.client.idx),
-        ...state.concat(state.slice(action.client.idx + 1))
+        ...state.slice(action.client.idx + 1)
       ]
     case 'client.replace':
       return state.map((client) => {
-        if(action.client.key !== client.key){
+        if(action.client.idx !== client.idx){
           return client
         }
         return {
@@ -63,6 +74,21 @@ const store = Redux.createStore(lobbyApp)
 class Lobby extends React.Component{
   constructor(props) {
     super(props)
+    // Listen for initial state
+    props.room.onUpdate.addOnce(state => {
+      console.log('initial lobby data:', state)
+      state.clients.forEach((el, idx) => store.dispatch({
+        type: 'client.add',
+        client: {
+          idx, name: el
+        },
+      }))
+      state.messages.forEach(el => store.dispatch({
+        type: 'message.add',
+        message: el,
+      }))
+    })
+
     // listen to patches coming from the server
     props.room.listen('clients/:number', (change) => {
       console.log('new client change arrived: ', change)
@@ -83,34 +109,9 @@ class Lobby extends React.Component{
       })
     })
 
-    props.room.onUpdate.addOnce(state => {
-      state.clients.forEach((el, idx) => store.dispatch({
-        type: 'client.add',
-        client: {
-          idx: idx,
-          name: el,
-        }
-      }), this)
-    })
-
-    store.subscribe(this.render)
-  }
-
-  add(key, name) {
-    const p = document.createElement('p')
-    p.innerHTML = name
-    p.id = 'client_' + key
-    this.element.appendChild(p)
-  }
-
-  replace(key, name) {
-    const el = document.getElementById('client_' + key)
-    el.innerHTML = name
-    el.id = 'client_' + key
-  }
-
-  remove(key) {
-    document.getElementById('client_' + key).remove()
+    // store.subscribe(() => {
+    //   this.render()
+    // })
   }
 
   render() {
@@ -118,6 +119,9 @@ class Lobby extends React.Component{
       <div className="flex">
         <Messages
           messages={store.getState().messages}
+          sendMessageHandler={message => {
+            this.props.room.send({ message })
+          }}
         ></Messages>
         <ClientsList
           clients={store.getState().clients}

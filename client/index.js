@@ -11,17 +11,18 @@ const client = new Colyseus.Client('ws://' + host + (location.port ? ':'+2657 : 
 
 const chatRoom = client.join('chat')
 
-chatRoom.onUpdate.addOnce(function(state) {
-  console.log('initial room data:', state)
+const render = () => {
+  console.log('RENDER')
   ReactDOM.render(
     <Lobby room={chatRoom}/>,
     document.getElementById('root')
   )
-})
+}
+render()
 
 // new room state
 chatRoom.onUpdate.add(function(state) {
-  console.log(`state updated`, state)
+  render()
 })
 
 // chatRoom.listen(function(change) {

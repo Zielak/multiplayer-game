@@ -14,16 +14,16 @@ class ClientsList extends React.Component {
 
   renderList() {
     return (
-      this.props.clients.map((client) => {
-        return this.renderClient(client)
+      this.props.clients.map((client, idx) => {
+        return this.renderClient(client, idx)
       })
     )
   }
 
-  renderClient(props) {
+  renderClient(props, key) {
     return (
-      <div name={props.name} id={`client_${props.key}`}>
-        {props.key}. {props.name}
+      <div key={key} name={props.name} id={`client_${props.idx}`}>
+        {props.idx}. {props.name}
       </div>
     )
   }

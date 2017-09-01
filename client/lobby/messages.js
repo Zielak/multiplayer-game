@@ -3,29 +3,22 @@ const PropTypes = require('prop-types')
 
 class Messages extends React.Component {
 
-  // send data to room on submit
-  // FIXME: I SCREAM FOR ATTENTION
-  document.getElementById('form').onsubmit = function(e) {
-    e.preventDefault()
-
-    const input = document.getElementById('input')
-
-    // send data to room
-    chatRoom.send({ message: input.value })
-
-    // clear input
-    input.value = ''
-  }
-
-
   render() {
     return (
       <div>
         <h3>Messages</h3>
 
         <form id="form">
-          <input type="text" id="input" value="" />
-          <input type="submit" value="send" />
+          <input type="text"
+            ref={input => { this.textInput = input }}
+          />
+          <button onClick={e => {
+            e.preventDefault()
+            this.props.sendMessageHandler(this.textInput.value)
+            this.textInput.value = ''
+          }}>
+            SEND
+          </button>
         </form>
 
         {this.renderList()}
@@ -36,25 +29,30 @@ class Messages extends React.Component {
   renderList() {
     return (
       <div className="messages-list">
-        {this.props.messages.map((message) => {
-          return this.renderMessage(message)
+        {this.props.messages.map((message, idx) => {
+          return this.renderMessage(message, idx)
         })}
       </div>
     )
   }
 
-  renderClient(props) {
+  renderMessage(props, key){
+    const client = props.client ?
+      <span><strong className="client">{props.client}</strong>: </span> :
+      ''
     return (
-      <div>
-        <strong>{props.client}</strong>: {props.text}
-      </div>
+      <p key={key}>
+        {client}
+        {props.text}
+      </p>
     )
   }
 
 }
 
 Messages.propTypes = {
-  messages: PropTypes.array
+  messages: PropTypes.array,
+  sendMessageHandler: PropTypes.func,
 }
 
 module.exports = Messages
