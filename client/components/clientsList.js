@@ -6,7 +6,7 @@ class ClientsList extends React.Component {
   render() {
     return (
       <div className="">
-        <h3>Clients</h3>
+        <h3>{this.props.title}</h3>
         {this.renderList()}
       </div>
     )
@@ -14,24 +14,19 @@ class ClientsList extends React.Component {
 
   renderList() {
     return (
-      this.props.clients.map((client, idx) => {
-        return this.renderClient(client, idx)
+      this.props.clients.map((client) => {
+        return <div key={client.idx}>
+          {client.idx}. {client.name}
+        </div>
       })
-    )
-  }
-
-  renderClient(props, key) {
-    return (
-      <div key={key} name={props.name} id={`client_${props.idx}`}>
-        {props.idx}. {props.name}
-      </div>
     )
   }
 
 }
 
 ClientsList.propTypes = {
-  clients: PropTypes.array
+  clients: PropTypes.array,
+  title: PropTypes.string,
 }
 
 module.exports = ClientsList

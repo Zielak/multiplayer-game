@@ -19,7 +19,8 @@ const httpServer = http.createServer(app)
 const gameServer = new colyseus.Server({ server: httpServer })
 
 // Register Lobby as 'lobby'
-gameServer.register('lobby', Lobby)
+// gameServer.register('lobby', Lobby)
+gameServer.register('warGame', WarGame)
 
 app.use(express.static(path.join(__dirname, 'static')))
 app.use('/', serveIndex(path.join(__dirname, 'static'), {'icons': true}))

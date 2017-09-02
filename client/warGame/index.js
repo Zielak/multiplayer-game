@@ -2,33 +2,11 @@ const React = require('react')
 const PropTypes = require('prop-types')
 const Redux = require('redux')
 
+const PlayersList = require('../components/clientsList')
+
 // require('./styles.css')
 
-const messages = (state = [], action) => {
-  switch (action.type) {
-    case 'message.add':
-      return [...state, action.message]
-    case 'message.remove':
-      return [
-        ...state.slice(0, action.message.idx),
-        ...state.slice(action.message.idx + 1)
-      ]
-    case 'message.replace':
-      return state.map((message) => {
-        if(action.message.key !== message.key){
-          return message
-        }
-        return {
-          ...message,
-          name: action.message.name
-        }
-      })
-    default:
-      return state
-  }
-}
-
-const clients = (state = [], action) => {
+const players = (state = [], action) => {
   switch (action.type) {
     case 'client.add':
       return [...state, action.client]
@@ -39,7 +17,7 @@ const clients = (state = [], action) => {
       ]
     case 'client.replace':
       return state.map((client) => {
-        if(action.client.idx !== client.idx){
+        if (action.client.idx !== client.idx) {
           return client
         }
         return {
@@ -52,12 +30,25 @@ const clients = (state = [], action) => {
   }
 }
 
+const gameState = (state, action) => {
+  if (state === undefined) {
+    return {
+      started: false,
+    }
+  } else {
+    return state
+  }
+}
+
 const cardsApp = Redux.combineReducers({
-  
+  players,
+  gameState,
 })
+
 const store = Redux.createStore(cardsApp)
 
-class Cards extends React.Component{
+class Cards extends React.Component {
+
   constructor(props) {
     super(props)
     // Listen for initial state
@@ -68,10 +59,6 @@ class Cards extends React.Component{
         client: {
           idx, name: el
         },
-      }))
-      state.messages.forEach(el => store.dispatch({
-        type: 'message.add',
-        message: el,
       }))
     })
 
@@ -87,22 +74,29 @@ class Cards extends React.Component{
       })
     })
 
-    props.room.listen('messages/:number', function(change) {
-      console.log('new message change arrived: ', change)
-      store.dispatch({
-        type: 'message.' + change.operation,
-        message: change.value
-      })
+    props.room.listen('game.start', () => {
+      console.log('game.start!? ', arguments)
     })
   }
 
   render() {
     return (
       <div className="flex">
-        <PlayersList players={store.getState().players} />
-        
+        <div>
+          <button onClick={()=>this.initGameHandler()}>
+            Maybe START?
+          </button>
+        </div>
+        <PlayersList
+          title="Players"
+          clients={store.getState().players}
+        ></PlayersList>
       </div>
     )
+  }
+
+  initGameHandler(){
+    this.props.room.send({action: 'init'})
   }
 }
 

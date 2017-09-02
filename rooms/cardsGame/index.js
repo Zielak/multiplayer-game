@@ -7,5 +7,6 @@ module.exports = {
   Hand: require('./hand'),
   Pile: require('./pile'),
   Player: require('./player'),
+  PlayersTurn: require('./playersTurn'),
   Row: require('./row'),
 }

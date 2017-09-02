@@ -2,7 +2,7 @@ const React = require('react')
 const PropTypes = require('prop-types')
 const Redux = require('redux')
 
-const ClientsList = require('./clientsList')
+const ClientsList = require('./../components/clientsList')
 const Messages = require('./messages')
 
 // TODO: don't load styles when not in view?
@@ -115,6 +115,7 @@ class Lobby extends React.Component{
           }}
         ></Messages>
         <ClientsList
+          title="Clients"
           clients={store.getState().clients}
         ></ClientsList>
       </div>

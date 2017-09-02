@@ -1,5 +1,5 @@
 const colyseus = require('colyseus')
-const Cards = require('./cards/index')
+const Cards = require('./cardsGame/index')
 
 module.exports = class MonstrousEscape extends colyseus.Room {
 

@@ -5,27 +5,39 @@ const ReactDOM = require('react-dom')
 require('./styles.css')
 
 const Lobby = require('./lobby/index')
-const Cards = require('./cards/index')
+const WarGame = require('./warGame/index')
 
 // === === === === === === == = -
 
 const host = window.document.location.host.replace(/:.*/, '')
 const client = new Colyseus.Client('ws://' + host + (location.port ? ':'+2657 : ''))
 
-const chatRoom = client.join('chat')
-const cardsRoom = client.join('cards')
+let page = 'warGame'
+// const chatRoom = client.join('lobby')
+const warGameRoom = client.join('warGame')
 
 const render = () => {
   console.log('RENDER')
-  ReactDOM.render(
-    <Lobby room={chatRoom}/>,
-    document.getElementById('root')
-  )
+  switch(page){
+    case 'warGame':
+      ReactDOM.render(
+        <WarGame room={warGameRoom}/>,
+        document.getElementById('root')
+      )
+      break
+    default:
+      /*ReactDOM.render(
+        <Lobby room={chatRoom}/>,
+        document.getElementById('root')
+      )*/
+      break
+  }
+  
 }
 render()
 
 // new room state
-chatRoom.onUpdate.add(function(state) {
+warGameRoom.onUpdate.add(function(state) {
   render()
 })
 
