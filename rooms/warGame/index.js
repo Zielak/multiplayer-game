@@ -1,4 +1,5 @@
 const colyseus = require('colyseus')
+const cards = require('../cardsGame/index')
 
 const isValidMessage = text => {
   return (''+text).length > 0
