@@ -62,6 +62,10 @@ class Cards extends React.Component {
       }))
     })
 
+    props.room.onUpdate.add(state => {
+      console.log('onUpdate: ', state)
+    })
+
     // listen to patches coming from the server
     props.room.listen('clients/:number', (change) => {
       console.log('new client change arrived: ', change)
@@ -72,6 +76,22 @@ class Cards extends React.Component {
           name: change.value,
         }
       })
+    })
+
+    props.room.listen('host', (change) => {
+      console.log('new host change arrived: ', change)
+    })
+    
+    props.room.listen('players', (change) => {
+      console.log('new players change arrived: ', change)
+    })
+    
+    props.room.listen('containers', (change) => {
+      console.log('new containers change arrived: ', change)
+    })
+    
+    props.room.listen('cards', (change) => {
+      console.log('new cards change arrived: ', change)
     })
 
     props.room.listen('game.start', () => {
@@ -96,7 +116,7 @@ class Cards extends React.Component {
   }
 
   initGameHandler(){
-    this.props.room.send({action: 'init'})
+    this.props.room.send({action: 'game.start'})
   }
 }
 

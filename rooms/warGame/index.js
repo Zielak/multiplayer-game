@@ -1,21 +1,34 @@
 const colyseus = require('colyseus')
 
 const {
+  Deck,
   PlayersTurn,
   Player,
+  Presets,
 } = require('../cardsGame/index')
 
-const randomName = () => 
-  [1,2,3].map(()=>(Math.floor(Math.random()*25+65))).map((e)=>String.fromCharCode(e))
+const randomName = () =>
+  [1, 2, 3].map(() => Math.floor(Math.random() * 25 + 65)).map((e) => String.fromCharCode(e))
 
+const actionStatus = (success = true, description = '') => {
+  return { success, description }
+}
 const canPerformThisAction = (client, action, state) => {
   switch (action) {
     case 'game.start':
-      return client === state.host
+      if(client === state.host){
+        return actionStatus()
+      }else{
+        return actionStatus(false, `Client is not a host`)
+      }
     case '':
-      return client.id === state.currentPlayer.id
+      if(client.id === state.currentPlayer.id){
+        return actionStatus()
+      }else{
+        return actionStatus(false, `Client is not current player`)
+      }
     default:
-      return false
+      return actionStatus(false, `Unknown action "${action}"`)
   }
 }
 
@@ -23,26 +36,93 @@ const canStartPlaying = (state) => {
   return state.clients.length > 1
 }
 
+const getActionType = (data) => {
+  const firstDot = data.action.indexOf('.')
+  return data.action.slice(0, firstDot)
+}
+
 const reducer = (state = {}, data) => {
-  if(data.action === 'game.start'){
-    this.setup(this.state.clients.slice(0))
-    if(this.start()){
-      this.broadcast({event: 'game.start'})
-    } else {
-      console.log(`Can't start the game yet.`)
-    }
+  const actionType = getActionType(data)
+  console.log('reducer ===================== ')
+  console.log(`data: ${JSON.stringify(data)}`)
+
+  let newState
+
+  switch (actionType) {
+    case 'client':
+      newState = {
+        ...state,
+        clients: clientsReducer(state.clients, data),
+      }
+      break
+    case 'host':
+      newState = {
+        ...state,
+        host: hostReducer(state.host, data),
+      }
+      break
+    case 'player':
+      newState = {
+        ...state,
+        players: playersReducer(state.players, data),
+      }
+      break
+    case 'card':
+      newState = {
+        ...state,
+        cards: cardsReducer(state.cards, data),
+      }
+      break
+    case 'container':
+      newState = {
+        ...state,
+        containers: containersReducer(state.containers, data),
+      }
+      break
+  }
+
+  console.log(`newState: ${JSON.stringify(newState)}`)
+  console.log('===========================')
+
+  return newState
+}
+
+const clientsReducer = (state = [], data) => {
+  switch (data.action) {
+    case 'client.add':
+      return [
+        ...state,
+        data.client
+      ]
+    default:
+      return state
+  }
+}
+
+const hostReducer = (state = null, data) => {
+  if(data.action === 'host.set'){
+    return data.host
+  } else {
+    return state
   }
 }
 
 const playersReducer = (state = [], data) => {
-  switch(data.action){
+  switch (data.action) {
     case 'player.add':
       return [
         ...state,
         data.player
       ]
-    
+    default:
+      return state
   }
+}
+const cardsReducer = (state = [], data) => {
+  return state
+}
+const containersReducer = (state = [], data) => {
+  return state
 }
 
 module.exports = class WarGame extends colyseus.Room {
@@ -59,11 +139,13 @@ module.exports = class WarGame extends colyseus.Room {
       players: [],
       // Player currently in action
       currentPlayer: {},
-      // Initial deck of cards
+      // Initial array of all available cards in the game
       cards: [],
-
+      // Container holding (or not yet) cards
+      containers: [],
+      // Table
+      table: null
     })
-    this.canStartPlaying
     this.playersTurn = new PlayersTurn()
 
     console.log('WarGame room created!', options)
@@ -71,67 +153,91 @@ module.exports = class WarGame extends colyseus.Room {
 
   requestJoin(/*options*/) {
     const res = this.clients.length < this.state.maxClients
-    if(!res) {
+    if (!res) {
       console.log('WarGame - rejected new client!')
     }
     return this.clients.length < this.state.maxClients
   }
 
   onJoin(client) {
-    console.log('WarGame: JOINED: ',client, JSON.stringify(client))
-    this.state.clients.push(client.id)
+    console.log('WarGame: JOINED: ', client.id)
+    this.setState(reducer(this.state, {
+      action: 'client.add',
+      client: client.id,
+    }))
+    if(!this.state.host){
+      this.setState(reducer(this.state, {
+        action: 'host.set',
+        host: client.id,
+      }))
+    }
   }
 
   onLeave(client) {
     this.state.clients.splice(
       this.state.clients.indexOf(client.id), 1
     )
+    // TODO: Handle leave when the game is running
+    // Timeout => end game? Make player able to go back in?
   }
 
   onMessage(client, data) {
-    console.log('MSG: ',JSON.stringify(data))
+    console.log('MSG: ', JSON.stringify(data))
 
-    if(!canPerformThisAction(client, data.action)){
+    const actionStatus = canPerformThisAction(client, data.action, this.state)
+
+    if (actionStatus.success) {
+      this.setState(reducer(this.state, data))
+      this.act(data)
+    } else {
       this.broadcast({
         event: 'game.error',
-        data: `Client ${client} tried to perform ${data.action} action`
+        data: `Client "${client.id}" failed to perform "${data.action}" action.
+        Details: ${actionStatus.description}`
       })
-    } else {
-      this.setState(reducer(this.state, data))
     }
   }
 
   onDispose() {
     console.log('Dispose WarGame')
-  }
-
-  updateState(data){
-    if(data.action.indexOf('player.' === 0)){
-      this.setState({
-        ...this.state,
-        players: playersReducer(this.state.players, data)
-      })
-    }
-    if(data.action.indexOf('player.' === 0)){
-      this.setState({
-        ...this.state,
-        players: playersReducer(this.state.players, data)
-      })
-    }
+    console.log('===========================')
   }
 
   // GAME FUNCTIONS === === == = -
 
-  start(){
-    if(canStartPlaying(this.state)){
+  act(data){
+    switch(data.action){
+      case 'game.start':
+        this.start()
+    }
+  }
+
+  start() {
+    if (canStartPlaying(this.state)) {
+      // Gather players
       this.state.clients.forEach(client => {
-        let newPlayer = new Player({
+        const newPlayer = new Player({
           id: client.id,
           name: randomName(),
         })
-        this.updateState({action: 'player.add', player: newPlayer})
+        this.setState(reducer({ action: 'player.add', player: newPlayer }))
       })
-      this.playersTurn
+      this.playersTurn.setPlayers(this.state.players)
+
+      // Setup all cards
+      this.setState(reducer({ action: 'deck.set', deck: Presets.classicCardsDeck() }))
+
+      // Set the table
+      this.setState(reducer({
+        action: 'container.add',
+        container: new Deck({ parent: this.playersTurn.players[0] })
+      }))
+      this.setState(reducer({
+        action: 'container.add',
+        container: new Deck({ parent: this.playersTurn.players[1] })
+      }))
+    } else {
+      console.log(`Can't start the game yet.`)
     }
 
     return this.started

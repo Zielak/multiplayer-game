@@ -19,7 +19,8 @@
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
     "redux": "^3.7.2",
-    "serve-index": "^1.8.0"
+    "serve-index": "^1.8.0",
+    "uuid": "^3.1.0"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",

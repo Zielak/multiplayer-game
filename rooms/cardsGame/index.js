@@ -3,10 +3,14 @@ module.exports = {
   ClassicCard: require('./classicCard'),
   Conditions: require('./classicCard'),
   Container: require('./container'),
-  Deck: require('./deck'),
-  Hand: require('./hand'),
-  Pile: require('./pile'),
+
+  Deck: require('./containers/deck'),
+  Hand: require('./containers/hand'),
+  Pile: require('./containers/pile'),
+  Row: require('./containers/row'),
+  Spread: require('./containers/spread'),
+
   Player: require('./player'),
   PlayersTurn: require('./playersTurn'),
-  Row: require('./row'),
+  Presets: require('./presets'),
 }

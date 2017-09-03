@@ -1,11 +1,13 @@
 const Conditions = require('./conditions')
+const Base = require('./base')
 
-module.exports = class Container extends Array {
+module.exports = class Container extends Base {
 
   constructor(options = {}) {
-    super()
+    super(options)
 
-    this.owner = options.owner || null
+    // Array of cards and/or other containers
+    this.elements = Array.isArray(options.elements) ? options.elements : []
 
     // for visuals
     this.x = options.x || 0
@@ -13,6 +15,10 @@ module.exports = class Container extends Array {
 
     // set of conditions used during gameplay
     this.conditions = new Conditions(options.conditions, this)
+  }
+
+  get length(){
+    return this.elements.length
   }
 
   /**
@@ -38,8 +44,8 @@ module.exports = class Container extends Array {
           el.parent.remove(el)
         }
         el.parent = this
-        super.push(el)
-        this.onPush(el)
+        this.elements.push(el)
+        this.elements.onPush(el)
       })
     }
     return this
@@ -49,10 +55,11 @@ module.exports = class Container extends Array {
    * Removes one element from container
    * 
    * @param {object} element 
+   * @return {Array} containing removed elements
    */
   remove(element) {
-    const idx = this.indexOf(element)
-    return this.splice(idx, 1)
+    const idx = this.elements.indexOf(element)
+    return this.elements.splice(idx, 1)
   }
 
   /**
@@ -61,14 +68,14 @@ module.exports = class Container extends Array {
    * @return {Container}
    */
   shuffle(){
-    let i = this.length
+    let i = this.elements.length
     if (i === 0) return
     while (--i) {
       const j = Math.floor(Math.random() * (i + 1))
-      const tempi = this[i]
-      const tempj = this[j]
-      this[i] = tempj
-      this[j] = tempi
+      const tempi = this.elements[i]
+      const tempj = this.elements[j]
+      this.elements[i] = tempj
+      this.elements[j] = tempi
     }
     return this
   }
@@ -79,7 +86,7 @@ module.exports = class Container extends Array {
    * @return {object}
    */
   top(){
-    return this[this.length-1]
+    return this.elements[this.elements.length-1]
   }
 
   /**
@@ -88,7 +95,7 @@ module.exports = class Container extends Array {
    * @return {object}
    */
   bottom(){
-    return this[0]
+    return this.elements[0]
   }
 
   onPlayerTap() { }
@@ -100,8 +107,4 @@ module.exports = class Container extends Array {
    */
   onPush(element) { }
 
-  /**
-   * Override. Use this to render this container in any way you want
-   */
-  onRender(){}
 }

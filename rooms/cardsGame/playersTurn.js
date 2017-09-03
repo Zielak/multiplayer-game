@@ -1,91 +1,79 @@
-let currentPlayerIdx = 0
-let players = []
-let reversed = false
-
-const init = (options = {}) => {
-  currentPlayerIdx = options.currentPlayerIdx !== undefined ? options.currentPlayerIdx : 0
-  players = options.players ? options.players.slice(0) : []
-  reversed = options.reversed !== undefined ? options.reversed : false
-}
-
-const setPlayers = (array) => {
-  players = array.slice(0)
-}
-
-/**
- * Picks next player to play
- * 
- * @returns {Player} current player
- */
-const next = (current, reversed, players) => {
-  if(!reversed){
-    if(++current > players.length - 1){
-      current = 0
-    }
-  }else{
-    if(--current < 0){
-      current = players.length - 1
-    }
-  }
-  return players[current]
-}
-
-/**
- * Picks previous player to play
- * 
- * @returns {Player} current player
- */
-const previous = (current, reversed, players) => {
-  if(reversed){
-    if(++current > players.length - 1){
-      current = 0
-    }
-  }else{
-    if(--current < 0){
-      current = players.length - 1
-    }
-  }
-  return players[current]
-}
-
-const shuffle = (array, current) => {
-  let i = array.length
-  if (i === 0) return
-  while (--i) {
-    const j = Math.floor(Math.random() * (i + 1))
-    const tempi = array[i]
-    const tempj = array[j]
-    array[i] = tempj
-    array[j] = tempi
-    // Keep the current player the same
-    if(i === current){
-      current = j
-    }
-  }
-  return current
-}
+const utils = require('./utils')
 
 module.exports = class PlayersTurn {
-  constructor(options){
-    init(options)
+  constructor(options = {}){
+    this.currentPlayerIdx = utils.default(options.currentPlayerIdx, 0)
+    this._players = options.players ? options.players.slice(0) : []
+    this.reversed = utils.default(options.reversed, false)
   }
   setPlayers(array){
-    return setPlayers(array)
+    this.players = array.slice(0)
+    this.currentPlayerIdx = 0
+    return this
   }
   get players(){
-    return players.slice(0)
+    return this._players.slice(0)
   }
+
+  get currentPlayer(){
+    return this._players[this.currentPlayerIdx]
+  }
+  
+  /**
+   * Picks next player to play
+   * 
+   * @returns {Player} current player
+   */
   next(){
-    return next(currentPlayerIdx, reversed, players)
+    if(!this.reversed){
+      if(++this.currentPlayerIdx > this.players.length - 1){
+        this.currentPlayerIdx = 0
+      }
+    }else{
+      if(--this.currentPlayerIdx < 0){
+        this.currentPlayerIdx = this.players.length - 1
+      }
+    }
+    return this.players[this.currentPlayerIdx]
   }
+
+  /**
+   * Picks previous player to play
+   * 
+   * @returns {Player} current player
+   */
   previous(){
-    return previous(currentPlayerIdx, reversed, players)
+    if(this.reversed){
+      if(++this.currentPlayerIdx > this.players.length - 1){
+        this.currentPlayerIdx = 0
+      }
+    }else{
+      if(--this.currentPlayerIdx < 0){
+        this.currentPlayerIdx = this.players.length - 1
+      }
+    }
+    return this.players[this.currentPlayerIdx]
   }
+
   shuffle(){
-    return shuffle(players, currentPlayerIdx)
+    let i = this.players.length
+    if (i === 0) return
+    while (--i) {
+      const j = Math.floor(Math.random() * (i + 1))
+      const tempi = this.players[i]
+      const tempj = this.players[j]
+      this.players[i] = tempj
+      this.players[j] = tempi
+      // Keep the current player the same
+      if(i === this.currentPlayerIdx){
+        this.currentPlayerIdx = j
+      }
+    }
+    return this
   }
+
   reverse(){
-    reversed = !reversed
-    return reversed
+    this.reversed = !this.reversed
+    return this.reversed
   }
 }

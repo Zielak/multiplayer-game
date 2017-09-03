@@ -17,7 +17,7 @@ let page = 'warGame'
 const warGameRoom = client.join('warGame')
 
 const render = () => {
-  console.log('RENDER')
+  // console.log('RENDER')
   switch(page){
     case 'warGame':
       ReactDOM.render(
@@ -34,11 +34,25 @@ const render = () => {
   }
   
 }
+// Initial render plz
 render()
 
-// new room state
+// Keep updating 
 warGameRoom.onUpdate.add(function(state) {
-  render()
+  if(page === 'warGame') render()
+})
+
+warGameRoom.onData.add(e => {
+  if(e.event === 'game.error'){
+    console.error('game.error: ', e.data)
+  }
+})
+
+warGameRoom.listen('clients', change => {
+  console.log('clients changed', change)
+})
+warGameRoom.listen('host', change => {
+  console.log('host changed', change)
 })
 
 // chatRoom.listen(function(change) {

@@ -1,12 +1,11 @@
+const Base = require('./base')
 const Conditions = require('./conditions')
 
-module.exports = class BaseCard {
+module.exports = class BaseCard extends Base {
 
-  constructor(options){
+  constructor(options = {}){
+    super(options)
     this.name = options.name || 'card'
-
-    // Current place, player's hand, deck, pile?
-    this.parent = options.parent || null
 
     // set of conditions used during gameplay
     this.conditions = new Conditions(options.conditions)
