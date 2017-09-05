@@ -14,7 +14,7 @@ class ClientsList extends React.Component {
 
   renderList() {
     return (
-      this.props.clients.map((client) => {
+      this.props.clients && this.props.clients.map((client) => {
         return <div key={client.idx}>
           {client.idx}. {client.name}
         </div>

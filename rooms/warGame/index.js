@@ -37,14 +37,14 @@ const canStartPlaying = (state) => {
 }
 
 const getActionType = (data) => {
+  if(data.action === undefined) return ''
   const firstDot = data.action.indexOf('.')
   return data.action.slice(0, firstDot)
 }
 
 const reducer = (state = {}, data) => {
   const actionType = getActionType(data)
-  console.log('reducer ===================== ')
-  console.log(`data: ${JSON.stringify(data)}`)
+  console.log(`Reduce: '${actionType}', ${data.action}`)
 
   let newState
 
@@ -81,9 +81,6 @@ const reducer = (state = {}, data) => {
       break
   }
 
-  console.log(`newState: ${JSON.stringify(newState)}`)
-  console.log('===========================')
-
   return newState
 }
 
@@ -94,6 +91,8 @@ const clientsReducer = (state = [], data) => {
         ...state,
         data.client
       ]
+    case 'client.remove':
+      return state.filter(el => el !== data.client)
     default:
       return state
   }
@@ -147,11 +146,17 @@ module.exports = class WarGame extends colyseus.Room {
       table: null
     })
     this.playersTurn = new PlayersTurn()
+    
+    // setInterval(() => {
+    //   console.log('trying to add dummie player')
+    //   this.setState(reducer(this.state, { action: 'player.add', player: 'whoop' + Math.random() }))
+    //   console.log('After change: ', JSON.stringify(this.state))
+    // }, 2000)
 
     console.log('WarGame room created!', options)
   }
 
-  requestJoin(/*options*/) {
+  requestJoin() {
     const res = this.clients.length < this.state.maxClients
     if (!res) {
       console.log('WarGame - rejected new client!')
@@ -161,6 +166,7 @@ module.exports = class WarGame extends colyseus.Room {
 
   onJoin(client) {
     console.log('WarGame: JOINED: ', client.id)
+    // this.state.clients.push(client.id)
     this.setState(reducer(this.state, {
       action: 'client.add',
       client: client.id,
@@ -174,9 +180,10 @@ module.exports = class WarGame extends colyseus.Room {
   }
 
   onLeave(client) {
-    this.state.clients.splice(
-      this.state.clients.indexOf(client.id), 1
-    )
+    this.setState(reducer(this.state, {
+      action: 'client.remove',
+      client: client.id,
+    }))
     // TODO: Handle leave when the game is running
     // Timeout => end game? Make player able to go back in?
   }
