@@ -149,7 +149,7 @@ module.exports = class WarGame extends colyseus.Room {
     
     // setInterval(() => {
     //   console.log('trying to add dummie player')
-    //   this.setState(reducer(this.state, { action: 'player.add', player: 'whoop' + Math.random() }))
+    //   this.state = reducer(this.state, { action: 'player.add', player: 'whoop' + Math.random() })
     //   console.log('After change: ', JSON.stringify(this.state))
     // }, 2000)
 
@@ -167,23 +167,23 @@ module.exports = class WarGame extends colyseus.Room {
   onJoin(client) {
     console.log('WarGame: JOINED: ', client.id)
     // this.state.clients.push(client.id)
-    this.setState(reducer(this.state, {
+    this.state = reducer(this.state, {
       action: 'client.add',
       client: client.id,
-    }))
+    })
     if(!this.state.host){
-      this.setState(reducer(this.state, {
+      this.state = reducer(this.state, {
         action: 'host.set',
         host: client.id,
-      }))
+      })
     }
   }
 
   onLeave(client) {
-    this.setState(reducer(this.state, {
+    this.state = reducer(this.state, {
       action: 'client.remove',
       client: client.id,
-    }))
+    })
     // TODO: Handle leave when the game is running
     // Timeout => end game? Make player able to go back in?
   }
@@ -194,7 +194,7 @@ module.exports = class WarGame extends colyseus.Room {
     const actionStatus = canPerformThisAction(client, data.action, this.state)
 
     if (actionStatus.success) {
-      this.setState(reducer(this.state, data))
+      this.state = reducer(this.state, data)
       this.act(data)
     } else {
       this.broadcast({
@@ -227,22 +227,22 @@ module.exports = class WarGame extends colyseus.Room {
           id: client.id,
           name: randomName(),
         })
-        this.setState(reducer({ action: 'player.add', player: newPlayer }))
+        this.state = reducer({ action: 'player.add', player: newPlayer })
       })
       this.playersTurn.setPlayers(this.state.players)
 
       // Setup all cards
-      this.setState(reducer({ action: 'deck.set', deck: Presets.classicCardsDeck() }))
+      this.state = reducer({ action: 'deck.set', deck: Presets.classicCardsDeck() })
 
       // Set the table
-      this.setState(reducer({
+      this.state = reducer({
         action: 'container.add',
         container: new Deck({ parent: this.playersTurn.players[0] })
-      }))
-      this.setState(reducer({
+      })
+      this.state = reducer({
         action: 'container.add',
         container: new Deck({ parent: this.playersTurn.players[1] })
-      }))
+      })
     } else {
       console.log(`Can't start the game yet.`)
     }

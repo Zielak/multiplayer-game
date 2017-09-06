@@ -45,24 +45,24 @@ module.exports = ({room, updateCallback}) => {
   console.log('creating controller, listening for new stuff')
   
   let a = ''
-  store.subscribe(updateCallback)
-  
-  room.onUpdate.addOnce(state => {
-    console.log('initial lobby data:', state)
-    state.clients.forEach((el, idx) => store.dispatch({
-      type: 'client.add',
-      client: {
-        idx, name: el
-      },
-    }))
-  })
+  const unsubscribe = store.subscribe(updateCallback.bind(null, store.getState))
+
+  // room.onUpdate.addOnce(state => {
+  //   console.log('initial lobby data:', state)
+  //   state.clients.forEach((el, idx) => store.dispatch({
+  //     type: 'client.add',
+  //     client: {
+  //       idx, name: el
+  //     },
+  //   }))
+  // })
 
   room.onUpdate.add(state => {
     console.log('onUpdate: ', state)
   })
 
   // listen to patches coming from the server
-  room.listen('clients/:number', (change) => {
+  room.listen('clients', (change) => {
     console.log('new client change arrived: ', change)
     store.dispatch({
       type: 'client.' + change.operation,

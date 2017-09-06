@@ -14,8 +14,9 @@ const client = new Colyseus.Client('ws://' + host + (location.port ? ':'+2657 : 
 
 const warGameRoom = client.join('warGame')
 
-const render = (state = {}) => {
+const render = (getState) => {
   console.log('render')
+  const state = getState ? getState() : {}
   ReactDOM.render(
     <WarGame
       initGameHandler={() =>
