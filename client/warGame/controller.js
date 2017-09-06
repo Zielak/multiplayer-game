@@ -24,6 +24,14 @@ const players = (state = [], action) => {
   }
 }
 
+const host = (state = null, action) => {
+  if(action.type === 'host.set'){
+    return action.host
+  } else {
+    return state
+  }
+}
+
 const gameState = (state, action) => {
   if (state === undefined) {
     return {
@@ -36,6 +44,7 @@ const gameState = (state, action) => {
 
 const cardsApp = Redux.combineReducers({
   players,
+  host,
   gameState,
 })
 
@@ -47,47 +56,51 @@ module.exports = ({room, updateCallback}) => {
   let a = ''
   const unsubscribe = store.subscribe(updateCallback.bind(null, store.getState))
 
-  // room.onUpdate.addOnce(state => {
-  //   console.log('initial lobby data:', state)
-  //   state.clients.forEach((el, idx) => store.dispatch({
-  //     type: 'client.add',
-  //     client: {
-  //       idx, name: el
-  //     },
-  //   }))
-  // })
-
-  room.onUpdate.add(state => {
-    console.log('onUpdate: ', state)
+  room.onUpdate.addOnce(state => {
+    console.log('initial lobby data:', state)
+    state.clients.forEach((el, idx) => store.dispatch({
+      type: 'client.add',
+      client: {
+        idx, name: el
+      },
+    }))
+    store.dispatch({
+      type: 'host.set',
+      host: state.host,
+    })
   })
 
+  // room.onUpdate.add(state => {
+  //   console.log('onUpdate: ', state)
+  // })
+
   // listen to patches coming from the server
-  room.listen('clients', (change) => {
+  room.listen('clients/:number', (change) => {
     console.log('new client change arrived: ', change)
     store.dispatch({
       type: 'client.' + change.operation,
       client: {
-        idx: change.path.number,
+        idx: parseInt(change.path.number),
         name: change.value,
       }
     })
   })
 
   room.listen('host', (change) => {
-    console.log('new host change arrived: ', change)
+    console.log('host changed: ', change)
   })
 
-  room.listen('players', (change) => {
-    console.log('new players change arrived: ', change)
+  room.listen('players/:number', (change) => {
+    console.log('player changed: ', change)
   })
 
-  // room.listen('containers', (change) => {
-  //   console.log('new containers change arrived: ', change)
-  // })
+  room.listen('containers/:number', (change) => {
+    console.log('container changed: ', change)
+  })
 
-  // room.listen('cards', (change) => {
-  //   console.log('new cards change arrived: ', change)
-  // })
+  room.listen('cards/:number', (change) => {
+    console.log('card changed: ', change)
+  })
 
   room.listen('game.start', () => {
     console.log('game.start!? ', arguments)

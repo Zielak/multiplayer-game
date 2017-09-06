@@ -16,8 +16,9 @@ class Cards extends React.Component {
           </button>
         </div>
         <PlayersList
-          title="Players"
+          title='Players'
           clients={this.props.players}
+          host={this.props.host}
         ></PlayersList>
       </div>
     )
@@ -27,6 +28,7 @@ class Cards extends React.Component {
 Cards.propTypes = {
   initGameHandler: PropTypes.func,
   players: PropTypes.array,
+  host: PropTypes.string,
 }
 
 module.exports = Cards

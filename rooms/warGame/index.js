@@ -98,14 +98,6 @@ const clientsReducer = (state = [], data) => {
   }
 }
 
-const hostReducer = (state = null, data) => {
-  if(data.action === 'host.set'){
-    return data.host
-  } else {
-    return state
-  }
-}
-
 const playersReducer = (state = [], data) => {
   switch (data.action) {
     case 'player.add':
@@ -172,10 +164,7 @@ module.exports = class WarGame extends colyseus.Room {
       client: client.id,
     })
     if(!this.state.host){
-      this.state = reducer(this.state, {
-        action: 'host.set',
-        host: client.id,
-      })
+      this.state.host = client.id
     }
   }
 
