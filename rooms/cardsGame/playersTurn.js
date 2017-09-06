@@ -7,7 +7,7 @@ module.exports = class PlayersTurn {
     this.reversed = utils.default(options.reversed, false)
   }
   setPlayers(array){
-    this.players = array.slice(0)
+    this._players = array.slice(0)
     this.currentPlayerIdx = 0
     return this
   }
