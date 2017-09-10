@@ -2,7 +2,6 @@ const colyseus = require('colyseus')
 
 const {
   Deck,
-  PlayersTurn,
   Player,
   Presets,
 } = require('../cardsGame/index')
@@ -16,25 +15,54 @@ const actionStatus = (success = true, description = '') => {
 
 const canPerformThisAction = (client, action, state) => {
   switch (action) {
-    case 'game.start':
-      if(client.id === state.host){
-        return actionStatus()
-      }else{
-        return actionStatus(false, `Client '${client.id}' is not a host: '${state.host}'`)
-      }
-    case '':
-      if(client.id === state.currentPlayer.id){
-        return actionStatus()
-      }else{
-        return actionStatus(false, `Client is not current player`)
-      }
-    default:
-      return actionStatus(false, `Unknown action "${action}"`)
+  case 'game.start':
+    if(client.id !== state.host){
+      return actionStatus(false, `Client '${client.id}' is not a host: '${state.host}'`)
+    }else if (state.clients.length < 2){
+      return actionStatus(false, `Not enough clients: only '${state.clients.length}' clients in the room`)
+    }else{
+      return actionStatus()
+    }
+  case '':
+    if(client.id === state.currentPlayer.id){
+      return actionStatus()
+    }else{
+      return actionStatus(false, `Client is not current player`)
+    }
+  default:
+    return actionStatus(false, `Unknown action "${action}"`)
   }
 }
 
-const canStartPlaying = (state) => {
-  return state.clients.length > 1
+const performAction = (data, state) => {
+  switch(data.action){
+  case 'game.start':
+    startGame(data, state)
+  }
+}
+
+const startGame = (data, state) => {
+  // Gather players
+  state.clients.forEach(client => {
+    const newPlayer = new Player({
+      id: client.id,
+      name: randomName(),
+    })
+    state = reducer(state, { action: 'players.add', player: newPlayer })
+  })
+
+  // Setup all cards
+  state = reducer(state, { action: 'decks.set', deck: Presets.classicCardsDeck() })
+
+  // Set the table
+  state = reducer(state, {
+    action: 'containers.add',
+    container: new Deck({ parent: state.players[0] })
+  })
+  state = reducer(state, {
+    action: 'containers.add',
+    container: new Deck({ parent: state.players[1] })
+  })
 }
 
 const getActionType = (data) => {
@@ -45,71 +73,38 @@ const getActionType = (data) => {
 
 const reducer = (state = {}, data) => {
   const actionType = getActionType(data)
-  console.log(`Reduce: '${actionType}', ${data.action}`)
-
-  let newState = state
+  console.info(`Reduce: '${actionType}', ${data.action}`)
 
   switch (actionType) {
-    case 'client':
-      newState = {
-        ...state,
-        clients: clientsReducer(state.clients, data),
-      }
-      break
-    case 'player':
-      newState = {
-        ...state,
-        players: playersReducer(state.players, data),
-      }
-      break
-    case 'card':
-      newState = {
-        ...state,
-        cards: cardsReducer(state.cards, data),
-      }
-      break
-    case 'container':
-      newState = {
-        ...state,
-        containers: containersReducer(state.containers, data),
-      }
-      break
-  }
-
-  return newState
-}
-
-const clientsReducer = (state = [], data) => {
-  switch (data.action) {
-    case 'client.add':
-      return [
-        ...state,
-        data.client
-      ]
-    case 'client.remove':
-      return state.filter(el => el !== data.client)
-    default:
-      return state
+  case 'clients':
+    return {
+      ...state,
+      clients: clientsReducer(state.clients, data),
+    }
+  case 'players':
+    return {
+      ...state,
+      players: playersReducer(state.players, data),
+    }
+  case 'cards':
+    return {
+      ...state,
+      cards: cardsReducer(state.cards, data),
+    }
+  case 'containers':
+    return {
+      ...state,
+      containers: containersReducer(state.containers, data),
+    }
+  default:
+    return state
   }
 }
 
-const playersReducer = (state = [], data) => {
-  switch (data.action) {
-    case 'player.add':
-      return [
-        ...state,
-        data.player
-      ]
-    default:
-      return state
-  }
-}
-const cardsReducer = (state = [], data) => {
-  return state
-}
-const containersReducer = (state = [], data) => {
-  return state
-}
+const clientsReducer = require('./reducers/clients')
+const playersReducer = require('./reducers/players')
+const cardsReducer = require('./reducers/cards')
+const containersReducer = require('./reducers/containers')
 
 module.exports = class WarGame extends colyseus.Room {
 
@@ -121,10 +116,8 @@ module.exports = class WarGame extends colyseus.Room {
 
       // Has the game started?
       started: false,
-      // Clients that are actually playing the game
-      players: [],
-      // Player currently in action
-      currentPlayer: {},
+      // Clients that are actually playing the game plus some turn order variables
+      players: {},
       // Initial array of all available cards in the game
       cards: [],
       // Container holding (or not yet) cards
@@ -132,7 +125,6 @@ module.exports = class WarGame extends colyseus.Room {
       // Table
       table: null
     })
-    this.playersTurn = new PlayersTurn()
     
     // setInterval(() => {
     //   console.log('trying to add dummie player')
@@ -155,7 +147,7 @@ module.exports = class WarGame extends colyseus.Room {
     console.log('WarGame: JOINED: ', client.id)
     // this.state.clients.push(client.id)
     this.state = reducer(this.state, {
-      action: 'client.add',
+      action: 'clients.add',
       client: client.id,
     })
     if(!this.state.host){
@@ -165,7 +157,7 @@ module.exports = class WarGame extends colyseus.Room {
 
   onLeave(client) {
     this.state = reducer(this.state, {
-      action: 'client.remove',
+      action: 'clients.remove',
       client: client.id,
     })
     // TODO: Handle leave when the game is running
@@ -176,13 +168,13 @@ module.exports = class WarGame extends colyseus.Room {
     console.log('MSG: ', JSON.stringify(data))
 
     const actionStatus = canPerformThisAction(client, data.action, this.state)
-    console.log(`actionStatus: ${JSON.stringify(actionStatus)}`)
-    
+    console.log(`action: ${data.action}`)
     if (actionStatus.success) {
-      if (this.act(data)) {
-        this.state = reducer(this.state, data)
-      }
+      console.log(` - success: ${actionStatus.description}`)
+      performAction(data, this.state)
+      this.state = reducer(this.state, data)
     } else {
+      console.warn(` - fail: ${actionStatus.description}`)
       this.broadcast({
         event: 'game.error',
         data: `Client "${client.id}" failed to perform "${data.action}" action.
@@ -194,46 +186,6 @@ module.exports = class WarGame extends colyseus.Room {
   onDispose() {
     console.log('Dispose WarGame')
     console.log('===========================')
-  }
-
-  // GAME FUNCTIONS === === == = -
-
-  act(data){
-    switch(data.action){
-      case 'game.start':
-        return this.start()
-    }
-  }
-
-  start() {
-    if (canStartPlaying(this.state)) {
-      // Gather players
-      this.state.clients.forEach(client => {
-        const newPlayer = new Player({
-          id: client.id,
-          name: randomName(),
-        })
-        this.state = reducer(this.state, { action: 'player.add', player: newPlayer })
-      })
-      this.playersTurn.setPlayers(this.state.clients)
-
-      // Setup all cards
-      this.state = reducer(this.state, { action: 'deck.set', deck: Presets.classicCardsDeck() })
-
-      // Set the table
-      this.state = reducer(this.state, {
-        action: 'container.add',
-        container: new Deck({ parent: this.playersTurn.players[0] })
-      })
-      this.state = reducer(this.state, {
-        action: 'container.add',
-        container: new Deck({ parent: this.playersTurn.players[1] })
-      })
-    } else {
-      console.log(`Can't start the game yet.`)
-    }
-
-    return this.started
   }
 
 }

@@ -9,7 +9,7 @@ module.exports = class Base {
     // Real-life size (in CM) and position
     this.x = utils.default(options.x, 0)
     this.y = utils.default(options.y, 0)
-    this.length = utils.default(options.length, 5)
+    this.width = utils.default(options.width, 5)
     this.width = utils.default(options.width, 5)
     
     // Parent element which holds this container

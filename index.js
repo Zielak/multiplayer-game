@@ -4,9 +4,11 @@ const serveIndex = require('serve-index')
 const http = require('http')
 const colyseus = require('colyseus')
 
+require('./consoleColors')
+
 // Require ChatRoom handler
-const Lobby = require('./rooms/lobby')
-const MonstrousEscapeRoom = require('./rooms/monstrousEscape')
+// const Lobby = require('./rooms/lobby')
+// const MonstrousEscapeRoom = require('./rooms/monstrousEscape')
 const WarGame = require('./rooms/warGame/index')
 
 const port = process.env.PORT || 2657

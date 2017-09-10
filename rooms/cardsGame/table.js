@@ -10,8 +10,8 @@ const utils = require('./utils')
 module.exports = class Table {
 
   constructor(options = {}){
-    this.length = utils.default(options.length, 55)
     this.width = utils.default(options.width, 55)
+    this.height = utils.default(options.height, 55)
     this.x = 0
     this.y = 0
   }

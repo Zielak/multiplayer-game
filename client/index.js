@@ -28,7 +28,7 @@ const render = (getState) => {
   )
 }
 
-const warGameController = require('./warGame/controller')({
+/*const warGameController = */require('./warGame/controller')({
   room: warGameRoom,
   updateCallback: render,
 })

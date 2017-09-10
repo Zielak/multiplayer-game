@@ -6,10 +6,8 @@ All cards and containers should have a defined real-like dimensions. Classic pla
 
 There are 2 units of dimensions now:
 
-- length
 - width
-
-NOTE: There's no such property as `height`, I didn't make a 3D game framework.
+- height
 
 Table sets the whole playground. It also should have a real-like dimensions, default table is 55 cm wide and 55 cm long. Table should fill the whole screen, so if it's larger, then the renderer should scale the whole view down. All game elements will get smaller, but should also be accessible, eg. zoom in on hover.
 

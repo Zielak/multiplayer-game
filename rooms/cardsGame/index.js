@@ -11,6 +11,5 @@ module.exports = {
   Spread: require('./containers/spread'),
 
   Player: require('./player'),
-  PlayersTurn: require('./playersTurn'),
   Presets: require('./presets'),
 }

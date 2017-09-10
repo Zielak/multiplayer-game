@@ -5,13 +5,13 @@
 
 module.exports = class Conditions extends Map {
 
-  constructor(set, context){
+  constructor(set = [], context = null){
     super()
     Object.keys(set).forEach(key => {
       this.set(key, set[key])
     })
 
-    this.context = context || null
+    this.context = context
   }
 
   call(key, args = undefined){

@@ -2,32 +2,35 @@ const Redux = require('redux')
 
 const players = (state = [], action) => {
   switch (action.type) {
-    case 'client.add':
-      return [...state, action.client]
-    case 'client.remove':
-      return [
-        ...state.slice(0, action.client.idx),
-        ...state.slice(action.client.idx + 1)
-      ]
-    case 'client.replace':
-      return state.map((client) => {
-        if (action.client.idx !== client.idx) {
-          return client
-        }
-        return {
-          ...client,
-          name: action.client.name
-        }
-      })
-    default:
-      return state
+  case 'clients.add':
+    return [...state, action.client]
+  case 'clients.remove':
+    return [
+      ...state.slice(0, action.client.idx),
+      ...state.slice(action.client.idx + 1)
+    ]
+  case 'clients.replace':
+    return state.map((client) => {
+      if (action.client.idx !== client.idx) {
+        return client
+      }
+      return {
+        ...client,
+        name: action.client.name
+      }
+    })
+  default:
+    return state
   }
 }
 
 const host = (state = null, action) => {
-  if(action.type === 'host.set'){
+  action.type === 'host.add'
+  switch(action.type){
+  case 'host.add':
+  case 'host.replace':
     return action.host
-  } else {
+  default:
     return state
   }
 }
@@ -53,13 +56,12 @@ const store = Redux.createStore(cardsApp)
 module.exports = ({room, updateCallback}) => {
   console.log('creating controller, listening for new stuff')
   
-  let a = ''
   const unsubscribe = store.subscribe(updateCallback.bind(null, store.getState))
 
   room.onUpdate.addOnce(state => {
     console.log('initial lobby data:', state)
     state.clients.forEach((el, idx) => store.dispatch({
-      type: 'client.add',
+      type: 'clients.add',
       client: {
         idx, name: el
       },
@@ -78,7 +80,7 @@ module.exports = ({room, updateCallback}) => {
   room.listen('clients/:number', (change) => {
     console.log('new client change arrived: ', change)
     store.dispatch({
-      type: 'client.' + change.operation,
+      type: 'clients.' + change.operation,
       client: {
         idx: parseInt(change.path.number),
         name: change.value,
@@ -88,6 +90,10 @@ module.exports = ({room, updateCallback}) => {
 
   room.listen('host', (change) => {
     console.log('host changed: ', change)
+    store.dispatch({
+      type: 'host.' + change.operation,
+      host: change.value
+    })
   })
 
   room.listen('players/:number', (change) => {
