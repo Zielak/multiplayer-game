@@ -83,7 +83,9 @@ const reducer = (state = {}, data) => {
     reducers['containers'](state, data)
     break
   default:
-    reducers[actionType](state, data)
+    if(actionType in reducers){
+      reducers[actionType](state, data)
+    }
   }
 }
 
