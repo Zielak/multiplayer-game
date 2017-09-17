@@ -77,37 +77,30 @@ const reducer = (state = {}, data) => {
   const actionType = getActionType(data)
   console.info(`Reduce: '${actionType}', ${data.action}`)
 
-  switch (actionType) {
-  case 'clients':
-    state.clients = clientsReducer(state.clients, data)
+  switch(actionType){
+  case 'decks':
+  case 'piles':
+    reducers['containers'](state, data)
     break
-  case 'players':
-    state.players = playersReducer(state.players, data)
-    break
-  case 'cards':
-    state.cards = cardsReducer(state.cards, data)
-    break
-  case 'containers':
-    state.containers = containersReducer(state.containers, data)
-    break
-  case 'testScore':
-    state.testScore = testScoreReducer(state.testScore, data)
-    break
+  default:
+    reducers[actionType](state, data)
   }
-  return state
 }
 
-const clientsReducer = require('./reducers/clients')
-const playersReducer = require('./reducers/players')
-const cardsReducer = require('./reducers/cards')
-const containersReducer = require('./reducers/containers')
-
-const testScoreReducer = (state = 0, data) => {
-  switch (data.action) {
-  case 'testScore.increase':
-    return state + 1
-  case 'testScore.decrease':
-    return state - 1
+const reducers = {
+  clients: require('./reducers/clients'),
+  players: require('./reducers/players'),
+  cards: require('./reducers/cards'),
+  containers: require('./reducers/containers'),
+  testScore: (state, data) => {
+    switch (data.action) {
+    case 'testScore.increase':
+      state.testScore++
+      break
+    case 'testScore.decrease':
+      state.testScore--
+      break
+    }
   }
 }
 
@@ -122,7 +115,12 @@ module.exports = class WarGame extends colyseus.Room {
       // Has the game started?
       started: false,
       // Clients that are actually playing the game plus some turn order variables
-      players: {},
+      players: {
+        list: [],
+        reversed: false,
+        currentPlayerIdx: 0,
+        currentPlayer: null,
+      },
       // Initial array of all available cards in the game
       cards: [],
       // Container holding (or not yet) cards

@@ -1,3 +1,3 @@
-module.exports = (state = [], data) => {
-  return state
+module.exports = (state, data) => {
+  // TODO: 
 }

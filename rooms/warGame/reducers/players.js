@@ -1,43 +1,39 @@
-module.exports = (state = {}, data) => {
-  let currIdx = state.currentPlayerIdx
+module.exports = (state, data) => {
+  const players = state.players
+  let currIdx = players.currentPlayerIdx
   switch (data.action) {
   case 'players.add':
-    return {
-      ...state,
-      players: data.player
-    }
+    players.list.push(data.player)
+    break
   case 'players.next':
-    if (!state.reversed) {
-      if (++currIdx > state.players.length - 1) {
+    if (!players.reversed) {
+      if (++currIdx > players.list.length - 1) {
         currIdx = 0
       }
     } else {
       if (--currIdx < 0) {
-        currIdx = state.players.length - 1
+        currIdx = players.list.length - 1
       }
     }
-    return {
-      ...state,
-      currentPlayerIdx: currIdx,
-      currentPlayer: state.players[currIdx],
-    }
+    players.currentPlayerIdx = currIdx
+    players.currentPlayer = players.list[currIdx]
+    break
   case 'players.prev':
-    if (state.reversed) {
-      if (++currIdx > state.players.length - 1) {
+    if (players.reversed) {
+      if (++currIdx > players.list.length - 1) {
         currIdx = 0
       }
     } else {
       if (--currIdx < 0) {
-        currIdx = state.players.length - 1
+        currIdx = players.list.length - 1
       }
     }
-    return {
-      ...state,
-      currentPlayerIdx: currIdx,
-      currentPlayer: state.players[currIdx],
-    }
+    players.currentPlayerIdx = currIdx
+    players.currentPlayer = players.list[currIdx]
+    break
   case 'players.shuffle':
-    return shufflePlayers(state)
+    shufflePlayers(players)
+    break
   case 'players.reverse':
     return {
       ...state,
@@ -48,28 +44,23 @@ module.exports = (state = {}, data) => {
   }
 }
 
-const shufflePlayers = (state) => {
-  const players = state.players.slice(0)
-  let currentPlayerIdx = state.currentPlayerIdx
-  let i = players.length
+const shufflePlayers = (players) => {
+  let currentPlayerIdx = players.currentPlayerIdx
+  let i = players.list.length
   if (i === 0){
-    return state
+    return
   }
   while (--i) {
     const j = Math.floor(Math.random() * (i + 1))
-    const tempi = players[i]
-    const tempj = players[j]
-    players[i] = tempj
-    players[j] = tempi
+    const tempi = players.list[i]
+    const tempj = players.list[j]
+    players.list[i] = tempj
+    players.list[j] = tempi
     // Keep the current player the same
     if(i === currentPlayerIdx){
       currentPlayerIdx = j
     }
   }
-  return {
-    ...state,
-    players,
-    currentPlayerIdx,
-    currentPlayer: players[currentPlayerIdx],
-  }
+  players.currentPlayerIdx = currentPlayerIdx
+  players.currentPlayer = players.list[currentPlayerIdx]
 }

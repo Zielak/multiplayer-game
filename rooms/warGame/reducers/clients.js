@@ -1,13 +1,9 @@
-module.exports = (state = [], data) => {
+module.exports = (state, data) => {
   switch (data.action) {
   case 'clients.add':
-    return [
-      ...state,
-      data.client
-    ]
+    state.clients.push(data.client)
+    break
   case 'clients.remove':
-    return state.filter(el => el !== data.client)
-  default:
-    return state
+    state.clients = state.clients.filter(el => el !== data.client)
   }
 }
