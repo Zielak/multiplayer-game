@@ -45,10 +45,19 @@ const gameState = (state, action) => {
   }
 }
 
+const testScore = (state = 0, action) => {
+  if(action.type === 'testScore.replace'){
+    return action.testScore
+  }else{
+    return state
+  }
+}
+
 const cardsApp = Redux.combineReducers({
   players,
   host,
   gameState,
+  testScore,
 })
 
 const store = Redux.createStore(cardsApp)
@@ -93,6 +102,14 @@ module.exports = ({room, updateCallback}) => {
     store.dispatch({
       type: 'host.' + change.operation,
       host: change.value
+    })
+  })
+
+  room.listen('testScore', change => {
+    console.log('new testScore: ', change.value)
+    store.dispatch({
+      type: 'testScore.' + change.operation,
+      testScore: change.value,
     })
   })
 

@@ -22,6 +22,11 @@ const render = (getState) => {
       initGameHandler={() =>
         warGameRoom.send({ action: 'game.start' })
       }
+      testScoreHandler={add =>
+        warGameRoom.send({
+          action: add > 0 ? 'testScore.increase' : 'testScore.decrease'
+        })
+      }
       {...state}
     />,
     document.getElementById('root')

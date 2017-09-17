@@ -23,6 +23,8 @@ const canPerformThisAction = (client, action, state) => {
     }else{
       return actionStatus()
     }
+  case 'testScore.increase': return actionStatus(true)
+  case 'testScore.decrease': return actionStatus(true)
   case '':
     if(client.id === state.currentPlayer.id){
       return actionStatus()
@@ -48,18 +50,18 @@ const startGame = (data, state) => {
       id: client.id,
       name: randomName(),
     })
-    state = reducer(state, { action: 'players.add', player: newPlayer })
+    reducer(state, { action: 'players.add', player: newPlayer })
   })
 
   // Setup all cards
-  state = reducer(state, { action: 'decks.set', deck: Presets.classicCardsDeck() })
+  reducer(state, { action: 'decks.set', deck: Presets.classicCardsDeck() })
 
   // Set the table
-  state = reducer(state, {
+  reducer(state, {
     action: 'containers.add',
     container: new Deck({ parent: state.players[0] })
   })
-  state = reducer(state, {
+  reducer(state, {
     action: 'containers.add',
     container: new Deck({ parent: state.players[1] })
   })
@@ -77,34 +79,37 @@ const reducer = (state = {}, data) => {
 
   switch (actionType) {
   case 'clients':
-    return {
-      ...state,
-      clients: clientsReducer(state.clients, data),
-    }
+    state.clients = clientsReducer(state.clients, data)
+    break
   case 'players':
-    return {
-      ...state,
-      players: playersReducer(state.players, data),
-    }
+    state.players = playersReducer(state.players, data)
+    break
   case 'cards':
-    return {
-      ...state,
-      cards: cardsReducer(state.cards, data),
-    }
+    state.cards = cardsReducer(state.cards, data)
+    break
   case 'containers':
-    return {
-      ...state,
-      containers: containersReducer(state.containers, data),
-    }
-  default:
-    return state
+    state.containers = containersReducer(state.containers, data)
+    break
+  case 'testScore':
+    state.testScore = testScoreReducer(state.testScore, data)
+    break
   }
+  return state
 }
 
 const clientsReducer = require('./reducers/clients')
 const playersReducer = require('./reducers/players')
 const cardsReducer = require('./reducers/cards')
 const containersReducer = require('./reducers/containers')
+
+const testScoreReducer = (state = 0, data) => {
+  switch (data.action) {
+  case 'testScore.increase':
+    return state + 1
+  case 'testScore.decrease':
+    return state - 1
+  }
+}
 
 module.exports = class WarGame extends colyseus.Room {
 
@@ -123,7 +128,10 @@ module.exports = class WarGame extends colyseus.Room {
       // Container holding (or not yet) cards
       containers: [],
       // Table
-      table: null
+      table: null,
+
+      // Testing
+      testScore: 0,
     })
     
     // setInterval(() => {
@@ -146,7 +154,7 @@ module.exports = class WarGame extends colyseus.Room {
   onJoin(client) {
     console.log('WarGame: JOINED: ', client.id)
     // this.state.clients.push(client.id)
-    this.state = reducer(this.state, {
+    reducer(this.state, {
       action: 'clients.add',
       client: client.id,
     })
@@ -156,7 +164,7 @@ module.exports = class WarGame extends colyseus.Room {
   }
 
   onLeave(client) {
-    this.state = reducer(this.state, {
+    reducer(this.state, {
       action: 'clients.remove',
       client: client.id,
     })
@@ -172,7 +180,7 @@ module.exports = class WarGame extends colyseus.Room {
     if (actionStatus.success) {
       console.log(` - success: ${actionStatus.description}`)
       performAction(data, this.state)
-      this.state = reducer(this.state, data)
+      reducer(this.state, data)
     } else {
       console.warn(` - fail: ${actionStatus.description}`)
       this.broadcast({
