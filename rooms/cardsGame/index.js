@@ -1,5 +1,5 @@
 module.exports = {
-  BaseCard: require('./basecard'),
+  BaseCard: require('./baseCard'),
   ClassicCard: require('./classicCard'),
   Conditions: require('./conditions'),
   Container: require('./container'),

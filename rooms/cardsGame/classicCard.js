@@ -1,4 +1,4 @@
-const BaseCard = require('./basecard')
+const BaseCard = require('./baseCard')
 
 module.exports = class ClassicCard extends BaseCard {
 
