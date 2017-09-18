@@ -1,11 +1,9 @@
-module.exports = (state, data) => {
-  const players = state.players
-  let currIdx = players.currentPlayerIdx
-  switch (data.action) {
-  case 'players.add':
-    players.list.push(data.player)
-    break
-  case 'players.next':
+module.exports = {
+  add: (state, player) => state.players.list.push(player),
+  
+  next: (state) => {
+    const players = state.players
+    let currIdx = players.currentPlayerIdx
     if (!players.reversed) {
       if (++currIdx > players.list.length - 1) {
         currIdx = 0
@@ -17,8 +15,10 @@ module.exports = (state, data) => {
     }
     players.currentPlayerIdx = currIdx
     players.currentPlayer = players.list[currIdx]
-    break
-  case 'players.prev':
+  },
+  prev: (state) => {
+    const players = state.players
+    let currIdx = players.currentPlayerIdx
     if (players.reversed) {
       if (++currIdx > players.list.length - 1) {
         currIdx = 0
@@ -30,37 +30,29 @@ module.exports = (state, data) => {
     }
     players.currentPlayerIdx = currIdx
     players.currentPlayer = players.list[currIdx]
-    break
-  case 'players.shuffle':
-    shufflePlayers(players)
-    break
-  case 'players.reverse':
-    return {
-      ...state,
-      reversed: !state.reversed
+  },
+  
+  shuffle: (state) => {
+    let currentPlayerIdx = state.players.currentPlayerIdx
+    let i = state.players.list.length
+    if (i === 0){
+      return
     }
-  default:
-    return state
-  }
-}
-
-const shufflePlayers = (players) => {
-  let currentPlayerIdx = players.currentPlayerIdx
-  let i = players.list.length
-  if (i === 0){
-    return
-  }
-  while (--i) {
-    const j = Math.floor(Math.random() * (i + 1))
-    const tempi = players.list[i]
-    const tempj = players.list[j]
-    players.list[i] = tempj
-    players.list[j] = tempi
-    // Keep the current player the same
-    if(i === currentPlayerIdx){
-      currentPlayerIdx = j
+    while (--i) {
+      const j = Math.floor(Math.random() * (i + 1))
+      const tempi = state.players.list[i]
+      const tempj = state.players.list[j]
+      state.players.list[i] = tempj
+      state.players.list[j] = tempi
+      // Keep the current player the same
+      if(i === currentPlayerIdx){
+        currentPlayerIdx = j
+      }
     }
+    state.players.currentPlayerIdx = currentPlayerIdx
+    state.players.currentPlayer = state.players.list[currentPlayerIdx]
+  },
+  reverse: (state) => {
+    state.players.reversed = state.players.reversed
   }
-  players.currentPlayerIdx = currentPlayerIdx
-  players.currentPlayer = players.list[currentPlayerIdx]
 }

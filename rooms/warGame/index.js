@@ -50,11 +50,13 @@ const startGame = (data, state) => {
       id: client.id,
       name: randomName(),
     })
-    reducer(state, { action: 'players.add', player: newPlayer })
+    console.info('adding new player!')
+    state.players.list.push(newPlayer)
+    // reducers.players.add(state, newPlayer)
   })
 
   // Setup all cards
-  reducer(state, { action: 'decks.set', deck: Presets.classicCardsDeck() })
+  reducers.containers(state, { action: 'decks.set', deck: Presets.classicCardsDeck() })
 
   // Set the table
   reducer(state, {
