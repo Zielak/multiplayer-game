@@ -49,9 +49,13 @@ const getActionOperator = (data) => {
 }
 
 const performAction = (data, state) => {
+  const actionType = getActionType(data.state)
   switch(data.action){
   case 'game.start':
     startGame(data, state)
+  }
+  switch(actionType){
+  case ''
   }
 }
 
@@ -158,11 +162,6 @@ module.exports = class WarGame extends colyseus.Room {
     if (actionStatus.success) {
       console.log(` - success: ${actionStatus.description}`)
       performAction(data, this.state)
-      // const _r = reducer[getActionType(data.action)]
-      // const _ra = _r ? _r[getActionOperator(data.action)] : false
-      // if (_ra) {
-      //   _ra(this.state, data)
-      // }
     } else {
       console.warn(` - fail: ${actionStatus.description}`)
       this.broadcast({
