@@ -113,8 +113,17 @@ module.exports = ({room, updateCallback}) => {
     })
   })
 
-  room.listen('players/:number', (change) => {
-    console.log('player changed: ', change)
+  room.listen('players/list/:number', (change) => {
+    console.log('player list changed: ', change)
+  })
+  room.listen('players/reversed', (change) => {
+    console.log('player reversed changed: ', change)
+  })
+  room.listen('players/currentPlayerIdx', (change) => {
+    console.log('player currentPlayerIdx changed: ', change)
+  })
+  room.listen('players/currentPlayer', (change) => {
+    console.log('player currentPlayer changed: ', change)
   })
 
   room.listen('containers/:number', (change) => {
