@@ -14,7 +14,7 @@ const actionStatus = (success = true, description = '') => {
   return { success, description }
 }
 
-const canPerformThisAction = (client, action, state) => {
+const canClientPerformThisAction = (client, action, state) => {
   switch (action) {
   case 'game.start':
     if(client.id !== state.host){
@@ -37,25 +37,23 @@ const canPerformThisAction = (client, action, state) => {
   }
 }
 
-const getActionType = (data) => {
-  if(data.action === undefined) return ''
-  const firstDot = data.action.indexOf('.')
-  return data.action.slice(0, firstDot)
+const getActionType = (action) => {
+  if(action === undefined) return ''
+  const firstDot = action.indexOf('.')
+  return action.slice(0, firstDot)
 }
-const getActionOperator = (data) => {
-  if(data.action === undefined) return ''
-  const firstDot = data.action.indexOf('.')
-  return data.action.slice(firstDot)
+const getActionArgument = (action) => {
+  if(action === undefined) return ''
+  const firstDot = action.indexOf('.')
+  return action.slice(firstDot)
 }
 
 const performAction = (data, state) => {
-  const actionType = getActionType(data.state)
+  const actionType = getActionType(data.action)
   switch(data.action){
   case 'game.start':
     startGame(data, state)
-  }
-  switch(actionType){
-  case ''
+    break
   }
 }
 
@@ -70,13 +68,13 @@ const startGame = (data, state) => {
   })
 
   // Setup all cards
-  reducer.cards.add(state, Presets.classicCardsDeck())
+  Presets.classicCards().forEach( el => reducer.cards.add(state, el) )
 
-  // Set the table
-  reducer.containers.add(state, new Deck({ parent: state.players[0] }))
-  reducer.containers.add(state, new Deck({ parent: state.players[1] }))
-  reducer.containers.add(state, new Row({ parent: state.players[0] }))
-  reducer.containers.add(state, new Row({ parent: state.players[1] }))
+  // Set the table, empty decks and rows
+  reducer.containers.add(state, new Deck({ parent: state.players.list[0] }))
+  reducer.containers.add(state, new Deck({ parent: state.players.list[0] }))
+  reducer.containers.add(state, new Row({ parent: state.players.list[0] }))
+  reducer.containers.add(state, new Row({ parent: state.players.list[0] }))
 }
 
 const reducer = {
@@ -157,13 +155,13 @@ module.exports = class WarGame extends colyseus.Room {
   onMessage(client, data) {
     console.log('MSG: ', JSON.stringify(data))
 
-    const actionStatus = canPerformThisAction(client, data.action, this.state)
-    console.log(`action: ${data.action}`)
+    const actionStatus = canClientPerformThisAction(client, data.action, this.state)
+    console.info(`action: ${data.action}`)
     if (actionStatus.success) {
       console.log(` - success: ${actionStatus.description}`)
       performAction(data, this.state)
     } else {
-      console.warn(` - fail: ${actionStatus.description}`)
+      console.error(` - fail: ${actionStatus.description}`)
       this.broadcast({
         event: 'game.error',
         data: `Client "${client.id}" failed to perform "${data.action}" action.
