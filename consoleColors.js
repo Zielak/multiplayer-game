@@ -39,7 +39,7 @@ const text = {
 const suffix = {
   info: '\x1b[0m',
   warn: '\x1b[0m',
-  error: '',
+  error: '\x1b[0m',
 }
 
 const getPrefix = (method) => {
