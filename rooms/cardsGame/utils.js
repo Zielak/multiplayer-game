@@ -4,5 +4,8 @@ module.exports = {
   ),
   default: (value, def) => {
     return typeof value !== 'undefined' ? value : def
+  },
+  exists: (value) => {
+    return typeof value !== undefined
   }
 }
