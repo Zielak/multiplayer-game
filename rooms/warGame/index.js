@@ -19,7 +19,7 @@ const canClientPerformThisAction = (client, action, state) => {
   case 'game.start':
     if(client.id !== state.host){
       return actionStatus(false, `Client '${client.id}' is not a host: '${state.host}'`)
-    }else if (state.clients.length < 2){
+    }else if (state.clients.length < 1){
       return actionStatus(false, `Not enough clients: only '${state.clients.length}' clients in the room`)
     }else{
       return actionStatus()
