@@ -16,17 +16,18 @@ module.exports = {
         loaders: ['babel-loader'],
       },
       {
-        test: /\.css$/,
+        test: /\.scss$/,
         use: [
           'style-loader',
           {
             loader: 'css-loader',
             options: {
-              importLoaders: 1,
+              importLoaders: 2,
               minimize: false,
             },
           },
-        ],
+          'sass-loader',
+        ]
       },
     ],
   },

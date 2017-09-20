@@ -63,7 +63,7 @@ function intercept(method) {
 }
 ['info', 'warn', 'error'].forEach(intercept)
 
-console.log('Console Colors testing:')
-console.warn('Warning please.')
-console.info('Information comming!')
-console.error('THE WORLD IS GOING TO END')
+// console.log('Console Colors testing:')
+// console.warn('Warning please.')
+// console.info('Information comming!')
+// console.error('THE WORLD IS GOING TO END')

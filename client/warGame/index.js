@@ -3,7 +3,7 @@ const PropTypes = require('prop-types')
 
 const PlayersList = require('../components/clientsList')
 
-// require('./styles.css')
+// require('./styles.scss')
 
 class Cards extends React.Component {
 

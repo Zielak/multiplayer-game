@@ -2,7 +2,7 @@ const Colyseus = require('colyseus.js')
 const React = require('react')
 const ReactDOM = require('react-dom')
 
-require('./styles.css')
+require('./styles.scss')
 
 // const Lobby = require('./lobby/index')
 const WarGame = require('./warGame/index')

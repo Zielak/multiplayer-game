@@ -1,7 +1,7 @@
 const React = require('react')
 const PropTypes = require('prop-types')
 
-require('./clientsList.css')
+require('./clientsList.scss')
 
 class ClientsList extends React.Component {
 

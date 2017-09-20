@@ -6,7 +6,7 @@ const ClientsList = require('./../components/clientsList')
 const Messages = require('./messages')
 
 // TODO: don't load styles when not in view?
-require('./styles.css')
+require('./styles.scss')
 
 const messages = (state = [], action) => {
   switch (action.type) {
