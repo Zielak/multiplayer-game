@@ -1,26 +1,45 @@
 const Redux = require('redux')
 
-const players = (state = [], action) => {
+const players = (state = {}, action) => {
   switch (action.type) {
-  case 'clients.add':
-    return [...state, action.client]
-  case 'clients.remove':
-    return [
-      ...state.slice(0, action.client.idx),
-      ...state.slice(action.client.idx + 1)
-    ]
-  case 'clients.replace':
-    return state.map((client) => {
-      if (action.client.idx !== client.idx) {
-        return client
-      }
-      return {
-        ...client,
-        name: action.client.name
-      }
-    })
+  case 'players.add':
+    return {
+      ...state,
+      list: [...state.list, action.data.player]
+    }
+  case 'players.remove':
+    return {
+      ...state,
+      list: [
+        ...state.slice(0, action.data.idx),
+        ...state.slice(action.data.idx + 1)
+      ]
+    }
+  case 'players.replace':
+    return {
+      ...state,
+      list: state.map((player) => {
+        if (action.data.idx !== player.idx) {
+          return player
+        }
+        return {
+          ...player,
+          name: action.data.player.name
+        }
+      })
+    }
+  case 'players.reversed':
+    return {
+      ...state,
+      reversed: action.data.player
+    }
   default:
-    return state
+    return {
+      list: [],
+      reversed: false,
+      currentPlayerIdx: 0,
+      currentPlayer: null,
+    }
   }
 }
 
@@ -29,7 +48,7 @@ const host = (state = null, action) => {
   switch(action.type){
   case 'host.add':
   case 'host.replace':
-    return action.host
+    return action.data
   default:
     return state
   }
@@ -46,8 +65,8 @@ const gameState = (state, action) => {
 }
 
 const testScore = (state = 0, action) => {
-  if(action.type === 'testScore.replace'){
-    return action.testScore
+  if(action.type === 'testScore.replace' || action.type === 'testScore.add'){
+    return action.data
   }else{
     return state
   }
@@ -71,13 +90,13 @@ module.exports = ({room, updateCallback}) => {
     console.log('initial lobby data:', state)
     state.clients.forEach((el, idx) => store.dispatch({
       type: 'clients.add',
-      client: {
+      data: {
         idx, name: el
       },
     }))
     store.dispatch({
       type: 'host.set',
-      host: state.host,
+      data: state.host,
     })
   })
 
@@ -90,7 +109,7 @@ module.exports = ({room, updateCallback}) => {
     console.log('new client change arrived: ', change)
     store.dispatch({
       type: 'clients.' + change.operation,
-      client: {
+      data: {
         idx: parseInt(change.path.number),
         name: change.value,
       }
@@ -101,7 +120,7 @@ module.exports = ({room, updateCallback}) => {
     console.log('host changed: ', change)
     store.dispatch({
       type: 'host.' + change.operation,
-      host: change.value
+      data: change.value
     })
   })
 
@@ -109,12 +128,19 @@ module.exports = ({room, updateCallback}) => {
     console.log('new testScore: ', change.value)
     store.dispatch({
       type: 'testScore.' + change.operation,
-      testScore: change.value,
+      data: change.value,
     })
   })
 
   room.listen('players/list/:number', (change) => {
     console.log('player list changed: ', change)
+    store.dispatch({
+      type: 'players.' + change.operation,
+      data: {
+        idx: parseInt(change.path.number),
+        player: change.value,
+      }
+    })
   })
   room.listen('players/reversed', (change) => {
     console.log('player reversed changed: ', change)

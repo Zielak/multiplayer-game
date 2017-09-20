@@ -8,7 +8,7 @@ const {
 } = require('../cardsGame/index')
 
 const randomName = () =>
-  [1, 2, 3].map(() => Math.floor(Math.random() * 25 + 65)).map((e) => String.fromCharCode(e))
+  [1, 2, 3].map(() => Math.floor(Math.random() * 25 + 65)).map((e) => String.fromCharCode(e)).join('')
 
 const actionStatus = (success = true, description = '') => {
   return { success, description }
@@ -61,7 +61,7 @@ const startGame = (data, state) => {
   // Gather players
   state.clients.forEach(client => {
     const newPlayer = new Player({
-      id: client.id,
+      id: client,
       name: randomName(),
     })
     reducer.players.add(state, newPlayer)

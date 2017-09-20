@@ -24,7 +24,7 @@ module.exports = class Base {
     }
     
     // Sanitize parent to ID
-    if (typeof options.parent.id === 'string') {
+    if (options.parent && typeof options.parent.id === 'string') {
       this.parent = options.parent
     } else if (typeof options.parent === 'object' && options.parent.id) {
       this.parent = options.parent.id

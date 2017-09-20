@@ -1,7 +1,7 @@
 const React = require('react')
 const PropTypes = require('prop-types')
 
-const PlayersList = require('../components/clientsList')
+const PlayersList = require('../components/playersList')
 
 // require('./styles.scss')
 
@@ -26,7 +26,7 @@ class Cards extends React.Component {
         </div>
         <PlayersList
           title='Players'
-          clients={this.props.players}
+          players={this.props.players}
           host={this.props.host}
         ></PlayersList>
       </div>
@@ -38,7 +38,7 @@ Cards.propTypes = {
   initGameHandler: PropTypes.func,
   testScoreHandler: PropTypes.func,
 
-  players: PropTypes.array,
+  players: PropTypes.object,
   host: PropTypes.string,
   testScore: PropTypes.number,
 }
