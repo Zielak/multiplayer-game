@@ -23,6 +23,9 @@ module.exports = class Base {
       }
     }
     
+    // List of children ID's
+    this.children = []
+    
     // Sanitize parent to ID
     if (options.parent && typeof options.parent.id === 'string') {
       this.parent = options.parent
@@ -33,7 +36,10 @@ module.exports = class Base {
     }
     
     // Parent element which holds this container
-    this.parent = options.parent ? utils.default(options.parent.id, null) : null
+    this.parent = null
+    if (options.parent !== undefined) {
+      Base.get(options.parent).addChild(this.id)
+    }
   }
 
   /**
@@ -50,6 +56,46 @@ module.exports = class Base {
     } else {
       return Base.get(this.parent.owner)
     }
+  }
+  
+  /**
+   * Adds new child to this element, ensuring that its last parent
+   * knows about this change.
+   * 
+   * @param {any|string} element reference to an object or its ID
+   * @returns this
+   */
+  addChild(element) {
+    const childId = typeof element !== 'string' ? element.id : element
+    const child = typeof element !== 'string' ? element : Base.get(element)
+    
+    // Notify element's last parent of change
+    const lastParent = Base.get(child.parent)
+    lastParent.removeChild(childId)
+    
+    // Change child's parent element
+    child.parent = this.id
+    
+    // Add to this list
+    this.children.push(childId)
+    return this
+  }
+  
+  /**
+   * Removes one child
+   * 
+   * @param {any|string} element reference to an object or its ID
+   * @returns this
+   */
+  removeChild(element) {
+    const childId = typeof element !== 'string' ? element.id : element
+    const child = typeof element !== 'string' ? element : Base.get(element)
+    
+    // Nullify its parent
+    child.parent = null
+    
+    this.children = this.children.filter(e => e !== child)
+    return this
   }
 
   /**
