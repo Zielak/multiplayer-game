@@ -1,4 +1,15 @@
 .Table{
   min-height: 600px;
   background: #FCE4CA;
+  position: relative;
+}
+
+player {
+  position: absolute;
+  display: block;
+  width: 1px;
+  height: 1px;
+
+  background: red;
+  font-size: 10px;
 }

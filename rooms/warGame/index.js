@@ -44,24 +44,29 @@ const getActionType = (action) => {
 }
 const getActionArgument = (action) => {
   if(action === undefined) return ''
-  const firstDot = action.indexOf('.')
+  const firstDot = action.indexOf('.')+1
   return action.slice(firstDot)
 }
 
 const performAction = (data, state) => {
   const actionType = getActionType(data.action)
+  const actionArgument = getActionArgument(data.action)
   switch(data.action){
   case 'game.start':
-    startGame(data, state)
-    break
+    return startGame(data, state)
+  }
+  if(actionType === 'testScore'){
+    // console.warn('trying to run',actionArgument)
+    return reducer.testScore[actionArgument](state)
   }
 }
 
 const startGame = (data, state) => {
   // Gather players
-  state.clients.forEach(client => {
+  // state.clients.forEach(client => {
+  [0,1].forEach(client => {
     const newPlayer = new Player({
-      id: client,
+      clientId: client,
       name: randomName(),
     })
     reducer.players.add(state, newPlayer)

@@ -1,5 +1,4 @@
 const uuid = require('uuid/v4')
-const Player = require('./player')
 const utils = require('./utils')
 
 const objects = new Map()
@@ -50,7 +49,7 @@ module.exports = class Base {
    * @return {Player|null} `Player` or `null` if this container doesn't belong to anyone
    */
   get owner(){
-    if(Base.get(this.parent) instanceof Player){
+    if(typeof Base.get(this.parent) === 'object'){
       return this.parent
     } else if (this.parent === null) {
       return null

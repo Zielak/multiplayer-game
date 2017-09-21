@@ -1,6 +1,14 @@
 const Redux = require('redux')
 
-const players = (state = {}, action) => {
+const players = (state, action) => {
+  if(state === undefined) {
+    return {
+      list: [],
+      reversed: false,
+      currentPlayerIdx: 0,
+      currentPlayer: null,
+    }
+  }
   switch (action.type) {
   case 'players.add':
     return {
@@ -34,12 +42,7 @@ const players = (state = {}, action) => {
       reversed: action.data.player
     }
   default:
-    return {
-      list: [],
-      reversed: false,
-      currentPlayerIdx: 0,
-      currentPlayer: null,
-    }
+    return state
   }
 }
 
@@ -54,7 +57,7 @@ const host = (state = null, action) => {
   }
 }
 
-const gameState = (state, action) => {
+const gameState = (state = {}, action) => {
   if (state === undefined) {
     return {
       started: false,

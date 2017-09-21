@@ -1,8 +1,12 @@
-module.exports = class Player {
-  
+const Base = require('./base')
+
+module.exports = class Player extends Base {
+
   constructor(options = {}){
+    super(options)
+
     this.name = options.name
-    this.id = options.id
+    this.clientId = options.clientId
     
     // Defaults
     this.score = 0
