@@ -7,7 +7,7 @@ const PropTypes = require('prop-types')
 class Deck extends React.Component {
 
   render(){
-    const shadow = ()
+  // const shadow = ()
 
     return (
       <div className="deck">
@@ -34,10 +34,10 @@ class Deck extends React.Component {
 
 }
 
-ClassicCard.propTypes = {
+Deck.propTypes = {
   cards: PropTypes.array,
   rank: PropTypes.string,
   faceUp: PropTypes.bool,
 }
 
-module.exports = ClassicCard
+module.exports = Deck

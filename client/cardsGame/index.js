@@ -1,11 +1,8 @@
 module.exports = {
   Renderer: require('./renderer'),
-  Deck: require('./deck'),
-  Pile: require('./pile'),
-  Row: require('./row'),
-  // Deck: require('./deck'),
-  // Hand: require('./hand'),
-  // Pile: require('./pile'),
-  // Player: require('./player'),
-  // Row: require('./row'),
+  Deck: require('./containers/deck/deck'),
+  Pile: require('./containers/pile/pile'),
+  Row: require('./containers/row/row'),
+  
+  Table: require('./table/table'),
 }

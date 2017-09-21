@@ -1,6 +1,8 @@
 const React = require('react')
 const PropTypes = require('prop-types')
 
+require('./classicCard.scss')
+
 class ClassicCard extends React.Component {
 
   render(){
@@ -48,9 +50,13 @@ class ClassicCard extends React.Component {
 }
 
 ClassicCard.propTypes = {
+  name: PropTypes.string,
   suit: PropTypes.string,
   rank: PropTypes.string,
+  
   faceUp: PropTypes.bool,
+  rotated: PropTypes.number,
+  marked: PropTypes.bool,
 }
 
 module.exports = ClassicCard

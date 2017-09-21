@@ -38,7 +38,8 @@ module.exports = class Base {
     // Parent element which holds this container
     this.parent = null
     if (options.parent !== undefined) {
-      Base.get(options.parent).addChild(this.id)
+      const parent = Base.get(options.parent)
+      parent && parent.addChild(this.id)
     }
   }
 
