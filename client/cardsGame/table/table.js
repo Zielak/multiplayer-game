@@ -16,9 +16,23 @@ const positionFromAngle = (angle, distance) => {
 class Table extends React.Component {
 
   render() {
-    let players
+    let players, containers
 
     if(this.props.players){
+      const angle = this.props.players.list ? 360 / this.props.players.list.length : 0
+      players = this.props.players.list.map((el, idx) => {
+        // TODO: align angle to the current player
+        const position = positionFromAngle(angle * idx+90, 40)
+        return (
+          <player key={idx} style={position}>
+            {'player:'+idx}<br/>
+            {'angle:'+angle*idx}
+          </player>
+        )
+      })
+    }
+    
+    if(this.props.containers){
       const angle = this.props.players.list ? 360 / this.props.players.list.length : 0
       players = this.props.players.list.map((el, idx) => {
         // TODO: align angle to the current player

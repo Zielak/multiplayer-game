@@ -14,7 +14,7 @@ module.exports = class Container extends Base {
     this.conditions = new Conditions(options.conditions, this)
   }
 
-  get length(){
+  get length() {
     return this.children.length
   }
 
@@ -23,7 +23,7 @@ module.exports = class Container extends Base {
    * 
    * @return {Container}
    */
-  shuffle(){
+  shuffle() {
     let i = this.children.length
     if (i === 0) return
     while (--i) {
@@ -41,8 +41,8 @@ module.exports = class Container extends Base {
    * 
    * @return {object}
    */
-  top(){
-    return this.children[this.children.length-1]
+  top() {
+    return this.children[this.children.length - 1]
   }
 
   /**
@@ -50,7 +50,7 @@ module.exports = class Container extends Base {
    * 
    * @return {object}
    */
-  bottom(){
+  bottom() {
     return this.children[0]
   }
 

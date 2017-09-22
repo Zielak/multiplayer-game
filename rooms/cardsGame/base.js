@@ -4,12 +4,14 @@ const utils = require('./utils')
 const objects = new Map()
 
 module.exports = class Base {
-  constructor(options = {}){
+  constructor(options = {}) {
     this.id = uuid()
 
     // Store a reference to itself by ID
     objects.set(this.id, this)
     
+    this.name = utils.default(options.name, undefined)
+
     // Has any dimensions? Add to seperate object
     if (utils.exists(options.x) || utils.exists(options.y)
       || utils.exists(options.y) || utils.exists(options.y)) {
@@ -21,22 +23,27 @@ module.exports = class Base {
         height: utils.default(options.height, 5),
       }
     }
-    
+
     // List of children ID's
     this.children = []
-    
+
     // Sanitize parent to ID
-    if (options.parent && typeof options.parent.id === 'string') {
+    if (typeof options.parent === 'string') {
+      // console.log('Parent was string', options.parent)
       this.parent = options.parent
-    } else if (typeof options.parent === 'object' && options.parent.id) {
+    } else if (
+      typeof options.parent === 'object' &&
+      options.parent.id && typeof options.parent.id === 'string'
+    ) {
+      // console.log('Parent was object', options.parent)
       this.parent = options.parent.id
     } else {
+      // console.log('Parent was nothing?', options.parent)
       this.parent = null
     }
-    
-    // Parent element which holds this container
-    this.parent = null
-    if (options.parent !== undefined) {
+
+    // Add myself to my new parent element
+    if (this.parent !== null) {
       const parent = Base.get(options.parent)
       parent && parent.addChild(this.id)
     }
@@ -48,8 +55,8 @@ module.exports = class Base {
    * @readonly
    * @return {Player|null} `Player` or `null` if this container doesn't belong to anyone
    */
-  get owner(){
-    if(typeof Base.get(this.parent) === 'object'){
+  get owner() {
+    if (typeof Base.get(this.parent) === 'object') {
       return this.parent
     } else if (this.parent === null) {
       return null
@@ -57,7 +64,7 @@ module.exports = class Base {
       return Base.get(this.parent.owner)
     }
   }
-  
+
   /**
    * Adds new child to this element, ensuring that its last parent
    * knows about this change.
@@ -68,19 +75,19 @@ module.exports = class Base {
   addChild(element) {
     const childId = typeof element !== 'string' ? element.id : element
     const child = typeof element !== 'string' ? element : Base.get(element)
-    
+
     // Notify element's last parent of change
     const lastParent = Base.get(child.parent)
     lastParent.removeChild(childId)
-    
+
     // Change child's parent element
     child.parent = this.id
-    
+
     // Add to this list
     this.children.push(childId)
     return this
   }
-  
+
   /**
    * Removes one child
    * 
@@ -90,10 +97,10 @@ module.exports = class Base {
   removeChild(element) {
     const childId = typeof element !== 'string' ? element.id : element
     const child = typeof element !== 'string' ? element : Base.get(element)
-    
+
     // Nullify its parent
     child.parent = null
-    
+
     this.children = this.children.filter(e => e !== child)
     return this
   }
@@ -105,7 +112,7 @@ module.exports = class Base {
    * @param {string} id 
    * @returns {any}
    */
-  static get(id){
+  static get(id) {
     return objects.get(id)
   }
 }

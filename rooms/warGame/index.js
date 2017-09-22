@@ -2,7 +2,8 @@ const colyseus = require('colyseus')
 
 const {
   Deck,
-  Row,
+  Pile,
+  Hand,
   Player,
   Presets,
 } = require('../cardsGame/index')
@@ -76,10 +77,24 @@ const startGame = (data, state) => {
   Presets.classicCards().forEach( el => reducer.cards.add(state, el) )
 
   // Set the table, empty decks and rows
-  reducer.containers.add(state, new Deck({ parent: state.players.list[0] }))
-  reducer.containers.add(state, new Deck({ parent: state.players.list[0] }))
-  reducer.containers.add(state, new Row({ parent: state.players.list[0] }))
-  reducer.containers.add(state, new Row({ parent: state.players.list[0] }))
+  state.players.list.forEach(player => {
+    reducer.containers.add(state, new Deck({
+      parent: player,
+    }))
+    reducer.containers.add(state, new Hand({
+      parent: player,
+    }))
+    reducer.containers.add(state, new Pile({
+      parent: player,
+      name: 'stage',
+    }))
+    reducer.containers.add(state, new Pile({
+      parent: player,
+      name: 'dead heat',
+      // a situation in or result of a race
+      // in which two or more competitors are exactly even.
+    }))
+  })
 }
 
 const reducer = {

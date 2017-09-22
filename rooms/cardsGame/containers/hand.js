@@ -6,12 +6,9 @@ const Container = require('../container')
  */
 module.exports = class Hand extends Container {
 
-  constructor(options){
+  constructor(options = {}) {
     super(options)
-  }
-
-  get type(){
-    return 'hand'
+    this.type = 'hand'
   }
 
 }

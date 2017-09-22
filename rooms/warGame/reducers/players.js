@@ -1,6 +1,6 @@
 module.exports = {
   add: (state, player) => state.players.list.push(player),
-  
+
   next: (state) => {
     const players = state.players
     let currIdx = players.currentPlayerIdx
@@ -31,11 +31,11 @@ module.exports = {
     players.currentPlayerIdx = currIdx
     players.currentPlayer = players.list[currIdx]
   },
-  
+
   shuffle: (state) => {
     let currentPlayerIdx = state.players.currentPlayerIdx
     let i = state.players.list.length
-    if (i === 0){
+    if (i === 0) {
       return
     }
     while (--i) {
@@ -45,7 +45,7 @@ module.exports = {
       state.players.list[i] = tempj
       state.players.list[j] = tempi
       // Keep the current player the same
-      if(i === currentPlayerIdx){
+      if (i === currentPlayerIdx) {
         currentPlayerIdx = j
       }
     }

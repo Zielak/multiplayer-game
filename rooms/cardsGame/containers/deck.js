@@ -7,8 +7,9 @@ const Container = require('../container')
  */
 module.exports = class Deck extends Container {
 
-  get type(){
-    return 'deck'
+  constructor(options = {}) {
+    super(options)
+    this.type = 'deck'
   }
 
   /**

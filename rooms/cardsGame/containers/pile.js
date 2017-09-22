@@ -20,8 +20,9 @@ const cardsDataFactory = (card, limits) => {
  */
 module.exports = class Pile extends Container {
 
-  constructor(options = {}){
+  constructor(options = {}) {
     super(options)
+    this.type = 'pile'
 
     this.limits = Object.assign({}, {
       minAngle: -20,
@@ -34,16 +35,12 @@ module.exports = class Pile extends Container {
 
     this.cardsData = []
   }
-  
-  get type(){
-    return 'pile'
-  }
 
   push(element) {
     this.cardsData.push(cardsDataFactory(element, this.limits))
     return super.push(element)
   }
-  
+
   remove(element) {
     const idx = this.elements.indexOf(element)
     return this.elements.splice(idx, 1)

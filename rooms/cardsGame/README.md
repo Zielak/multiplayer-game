@@ -21,6 +21,32 @@ I don't yet know how will it play out on mobile devices/small screens.
 
 ## Containers
 
+Containers are just a group of cards/elements. Different containers should be rendered differently
+
+### `deck`
+
+Neatly packed cards on top of eachother. Same x/y positions.
+
+### `hand`
+
+Cards that you hold in your own hand, and nobody can see them. They're ought to 
+be rendered in "spread", just like you would hold cards in your hand.
+
+### `pile`
+
+Cards randomly thrown at one spot on the table, one on top of the other.
+Each new card will get randomized offset and rotation.
+
+### `row`
+
+Cards placed in one row, one next to the other.
+This container has specified width, and cards will never overflow this container.
+User should be able to peek and see all cards in here (unless they're face-down). 
+
+### `spread`
+
+![Spread of cards](https://i.imgur.com/6AOyxPm.gif)
+
 ## Cards
 
 
