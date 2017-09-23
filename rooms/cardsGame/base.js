@@ -27,28 +27,25 @@ module.exports = class Base {
     // List of children ID's
     this.children = []
 
+    this.onUpdate = utils.def(options.onUpdate || utils.noop)
+
     // Sanitize parent to ID
-    if (typeof options.parent === 'string') {
-      // console.log('Parent was string', options.parent)
-      this.parent = options.parent
-    } else if (
+    if (
       typeof options.parent === 'object' &&
       options.parent.id && typeof options.parent.id === 'string'
     ) {
       // console.log('Parent was object', options.parent)
-      this.parent = options.parent.id
+      options.parent = options.parent.id
     } else {
       // console.log('Parent was nothing?', options.parent)
-      this.parent = null
+      options.parent = null
     }
 
     // Add myself to my new parent element
-    if (this.parent !== null) {
-      const parent = Base.get(this.parent)
+    if (options.parent !== null) {
+      const parent = objects.get(options.parent)
       parent && parent.addChild(this.id)
     }
-
-    this.onUpdate = utils.def(options.onUpdate || utils.noop)
   }
 
   /**
@@ -75,19 +72,20 @@ module.exports = class Base {
    * @returns this
    */
   addChild(element) {
-    const childId = typeof element !== 'string' ? element.id : element
-    const child = typeof element !== 'string' ? element : Base.get(element)
+    const child = typeof element === 'string' ? objects.get(element) : element
 
     // Notify element's last parent of change
-    const lastParent = Base.get(child.parent)
-    lastParent.removeChild(childId)
+    const lastParent = objects.get(child.parent)
+    if(lastParent) {
+      lastParent.removeChild(child)
+    }
 
     // Change child's parent element
     child.parent = this.id
 
     // Add to this list
-    this.children.push(childId)
-    this.onUpdate()
+    this.children.push(child.id)
+    this.onUpdate(this)
     return this
   }
 
@@ -105,7 +103,7 @@ module.exports = class Base {
     child.parent = null
 
     this.children = this.children.filter(e => e !== child)
-    this.onUpdate()
+    this.onUpdate(this)
     return this
   }
 
@@ -118,5 +116,14 @@ module.exports = class Base {
    */
   static get(id) {
     return objects.get(id)
+  }
+
+  /**
+   * Only for testing. Do not use while playing
+   * 
+   * @static
+   */
+  static _clear() {
+    objects.clear()
   }
 }

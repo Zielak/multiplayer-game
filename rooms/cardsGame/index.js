@@ -1,4 +1,5 @@
 module.exports = {
+  Base: require('./base'),
   BaseCard: require('./baseCard'),
   ClassicCard: require('./classicCard'),
   Conditions: require('./conditions'),
@@ -12,4 +13,7 @@ module.exports = {
 
   Player: require('./player'),
   Presets: require('./presets'),
+  Table: require('./table'),
+
+  utils: require('./utils'),
 }
