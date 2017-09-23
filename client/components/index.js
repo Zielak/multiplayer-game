@@ -1,4 +1,2 @@
-module.exports = {
-  ClientsList: require('./clientsList/clientsList'),
-  PlayersList: require('./playersList/playersList'),
-}
+export { default as ClientsList } from './clientsList/clientsList'
+export { default as PlayersList } from './playersList/playersList'

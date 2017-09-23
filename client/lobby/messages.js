@@ -1,5 +1,5 @@
-const React = require('react')
-const PropTypes = require('prop-types')
+import React from 'react'
+import PropTypes from 'prop-types'
 
 class Messages extends React.Component {
 
@@ -55,4 +55,4 @@ Messages.propTypes = {
   sendMessageHandler: PropTypes.func,
 }
 
-module.exports = Messages
+export default Messages

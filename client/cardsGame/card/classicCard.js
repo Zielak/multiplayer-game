@@ -1,5 +1,5 @@
-const React = require('react')
-const PropTypes = require('prop-types')
+import React from 'react'
+import PropTypes from 'prop-types'
 
 require('./classicCard.scss')
 
@@ -59,4 +59,4 @@ ClassicCard.propTypes = {
   marked: PropTypes.bool,
 }
 
-module.exports = ClassicCard
+export default ClassicCard

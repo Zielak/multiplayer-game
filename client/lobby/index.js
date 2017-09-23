@@ -1,58 +1,58 @@
-const React = require('react')
-const PropTypes = require('prop-types')
-const Redux = require('redux')
+import React from 'react'
+import PropTypes from 'prop-types'
+import Redux from 'redux'
 
-const ClientsList = require('./../components/clientsList')
-const Messages = require('./messages')
+import ClientsList from './../components/clientsList'
+import Messages from './messages'
 
 // TODO: don't load styles when not in view?
 require('./styles.scss')
 
 const messages = (state = [], action) => {
   switch (action.type) {
-    case 'message.add':
-      return [...state, action.message]
-    case 'message.remove':
-      return [
-        ...state.slice(0, action.message.idx),
-        ...state.slice(action.message.idx + 1)
-      ]
-    case 'message.replace':
-      return state.map((message) => {
-        if(action.message.key !== message.key){
-          return message
-        }
-        return {
-          ...message,
-          name: action.message.name
-        }
-      })
-    default:
-      return state
+  case 'message.add':
+    return [...state, action.message]
+  case 'message.remove':
+    return [
+      ...state.slice(0, action.message.idx),
+      ...state.slice(action.message.idx + 1)
+    ]
+  case 'message.replace':
+    return state.map((message) => {
+      if(action.message.key !== message.key){
+        return message
+      }
+      return {
+        ...message,
+        name: action.message.name
+      }
+    })
+  default:
+    return state
   }
 }
 
 const clients = (state = [], action) => {
   switch (action.type) {
-    case 'client.add':
-      return [...state, action.client]
-    case 'client.remove':
-      return [
-        ...state.slice(0, action.client.idx),
-        ...state.slice(action.client.idx + 1)
-      ]
-    case 'client.replace':
-      return state.map((client) => {
-        if(action.client.idx !== client.idx){
-          return client
-        }
-        return {
-          ...client,
-          name: action.client.name
-        }
-      })
-    default:
-      return state
+  case 'client.add':
+    return [...state, action.client]
+  case 'client.remove':
+    return [
+      ...state.slice(0, action.client.idx),
+      ...state.slice(action.client.idx + 1)
+    ]
+  case 'client.replace':
+    return state.map((client) => {
+      if(action.client.idx !== client.idx){
+        return client
+      }
+      return {
+        ...client,
+        name: action.client.name
+      }
+    })
+  default:
+    return state
   }
 }
 
@@ -127,4 +127,4 @@ Lobby.propTypes = {
   room: PropTypes.object
 }
 
-module.exports = Lobby
+export default Lobby

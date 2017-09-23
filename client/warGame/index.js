@@ -1,12 +1,12 @@
-const React = require('react')
-const PropTypes = require('prop-types')
+import React from 'react'
+import PropTypes from 'prop-types'
 
-const {PlayersList} = require('../components')
-const {Table} = require('../cardsGame')
+import {PlayersList} from '../components'
+import {Table} from '../cardsGame'
 
 // require('./styles.scss')
 
-class Cards extends React.Component {
+class WarGame extends React.Component {
 
   render() {
     return (
@@ -42,7 +42,7 @@ class Cards extends React.Component {
   }
 }
 
-Cards.propTypes = {
+WarGame.propTypes = {
   initGameHandler: PropTypes.func,
   testScoreHandler: PropTypes.func,
 
@@ -54,4 +54,4 @@ Cards.propTypes = {
   testScore: PropTypes.number,
 }
 
-module.exports = Cards
+export default WarGame

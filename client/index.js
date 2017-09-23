@@ -1,16 +1,16 @@
-const Colyseus = require('colyseus.js')
-const React = require('react')
-const ReactDOM = require('react-dom')
+import {Client} from 'colyseus.js'
+import React from 'react'
+import ReactDOM from 'react-dom'
 
 require('./styles.scss')
 
-// const Lobby = require('./lobby/index')
-const WarGame = require('./warGame/index')
+// import Lobby from './lobby/index'
+import WarGame from './warGame/index'
 
 // === === === === === === == = -
 
 const host = window.document.location.host.replace(/:.*/, '')
-const client = new Colyseus.Client('ws://' + host + (location.port ? ':'+2657 : ''))
+const client = new Client('ws://' + host + (location.port ? ':'+2657 : ''))
 
 const warGameRoom = client.join('warGame')
 
@@ -32,7 +32,9 @@ const render = (getState) => {
   )
 }
 
-/*const warGameController = */require('./warGame/controller')({
+/*const warGameController = */
+import warGameController from './warGame/controller'
+warGameController({
   room: warGameRoom,
   updateCallback: render,
 })

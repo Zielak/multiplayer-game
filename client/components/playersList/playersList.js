@@ -1,5 +1,5 @@
-const React = require('react')
-const PropTypes = require('prop-types')
+import React from 'react'
+import PropTypes from 'prop-types'
 
 require('./playersList.scss')
 
@@ -44,4 +44,4 @@ PlayersList.propTypes = {
   host: PropTypes.string,
 }
 
-module.exports = PlayersList
+export default PlayersList

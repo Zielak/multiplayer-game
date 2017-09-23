@@ -1,8 +1,8 @@
 /**
  * Container of neatly packed cards in one column.
  */
-const React = require('react')
-const PropTypes = require('prop-types')
+import React from 'react'
+import PropTypes from 'prop-types'
 
 class Deck extends React.Component {
 
@@ -40,4 +40,4 @@ Deck.propTypes = {
   faceUp: PropTypes.bool,
 }
 
-module.exports = Deck
+export default Deck

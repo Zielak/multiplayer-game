@@ -2,8 +2,8 @@
  * Decides where each part of the game should be placed,
  * RWD
  */
-const React = require('react')
-const PropTypes = require('prop-types')
+import React from 'react'
+import PropTypes from 'prop-types'
 
 require('./table.scss')
 
@@ -61,4 +61,4 @@ Table.propTypes = {
   containers: PropTypes.array,
 }
 
-module.exports = Table
+export default Table

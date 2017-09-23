@@ -1,21 +1,24 @@
-const Redux = require('redux')
-const {
+import {
+  combineReducers,
+  createStore
+} from 'redux'
+import {
   players,
   host,
   gameState,
   testScore,
-} = require('./reducers')
+} from './reducers'
 
-const cardsApp = Redux.combineReducers({
+const cardsApp = combineReducers({
   players,
   host,
   gameState,
   testScore,
 })
 
-const store = Redux.createStore(cardsApp)
+const store = createStore(cardsApp)
 
-module.exports = ({room, updateCallback}) => {
+export default ({room, updateCallback}) => {
   console.log('creating controller, listening for new stuff')
   
   const unsubscribe = store.subscribe(updateCallback.bind(null, store.getState))
