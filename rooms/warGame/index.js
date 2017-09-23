@@ -69,6 +69,9 @@ const startGame = (data, state) => {
     const newPlayer = new Player({
       clientId: client,
       name: randomName(),
+      onUpdate: function() {
+        reducer.players.update(state, this)
+      }
     })
     reducer.players.add(state, newPlayer)
   })

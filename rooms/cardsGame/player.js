@@ -5,6 +5,8 @@ module.exports = class Player extends Base {
   constructor(options = {}){
     super(options)
 
+    this.type = 'player'
+
     this.name = options.name
     this.clientId = options.clientId
     

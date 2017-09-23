@@ -1,6 +1,16 @@
 module.exports = {
   add: (state, player) => state.players.list.push(player),
 
+  update: (state, player) => {
+    state.players.list.forEach(element => {
+      if (element.id === player.id) {
+        for (const key in player) {
+          element[key] = player[key]
+        }
+      }
+    })
+  },
+
   next: (state) => {
     const players = state.players
     let currIdx = players.currentPlayerIdx
@@ -16,6 +26,7 @@ module.exports = {
     players.currentPlayerIdx = currIdx
     players.currentPlayer = players.list[currIdx]
   },
+
   prev: (state) => {
     const players = state.players
     let currIdx = players.currentPlayerIdx
@@ -52,6 +63,7 @@ module.exports = {
     state.players.currentPlayerIdx = currentPlayerIdx
     state.players.currentPlayer = state.players.list[currentPlayerIdx]
   },
+
   reverse: (state) => {
     state.players.reversed = state.players.reversed
   }

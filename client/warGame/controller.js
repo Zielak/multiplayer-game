@@ -1,85 +1,16 @@
 const Redux = require('redux')
-
-const players = (state, action) => {
-  if(state === undefined) {
-    return {
-      list: [],
-      reversed: false,
-      currentPlayerIdx: 0,
-      currentPlayer: null,
-    }
-  }
-  switch (action.type) {
-  case 'players.add':
-    return {
-      ...state,
-      list: [...state.list, action.data.player]
-    }
-  case 'players.remove':
-    return {
-      ...state,
-      list: [
-        ...state.slice(0, action.data.idx),
-        ...state.slice(action.data.idx + 1)
-      ]
-    }
-  case 'players.replace':
-    return {
-      ...state,
-      list: state.map((player) => {
-        if (action.data.idx !== player.idx) {
-          return player
-        }
-        return {
-          ...player,
-          name: action.data.player.name
-        }
-      })
-    }
-  case 'players.reversed':
-    return {
-      ...state,
-      reversed: action.data.player
-    }
-  default:
-    return state
-  }
-}
-
-const host = (state = null, action) => {
-  action.type === 'host.add'
-  switch(action.type){
-  case 'host.add':
-  case 'host.replace':
-    return action.data
-  default:
-    return state
-  }
-}
-
-const gameState = (state = {}, action) => {
-  if (state === undefined) {
-    return {
-      started: false,
-    }
-  } else {
-    return state
-  }
-}
-
-const testScore = (state = 0, action) => {
-  if(action.type === 'testScore.replace' || action.type === 'testScore.add'){
-    return action.data
-  }else{
-    return state
-  }
-}
+const {
+  playersReducer,
+  hostReducer,
+  gameStateReducer,
+  testScoreReducer,
+} = require('./reducers')
 
 const cardsApp = Redux.combineReducers({
-  players,
-  host,
-  gameState,
-  testScore,
+  playersReducer,
+  hostReducer,
+  gameStateReducer,
+  testScoreReducer,
 })
 
 const store = Redux.createStore(cardsApp)
@@ -101,6 +32,10 @@ module.exports = ({room, updateCallback}) => {
       type: 'host.set',
       data: state.host,
     })
+  })
+
+  room.onUpdate.add(state => {
+    console.log('Update', state)
   })
 
   // room.onUpdate.add(state => {
@@ -128,7 +63,7 @@ module.exports = ({room, updateCallback}) => {
   })
 
   room.listen('testScore', change => {
-    console.log('new testScore: ', change.value)
+    // console.log('new testScore: ', change.value)
     store.dispatch({
       type: 'testScore.' + change.operation,
       data: change.value,
@@ -156,11 +91,11 @@ module.exports = ({room, updateCallback}) => {
   })
 
   room.listen('containers/:number', (change) => {
-    console.log('container changed: ', change)
+    // console.log('container changed: ', change)
   })
 
   room.listen('cards/:number', (change) => {
-    console.log('card changed: ', change)
+    // console.log('card changed: ', change)
   })
 
   room.listen('game.start', () => {

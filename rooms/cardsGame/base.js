@@ -9,18 +9,18 @@ module.exports = class Base {
 
     // Store a reference to itself by ID
     objects.set(this.id, this)
-    
-    this.name = utils.default(options.name, undefined)
+
+    this.name = utils.def(options.name, undefined)
 
     // Has any dimensions? Add to seperate object
     if (utils.exists(options.x) || utils.exists(options.y)
       || utils.exists(options.y) || utils.exists(options.y)) {
       this.dimensions = {
         // Real-life size (in CM) and position
-        x: utils.default(options.x, 0),
-        y: utils.default(options.y, 0),
-        width: utils.default(options.width, 5),
-        height: utils.default(options.height, 5),
+        x: utils.def(options.x, 0),
+        y: utils.def(options.y, 0),
+        width: utils.def(options.width, 5),
+        height: utils.def(options.height, 5),
       }
     }
 
@@ -44,9 +44,11 @@ module.exports = class Base {
 
     // Add myself to my new parent element
     if (this.parent !== null) {
-      const parent = Base.get(options.parent)
+      const parent = Base.get(this.parent)
       parent && parent.addChild(this.id)
     }
+
+    this.onUpdate = utils.def(options.onUpdate || utils.noop)
   }
 
   /**
@@ -85,6 +87,7 @@ module.exports = class Base {
 
     // Add to this list
     this.children.push(childId)
+    this.onUpdate()
     return this
   }
 
@@ -102,6 +105,7 @@ module.exports = class Base {
     child.parent = null
 
     this.children = this.children.filter(e => e !== child)
+    this.onUpdate()
     return this
   }
 
