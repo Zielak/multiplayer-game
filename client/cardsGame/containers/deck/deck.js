@@ -16,7 +16,7 @@ class Deck extends React.Component {
     )
   }
 
-  renderFrontGraphics(suit, rank){
+  renderFrontGraphics(/*suit, rank*/){
     return 'card'
   }
   

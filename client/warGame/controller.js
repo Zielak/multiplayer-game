@@ -21,7 +21,7 @@ const store = createStore(cardsApp)
 export default ({room, updateCallback}) => {
   console.log('creating controller, listening for new stuff')
   
-  const unsubscribe = store.subscribe(updateCallback.bind(null, store.getState))
+  /*const unsubscribe = */store.subscribe(updateCallback.bind(null, store.getState))
 
   room.onUpdate.addOnce(state => {
     console.log('initial lobby data:', state)
@@ -37,9 +37,9 @@ export default ({room, updateCallback}) => {
     })
   })
 
-  room.onUpdate.add(state => {
-    // console.log('Update', state)
-  })
+  // room.onUpdate.add(state => {
+  //   console.log('Update', state)
+  // })
 
   // listen to patches coming from the server
   room.listen('clients/:number', (change) => {
@@ -89,13 +89,13 @@ export default ({room, updateCallback}) => {
     console.log('player currentPlayer changed: ', change)
   })
 
-  room.listen('containers/:number', (change) => {
-    // console.log('container changed: ', change)
-  })
+  // room.listen('containers/:number', (change) => {
+  //   console.log('container changed: ', change)
+  // })
 
-  room.listen('cards/:number', (change) => {
-    // console.log('card changed: ', change)
-  })
+  // room.listen('cards/:number', (change) => {
+  //   console.log('card changed: ', change)
+  // })
 
   room.listen('game.start', () => {
     console.log('game.start!? ', arguments)

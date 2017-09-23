@@ -70,7 +70,7 @@ module.exports.host = (state = null, action) => {
   }
 }
 
-module.exports.gameState = (state = {}, action) => {
+module.exports.gameState = (state = {}/*, action*/) => {
   if (state === undefined) {
     return {
       started: false,

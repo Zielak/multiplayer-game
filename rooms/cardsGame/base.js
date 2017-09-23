@@ -96,7 +96,7 @@ module.exports = class Base {
    * @returns this
    */
   removeChild(element) {
-    const childId = typeof element !== 'string' ? element.id : element
+    // const childId = typeof element !== 'string' ? element.id : element
     const child = typeof element !== 'string' ? element : Base.get(element)
 
     // Nullify its parent
