@@ -1,5 +1,5 @@
 
-module.exports.playersReducer = (state, action) => {
+module.exports.players = (state, action) => {
   if(state === undefined) {
     return {
       list: [],
@@ -59,7 +59,7 @@ module.exports.playersReducer = (state, action) => {
   }
 }
 
-module.exports.hostReducer = (state = null, action) => {
+module.exports.host = (state = null, action) => {
   action.type === 'host.add'
   switch(action.type){
   case 'host.add':
@@ -70,7 +70,7 @@ module.exports.hostReducer = (state = null, action) => {
   }
 }
 
-module.exports.gameStateReducer = (state = {}, action) => {
+module.exports.gameState = (state = {}, action) => {
   if (state === undefined) {
     return {
       started: false,
@@ -80,7 +80,7 @@ module.exports.gameStateReducer = (state = {}, action) => {
   }
 }
 
-module.exports.testScoreReducer = (state = 0, action) => {
+module.exports.testScore = (state = 0, action) => {
   if(action.type === 'testScore.replace' || action.type === 'testScore.add'){
     return action.data
   }else{

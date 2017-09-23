@@ -1,16 +1,16 @@
 const Redux = require('redux')
 const {
-  playersReducer,
-  hostReducer,
-  gameStateReducer,
-  testScoreReducer,
+  players,
+  host,
+  gameState,
+  testScore,
 } = require('./reducers')
 
 const cardsApp = Redux.combineReducers({
-  playersReducer,
-  hostReducer,
-  gameStateReducer,
-  testScoreReducer,
+  players,
+  host,
+  gameState,
+  testScore,
 })
 
 const store = Redux.createStore(cardsApp)
@@ -35,12 +35,8 @@ module.exports = ({room, updateCallback}) => {
   })
 
   room.onUpdate.add(state => {
-    console.log('Update', state)
+    // console.log('Update', state)
   })
-
-  // room.onUpdate.add(state => {
-  //   console.log('onUpdate: ', state)
-  // })
 
   // listen to patches coming from the server
   room.listen('clients/:number', (change) => {
