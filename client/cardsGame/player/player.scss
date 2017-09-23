@@ -1,0 +1,13 @@
+.Player {
+  position: absolute;
+  display: block;
+  width: 1px;
+  height: 1px;
+
+  background: red;
+  font-size: 10px;
+
+  &:after{
+
+  }
+}

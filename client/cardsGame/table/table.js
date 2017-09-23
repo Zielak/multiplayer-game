@@ -5,46 +5,71 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-require('./table.scss')
+// import ClassicCard from '../card/classicCard'
+import Player from '../player/player'
+
+import './table.scss'
 
 const positionFromAngle = (angle, distance) => {
   const x = distance * Math.cos(angle * (Math.PI * 2 / 360))
   const y = distance * Math.sin(angle * (Math.PI * 2 / 360))
-  return {left: x+50+'%', top: y+50+'%'}
+  return { x, y }
 }
+
+const getOwnerId = (element) => {
+  if (element.parent) {
+    return getOwnerId(element.parent)
+  } else {
+    return element
+  }
+}
+
+// const findById = (elements, id) => elements.some(elem => elem.id === id)
 
 class Table extends React.Component {
 
   render() {
-    let players//, containers
+    /**
+     * Generally, everything that belongs to a player, will be
+     * rendered inside this player's main <div> element.
+     * Any children of a container will be rendered inside that <div> container
+     * Objects not belonging to anyone will just be loosely placed in <Table> element
+     * Each element has it's position in relative units. It's important to keep track
+     * of other player's stuff - people are rotated around the table relative to center.
+     */
+    let players = []
 
-    if(this.props.players){
+    if(this.props.players && this.props.players.list){
       const angle = this.props.players.list ? 360 / this.props.players.list.length : 0
-      players = this.props.players.list.map((el, idx) => {
-        // TODO: align angle to the current player
-        const position = positionFromAngle(angle * idx+90, 40)
+      // TODO: align angle to the current player
+      const startingAngle = 90
+
+      players = this.props.players.list.map((player, idx) => ({
+        ...player,
+        angle: angle * idx + startingAngle,
+        idx,
+      })).map((element, idx) => {
+        const position = positionFromAngle(angle * idx + 90, 40)
         return (
-          <player key={idx} style={position}>
-            {'player:'+idx}<br/>
-            {'angle:'+angle*idx}
-          </player>
+          <Player key={'player'+element.idx}
+            {...element}
+            x={element.dimensions.x + position.x}
+            y={element.dimensions.y + position.y}
+
+            width={element.dimensions.width}
+            height={element.dimensions.height}
+          ></Player>
         )
       })
     }
-    
-    if(this.props.containers){
-      const angle = this.props.players.list ? 360 / this.props.players.list.length : 0
-      players = this.props.players.list.map((el, idx) => {
-        // TODO: align angle to the current player
-        const position = positionFromAngle(angle * idx+90, 40)
-        return (
-          <player key={idx} style={position}>
-            {'player:'+idx}<br/>
-            {'angle:'+angle*idx}
-          </player>
-        )
-      })
-    }
+
+    // const elements = [
+    //   ...this.props.containers,
+    //   ...this.props.cards,
+    // ].map(element => {
+    //   // Find parent
+    //   const owner = findOwner(elements, element)
+    // })
 
     return (
       <div className='Table'>
