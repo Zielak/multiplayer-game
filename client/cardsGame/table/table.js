@@ -16,6 +16,22 @@ const positionFromAngle = (angle, distance) => {
   return { x, y }
 }
 
+const getElementById = (everything, id) => everything.find(el => el.id === id)
+
+// TODO: test it
+const getAllParents = (everything, element) => {
+  if(element.parent) {
+    const found = getElementById(everything, element.parent)
+    if(found){
+      return [...getAllParents(everything, found)]
+    } else {
+      return []
+    }
+  } else {
+    return []
+  }
+}
+
 const getOwnerId = (element) => {
   if (element.parent) {
     return getOwnerId(element.parent)
@@ -29,20 +45,16 @@ const getOwnerId = (element) => {
 class Table extends React.Component {
 
   render() {
-    /**
-     * Generally, everything that belongs to a player, will be
-     * rendered inside this player's main <div> element.
-     * Any children of a container will be rendered inside that <div> container
-     * Objects not belonging to anyone will just be loosely placed in <Table> element
-     * Each element has it's position in relative units. It's important to keep track
-     * of other player's stuff - people are rotated around the table relative to center.
-     */
     let players = []
 
     if(this.props.players && this.props.players.list){
       const angle = this.props.players.list ? 360 / this.props.players.list.length : 0
       // TODO: align angle to the current player
       const startingAngle = 90
+
+      // TODO: Get all parents
+
+      // TODO: Transform this element regarding all parents transforms
 
       players = this.props.players.list.map((player, idx) => ({
         ...player,

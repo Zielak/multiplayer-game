@@ -6,10 +6,6 @@ module.exports = class Container extends Base {
   constructor(options = {}) {
     super(options)
 
-    // for visuals
-    this.x = options.x || 0
-    this.y = options.y || 0
-
     // set of conditions used during gameplay
     this.conditions = new Conditions(options.conditions, this)
   }

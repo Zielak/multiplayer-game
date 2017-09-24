@@ -82,6 +82,7 @@ const startGame = (data, state) => {
   // Set the table, empty decks and rows
   state.players.list.forEach(player => {
     reducer.containers.add(state, new Deck({
+      x: 10,
       parent: player,
     }))
     reducer.containers.add(state, new Hand({
@@ -90,12 +91,15 @@ const startGame = (data, state) => {
     reducer.containers.add(state, new Pile({
       parent: player,
       name: 'stage',
+      y: -20,
     }))
     reducer.containers.add(state, new Pile({
       parent: player,
       name: 'dead heat',
       // a situation in or result of a race
       // in which two or more competitors are exactly even.
+      y: -20,
+      x: -20,
     }))
   })
 }

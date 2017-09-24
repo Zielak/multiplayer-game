@@ -13,16 +13,16 @@ module.exports = class Base {
     this.name = utils.def(options.name, undefined)
 
     // Has any dimensions? Add to seperate object
-    if (utils.exists(options.x) || utils.exists(options.y)
-      || utils.exists(options.y) || utils.exists(options.y)) {
-      this.dimensions = {
-        // Real-life size (in CM) and position
-        x: utils.def(options.x, 0),
-        y: utils.def(options.y, 0),
-        width: utils.def(options.width, 5),
-        height: utils.def(options.height, 5),
-      }
+    // if (utils.exists(options.x) || utils.exists(options.y)
+    // || utils.exists(options.y) || utils.exists(options.y)) {
+    this.dimensions = {
+      // Real-life size (in CM) and position
+      x: utils.def(options.x, 0),
+      y: utils.def(options.y, 0),
+      width: utils.def(options.width, 5),
+      height: utils.def(options.height, 5),
     }
+    // }
 
     // List of children ID's
     this.children = []
