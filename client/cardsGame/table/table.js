@@ -6,6 +6,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 // import ClassicCard from '../card/classicCard'
+// import {getElementById, getAllParents} from '../utils'
+
 import Player from '../player/player'
 
 import './table.scss'
@@ -14,22 +16,6 @@ const positionFromAngle = (angle, distance) => {
   const x = distance * Math.cos(angle * (Math.PI * 2 / 360))
   const y = distance * Math.sin(angle * (Math.PI * 2 / 360))
   return { x, y }
-}
-
-const getElementById = (everything, id) => everything.find(el => el.id === id)
-
-// TODO: test it
-const getAllParents = (everything, element) => {
-  if(element.parent) {
-    const found = getElementById(everything, element.parent)
-    if(found){
-      return [...getAllParents(everything, found)]
-    } else {
-      return []
-    }
-  } else {
-    return []
-  }
 }
 
 const getOwnerId = (element) => {
