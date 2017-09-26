@@ -1,13 +1,9 @@
-.Player {
+.Deck {
   position: absolute;
   display: block;
   width: 5px;
   height: 5px;
 
-  background: red;
+  background: #084911;
   font-size: 10px;
-
-  &:after{
-
-  }
 }

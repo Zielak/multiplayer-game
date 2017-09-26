@@ -65,7 +65,7 @@ const performAction = (data, state) => {
 const startGame = (data, state) => {
   // Gather players
   // state.clients.forEach(client => {
-  [0,1].forEach(client => {
+  [0,1,2].forEach(client => {
     const newPlayer = new Player({
       clientId: client,
       name: randomName(),

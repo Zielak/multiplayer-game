@@ -4,13 +4,18 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
+import './deck.scss'
+
 class Deck extends React.Component {
 
   render(){
   // const shadow = ()
 
     return (
-      <div className="deck">
+      <div className="Deck" style={{
+        left: this.props.x + 50 + '%',
+        top: this.props.y + 50 + '%'
+      }}>
         
       </div>
     )
@@ -38,6 +43,9 @@ Deck.propTypes = {
   cards: PropTypes.array,
   rank: PropTypes.string,
   faceUp: PropTypes.bool,
+
+  x: PropTypes.number,
+  y: PropTypes.number,
 }
 
 export default Deck

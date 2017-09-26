@@ -21,8 +21,8 @@ import Pile from '../containers/pile/pile'
 import './table.scss'
 
 const positionFromAngle = (angle, distance) => {
-  const x = distance * Math.cos(angle * (Math.PI * 2 / 360))
-  const y = distance * Math.sin(angle * (Math.PI * 2 / 360))
+  const x = Math.round(distance * Math.cos(angle * (Math.PI * 2 / 360))*100)/100
+  const y = Math.round(distance * Math.sin(angle * (Math.PI * 2 / 360))*100)/100
   return { x, y }
 }
 
@@ -39,37 +39,12 @@ const getOwnerId = (element) => {
 class Table extends React.Component {
 
   render() {
-    let players = []
 
-    if (this.props.players && this.props.players.list) {
-      const angle = this.props.players.list ? 360 / this.props.players.list.length : 0
-      // TODO: align angle to the current player
-      const startingAngle = 90
+    const angle = this.props.players && this.props.players.list ?
+      360 / this.props.players.list.length : 0
 
-      players = this.props.players.list.map((player, idx) => {
-        // Get initial correct position on the table, and add an angle
-        const position = positionFromAngle(angle * idx + 90, 40)
-        return {
-          ...player,
-          x: position.x,
-          y: position.y,
-          angle: angle * idx + startingAngle,
-          idx,
-        }
-      }).map((element) => {
-
-        return (
-          <Player key={'player' + element.idx}
-            {...element}
-            x={element.dimensions.x}
-            y={element.dimensions.y}
-
-            width={element.dimensions.width}
-            height={element.dimensions.height}
-          ></Player>
-        )
-      })
-    }
+    // TODO: align angle to the current player
+    const startingAngle = 90
 
     // Parse all current elements from props
     // Returns renderable html elements
@@ -77,18 +52,38 @@ class Table extends React.Component {
       ...this.props.players && this.props.players.list || [],
       ...this.props.containers || [],
       ...this.props.cards || [],
-    ].map(element => {
-      // TODO: Get all parents
+    ].map((element, idx) => {
+      // Add index for later, keys are important in React
+      return {
+        ...element,
+        idx,
+      }
+    }).map((element, idx) => {
+      // Manipulate every player first
+      if(element.type !== 'player') return element
+
+      // Get initial correct position on the table, and add an angle
+      const position = positionFromAngle(angle * idx + 90 + this.props.testAngle, 40)
+      return {
+        ...element,
+        dimensions: {
+          x: position.x,
+          y: position.y,
+        },
+        angle: angle * idx + startingAngle + this.props.testAngle,
+      }
+    }).map((element, idx, elements) => {
+      // Get all parents
       const parents = getAllParents(elements, element)
       
-      // TODO: Transform this element regarding all parents transforms
+      // Transform this element regarding all parents transforms
       const position = parents.reduce((point, parent) => {
         const parentPos = {
           x: parent.dimensions.x,
           y: parent.dimensions.y,
         }
         let p = translatePoint(point, parentPos)
-        p = rotatePoint(p, parentPos, parent.dimensions.angle)
+        p = rotatePoint(p, parentPos, parent.angle)
         return p
       }, {x: element.dimensions.x, y: element.dimensions.y})
       
@@ -98,7 +93,14 @@ class Table extends React.Component {
         y: position.y,
       }
     }).map(element => {
-      if(element.type === 'deck'){
+      // Finally render them all to React components
+      if(element.type === 'player'){
+        return (
+          <Player key={'player' + element.idx}
+            {...element}
+          ></Player>
+        )
+      }else if(element.type === 'deck'){
         return (
           <Deck key={'deck' + element.idx}
             {...element}
@@ -122,7 +124,7 @@ class Table extends React.Component {
 
     return (
       <div className='Table'>
-        {players}
+        {elements}
       </div>
     )
   }
@@ -133,6 +135,8 @@ Table.propTypes = {
   players: PropTypes.object,
   cards: PropTypes.array,
   containers: PropTypes.array,
+
+  testAngle: PropTypes.number,
 }
 
 export default Table

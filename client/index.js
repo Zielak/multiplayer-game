@@ -14,7 +14,7 @@ const client = new Client('ws://' + host + (location.port ? ':'+2657 : ''))
 
 const warGameRoom = client.join('warGame')
 
-const render = (getState) => {
+const render = (getState, testAngle=0) => {
   const state = getState ? getState() : {}
   ReactDOM.render(
     <WarGame
@@ -26,6 +26,7 @@ const render = (getState) => {
           action: add > 0 ? 'testScore.increase' : 'testScore.decrease'
         })
       }
+      testAngle={testAngle}
       {...state}
     />,
     document.getElementById('root')

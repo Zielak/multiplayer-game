@@ -33,6 +33,7 @@ class WarGame extends React.Component {
           ></PlayersList>
         </div>
         <Table
+          testAngle={this.props.testAngle}
           players={this.props.players}
           cards={this.props.cards}
           containers={this.props.containers}
@@ -45,6 +46,7 @@ class WarGame extends React.Component {
 WarGame.propTypes = {
   initGameHandler: PropTypes.func,
   testScoreHandler: PropTypes.func,
+  testAngle: PropTypes.number,
 
   players: PropTypes.object,
   cards: PropTypes.array,

@@ -5,6 +5,7 @@ import {
 import {
   players,
   host,
+  containers,
   gameState,
   testScore,
 } from './reducers'
@@ -12,6 +13,7 @@ import {
 const cardsApp = combineReducers({
   players,
   host,
+  containers,
   gameState,
   testScore,
 })
@@ -22,6 +24,13 @@ export default ({room, updateCallback}) => {
   console.log('creating controller, listening for new stuff')
   
   /*const unsubscribe = */store.subscribe(updateCallback.bind(null, store.getState))
+
+  let angle = 0
+
+  setInterval(() => {
+    angle += 0.7
+    updateCallback(store.getState, angle)
+  }, 50)
 
   room.onUpdate.addOnce(state => {
     console.log('initial lobby data:', state)
@@ -89,9 +98,16 @@ export default ({room, updateCallback}) => {
     console.log('player currentPlayer changed: ', change)
   })
 
-  // room.listen('containers/:number', (change) => {
-  //   console.log('container changed: ', change)
-  // })
+  room.listen('containers/:number', (change) => {
+    console.log('container changed: ', change)
+    store.dispatch({
+      type: 'containers.' + change.operation,
+      data: {
+        idx: parseInt(change.path.number),
+        container: change.value,
+      }
+    })
+  })
 
   // room.listen('cards/:number', (change) => {
   //   console.log('card changed: ', change)

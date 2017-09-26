@@ -59,6 +59,32 @@ module.exports.players = (state, action) => {
   }
 }
 
+module.exports.containers = (state = [], action) => {
+  switch (action.type) {
+  case 'containers.add':
+    return [
+      ...state,
+      action.data.container
+    ]
+  case 'containers.remove':
+    return [
+      ...state.slice(0, action.data.idx),
+      ...state.slice(action.data.idx + 1)
+    ]
+  case 'containers.replace':
+    return state.map(container => {
+      if (action.data.idx !== container.idx) {
+        return container
+      }
+      return {
+        ...container
+      }
+    })
+  default:
+    return state
+  }
+}
+
 module.exports.host = (state = null, action) => {
   action.type === 'host.add'
   switch(action.type){
