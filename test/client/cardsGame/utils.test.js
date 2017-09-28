@@ -1,17 +1,19 @@
 import test from 'ava'
-/*import {
-  getElementById, getAllParents
+import {
+  getElementById
 } from '../../../client/cardsGame/utils'
-import uuid from 'uuid/v4'*/
-test.todo('getElementById')
-/*
-test.skip('getElementById', t => {
+import uuid from 'uuid/v4'
+
+test('getElementById', t => {
   const elements = [
     { id: uuid() },
     { id: uuid() },
     { id: uuid() },
     { id: uuid() },
   ]
-  t.deepEqual(getElementById(elements, elements[0]), elements[0], `didn't return correct element`)
+
+  t.deepEqual(getElementById(elements, elements[0].id), elements[0], `didn't return correct element`)
+
+  t.deepEqual(getElementById(elements, 'somethingImaginary'), undefined, `didn't return undefined`)
 })
-*/
+

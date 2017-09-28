@@ -1,14 +1,13 @@
 
 export const getElementById = (everything, id) => everything.find(el => el.id === id)
 
-// TODO: test it
 export const getAllParents = (everything, target) => {
   if (target.parent) {
     const parents = []
-    let parent = getElementById(everything, target.parent)
+    let parent = target.parent// = getElementById(everything, target.parent)
     while (parent) {
-      parents.unshift( getElementById(everything, parent.id) )
-      parent = parent.parent
+      parents.unshift( getElementById(everything, parent) )
+      parent = parents[0].parent
     }
     return parents
   } else {
