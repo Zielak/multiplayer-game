@@ -15,7 +15,7 @@ const def = (value, def) => typeof value !== 'undefined' ? value : def
 /**
  * Check if the value exists
  */
-const exists = (value) => typeof value !== undefined
+const exists = (value) => typeof value !== 'undefined'
 
 /**
  * Get element by ID from the Base class

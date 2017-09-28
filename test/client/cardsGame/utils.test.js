@@ -17,3 +17,6 @@ test('getElementById', t => {
   t.deepEqual(getElementById(elements, 'somethingImaginary'), undefined, `didn't return undefined`)
 })
 
+test.todo('translatePoint')
+
+test.todo('rotatePoint')
