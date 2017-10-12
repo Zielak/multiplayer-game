@@ -18,7 +18,8 @@ class Pile extends React.Component {
     return (
       <div className="Pile" style={{
         left: this.props.x + 50 + '%',
-        top: this.props.y + 50 + '%'
+        top: this.props.y + 50 + '%',
+        '--angle': this.props.angle+'deg',
       }}>
         <div className="label">PILE</div>
       </div>
@@ -32,6 +33,7 @@ Pile.propTypes = {
 
   x: PropTypes.number,
   y: PropTypes.number,
+  angle: PropTypes.number,
 }
 
 export default Pile

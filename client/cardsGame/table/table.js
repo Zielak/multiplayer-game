@@ -63,7 +63,7 @@ class Table extends React.Component {
       if(element.type !== 'player') return element
 
       // Get initial correct position on the table, and add an angle
-      const position = positionFromAngle(angle * idx + 90 + this.props.testAngle, 40)
+      const position = positionFromAngle(angle * idx + startingAngle + this.props.testAngle, 40)
       return {
         ...element,
         dimensions: {
@@ -86,11 +86,17 @@ class Table extends React.Component {
         p = rotatePoint(p, parentPos, parent.angle)
         return p
       }, {x: element.dimensions.x, y: element.dimensions.y})
+
+      // Just get the final angle
+      const angle = parents[parents.length-1] ?
+        parents[parents.length-1].angle - startingAngle :
+        startingAngle
       
       return {
         ...element,
         x: position.x,
         y: position.y,
+        angle,
       }
     }).map(element => {
       // Finally render them all to React components

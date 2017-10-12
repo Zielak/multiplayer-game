@@ -9,14 +9,15 @@ import './deck.scss'
 class Deck extends React.Component {
 
   render(){
-  // const shadow = ()
-
     return (
-      <div className="Deck" style={{
-        left: this.props.x + 50 + '%',
-        top: this.props.y + 50 + '%'
-      }}>
-        
+      <div className="Deck"
+        style={{
+          left: this.props.x + 50 + '%',
+          top: this.props.y + 50 + '%',
+          '--angle': this.props.angle+'deg',
+        }}
+      >
+        <div className="label">DECK</div>
       </div>
     )
   }
@@ -46,6 +47,7 @@ Deck.propTypes = {
 
   x: PropTypes.number,
   y: PropTypes.number,
+  angle: PropTypes.number,
 }
 
 export default Deck
