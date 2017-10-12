@@ -1,5 +1,9 @@
-.Table{
+.Table {
   min-height: 500px;
   background: #FCE4CA;
   position: relative;
+
+  & > div {
+    transition: 0.25s left linear, 0.25s top linear, 0.25s transform linear;
+  }
 }

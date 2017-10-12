@@ -6,6 +6,7 @@ import {
   players,
   host,
   containers,
+  cards,
   gameState,
   testScore,
 } from './reducers'
@@ -14,6 +15,7 @@ const cardsApp = combineReducers({
   players,
   host,
   containers,
+  cards,
   gameState,
   testScore,
 })
@@ -28,9 +30,9 @@ export default ({room, updateCallback}) => {
   // let angle = 0
 
   // setInterval(() => {
-  //   angle += 0.7
+  //   angle += 3
   //   updateCallback(store.getState, angle)
-  // }, 50)
+  // }, 250)
 
   room.onUpdate.addOnce(state => {
     console.log('initial lobby data:', state)
@@ -45,10 +47,6 @@ export default ({room, updateCallback}) => {
       data: state.host,
     })
   })
-
-  // room.onUpdate.add(state => {
-  //   console.log('Update', state)
-  // })
 
   // listen to patches coming from the server
   room.listen('clients/:number', (change) => {
@@ -99,7 +97,7 @@ export default ({room, updateCallback}) => {
   })
 
   room.listen('containers/:number', (change) => {
-    console.log('container changed: ', change)
+    // console.log('container changed: ', change)
     store.dispatch({
       type: 'containers.' + change.operation,
       data: {
@@ -109,9 +107,16 @@ export default ({room, updateCallback}) => {
     })
   })
 
-  // room.listen('cards/:number', (change) => {
-  //   console.log('card changed: ', change)
-  // })
+  room.listen('cards/:number', (change) => {
+    console.log('card changed: ', change)
+    store.dispatch({
+      type: 'cards.' + change.operation,
+      data: {
+        idx: parseInt(change.path.number),
+        card: change.value,
+      }
+    })
+  })
 
   room.listen('game.start', () => {
     console.log('game.start!? ', arguments)

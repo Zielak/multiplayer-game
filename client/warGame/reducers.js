@@ -85,6 +85,32 @@ module.exports.containers = (state = [], action) => {
   }
 }
 
+module.exports.cards = (state = [], action) => {
+  switch (action.type) {
+  case 'cards.add':
+    return [
+      ...state,
+      action.data.card
+    ]
+  case 'cards.remove':
+    return [
+      ...state.slice(0, action.data.idx),
+      ...state.slice(action.data.idx + 1)
+    ]
+  case 'cards.replace':
+    return state.map(card => {
+      if (action.data.idx !== card.idx) {
+        return card
+      }
+      return {
+        ...card
+      }
+    })
+  default:
+    return state
+  }
+}
+
 module.exports.host = (state = null, action) => {
   action.type === 'host.add'
   switch(action.type){
