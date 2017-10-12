@@ -20,7 +20,7 @@ class Pile extends React.Component {
         left: this.props.x + 50 + '%',
         top: this.props.y + 50 + '%'
       }}>
-        
+        <div className="label">PILE</div>
       </div>
     )
   }

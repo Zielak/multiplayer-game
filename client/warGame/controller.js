@@ -25,12 +25,12 @@ export default ({room, updateCallback}) => {
   
   /*const unsubscribe = */store.subscribe(updateCallback.bind(null, store.getState))
 
-  let angle = 0
+  // let angle = 0
 
-  setInterval(() => {
-    angle += 0.7
-    updateCallback(store.getState, angle)
-  }, 50)
+  // setInterval(() => {
+  //   angle += 0.7
+  //   updateCallback(store.getState, angle)
+  // }, 50)
 
   room.onUpdate.addOnce(state => {
     console.log('initial lobby data:', state)

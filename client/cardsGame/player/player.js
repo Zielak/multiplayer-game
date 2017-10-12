@@ -13,12 +13,15 @@ import './player.scss'
 class Player extends React.Component {
   
   render(){
-    const text = `player here`
     return (
       <div className="Player" style={{
         left: this.props.x + 50 + '%',
         top: this.props.y + 50 + '%'
-      }}>{text}</div>
+      }}>
+        <div className="icon">
+          <div className="name">{this.props.name}</div>
+        </div>
+      </div>
     )
   }
 }

@@ -42,6 +42,9 @@ warGameController({
 
 warGameRoom.onJoin.add(function() {
   console.log(client.id, "joined", warGameRoom.name)
+  
+  // Testing, just init with players
+  warGameRoom.send({ action: 'game.start' })
 })
 
 // Initial render plz
