@@ -1,5 +1,17 @@
 .ClassicCard {
+  position: absolute;
+  justify-content: center;
+  display: flex;
+  width: var(--card-width);
+  height: var(--card-height);
+  transform:
+    translate(calc(var(--card-width) * -0.5), calc(var(--card-height) * -0.5))
+    rotate( var(--angle) );
+
   .back {
-    background: #881100;
+    width: 100%;
+    background: #b46055;
+    border: var(--line-size) solid white;
+    border-radius: var(--line-size);
   }
 }

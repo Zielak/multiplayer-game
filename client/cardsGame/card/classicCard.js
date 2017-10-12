@@ -25,7 +25,11 @@ class ClassicCard extends React.Component {
       </div>
 
     return (
-      <div className="card card-classic">
+      <div className="ClassicCard" style={{
+        left: this.props.x + 50 + '%',
+        top: this.props.y + 50 + '%',
+        '--angle': this.props.angle+'deg',
+      }}>
         {face}
       </div>
     )
@@ -57,6 +61,10 @@ ClassicCard.propTypes = {
   faceUp: PropTypes.bool,
   rotated: PropTypes.number,
   marked: PropTypes.bool,
+
+  x: PropTypes.number,
+  y: PropTypes.number,
+  angle: PropTypes.number,
 }
 
 export default ClassicCard

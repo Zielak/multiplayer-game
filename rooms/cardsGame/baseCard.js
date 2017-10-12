@@ -6,6 +6,7 @@ module.exports = class BaseCard extends Base {
   constructor(options = {}){
     super(options)
     this.name = options.name || 'card'
+    this.type = 'card'
 
     // set of conditions used during gameplay
     this.conditions = new Conditions(options.conditions)
