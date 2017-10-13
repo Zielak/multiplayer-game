@@ -5,7 +5,7 @@ require('./classicCard.scss')
 
 class ClassicCard extends React.Component {
 
-  render(){
+  render() {
     const face = this.props.faceUp ?
       <div className="face">
         <div className="">
@@ -28,26 +28,26 @@ class ClassicCard extends React.Component {
       <div className="ClassicCard" style={{
         left: this.props.x + 50 + '%',
         top: this.props.y + 50 + '%',
-        '--angle': this.props.angle+'deg',
+        '--angle': this.props.angle + 'deg',
       }}>
         {face}
       </div>
     )
   }
 
-  renderFrontGraphics(/*suit, rank*/){
+  renderFrontGraphics(/*suit, rank*/) {
     return 'card'
   }
-  
-  renderBackGraphics(){
+
+  renderBackGraphics() {
     return 'bg'
   }
 
-  renderRank(rank){
+  renderRank(rank) {
     return rank
   }
 
-  renderSuit(suit){
+  renderSuit(suit) {
     return suit
   }
 
@@ -56,8 +56,8 @@ class ClassicCard extends React.Component {
 ClassicCard.propTypes = {
   name: PropTypes.string,
   suit: PropTypes.string,
-  rank: PropTypes.string,
-  
+  rank: PropTypes.number,
+
   faceUp: PropTypes.bool,
   rotated: PropTypes.number,
   marked: PropTypes.bool,
