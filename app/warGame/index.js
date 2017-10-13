@@ -1,4 +1,5 @@
 const colyseus = require('colyseus')
+const { canClientPerformThisAction } = require('../referee')
 
 const {
   Deck,
@@ -11,52 +12,25 @@ const {
 const randomName = () =>
   [1, 2, 3].map(() => Math.floor(Math.random() * 25 + 65)).map((e) => String.fromCharCode(e)).join('')
 
-const actionStatus = (success = true, description = '') => {
-  return { success, description }
-}
-
-const canClientPerformThisAction = (client, action, state) => {
-  switch (action) {
-  case 'game.start':
-    if(client.id !== state.host){
-      return actionStatus(false, `Client '${client.id}' is not a host: '${state.host}'`)
-    }else if (state.clients.length < 1){
-      return actionStatus(false, `Not enough clients: only '${state.clients.length}' clients in the room`)
-    }else{
-      return actionStatus()
-    }
-  case 'testScore.increase': return actionStatus(true)
-  case 'testScore.decrease': return actionStatus(true)
-  case '':
-    if(client.id === state.currentPlayer.id){
-      return actionStatus()
-    }else{
-      return actionStatus(false, `Client is not current player`)
-    }
-  default:
-    return actionStatus(false, `Unknown action "${action}"`)
-  }
-}
-
 const getActionType = (action) => {
-  if(action === undefined) return ''
+  if (action === undefined) return ''
   const firstDot = action.indexOf('.')
   return action.slice(0, firstDot)
 }
 const getActionArgument = (action) => {
-  if(action === undefined) return ''
-  const firstDot = action.indexOf('.')+1
+  if (action === undefined) return ''
+  const firstDot = action.indexOf('.') + 1
   return action.slice(firstDot)
 }
 
 const performAction = (data, state) => {
   const actionType = getActionType(data.action)
   const actionArgument = getActionArgument(data.action)
-  switch(data.action){
+  switch (data.action) {
   case 'game.start':
     return startGame(data, state)
   }
-  if(actionType === 'testScore'){
+  if (actionType === 'testScore') {
     // console.warn('trying to run',actionArgument)
     return reducer.testScore[actionArgument](state)
   }
@@ -65,19 +39,18 @@ const performAction = (data, state) => {
 const startGame = (data, state) => {
   // Gather players
   // state.clients.forEach(client => {
-  [0,1,2].forEach(client => {
+  [0, 1, 2].forEach(client => {
     const newPlayer = new Player({
       clientId: client,
       name: randomName(),
-      onUpdate: function() {
-        reducer.players.update(state, this)
-      }
     })
     reducer.players.add(state, newPlayer)
   })
 
-  // Setup all cards
-  Presets.classicCards().forEach( el => reducer.cards.add(state, el) )
+  const mainDeck = new Deck({
+    x: 0, y: 0,
+  })
+  reducer.containers.add(state, mainDeck)
 
   // Set the table, empty decks and rows
   state.players.list.forEach(player => {
@@ -102,13 +75,19 @@ const startGame = (data, state) => {
       x: -20,
     }))
   })
+  
+  // Setup all cards
+  Presets.classicCards().forEach(card => {
+    reducer.cards.add(state, card)
+    mainDeck.addChild(card)
+  })
 }
 
 const reducer = {
   clients: require('./reducers/arrayReducer')('clients'),
   players: require('./reducers/players'),
   cards: require('./reducers/arrayReducer')('cards'),
-  containers: require('./reducers/arrayReducer')('containers'),
+  containers: require('./reducers/containers'),
   testScore: {
     increase: (state) => {
       state.testScore++
@@ -146,7 +125,7 @@ module.exports = class WarGame extends colyseus.Room {
       // Testing
       testScore: 0,
     })
-    
+
     // setInterval(() => {
     //   console.log('trying to add dummie player')
     //   this.state = reducer(this.state, { action: 'player.add', player: 'whoop' + Math.random() })
@@ -168,7 +147,7 @@ module.exports = class WarGame extends colyseus.Room {
     console.log('WarGame: JOINED: ', client.id)
     // this.state.clients.push(client.id)
     reducer.clients.add(this.state, client.id)
-    if(!this.state.host){
+    if (!this.state.host) {
       this.state.host = client.id
     }
   }

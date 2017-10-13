@@ -97,7 +97,7 @@ export default ({room, updateCallback}) => {
   })
 
   room.listen('containers/:number', (change) => {
-    // console.log('container changed: ', change)
+    console.log('container changed: ', change)
     store.dispatch({
       type: 'containers.' + change.operation,
       data: {
@@ -108,7 +108,7 @@ export default ({room, updateCallback}) => {
   })
 
   room.listen('cards/:number', (change) => {
-    console.log('card changed: ', change)
+    // console.log('card changed: ', change)
     store.dispatch({
       type: 'cards.' + change.operation,
       data: {

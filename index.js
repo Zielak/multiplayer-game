@@ -9,7 +9,7 @@ require('./consoleColors')
 // Require ChatRoom handler
 // const Lobby = require('./rooms/lobby')
 // const MonstrousEscapeRoom = require('./rooms/monstrousEscape')
-const WarGame = require('./rooms/warGame/index')
+const WarGame = require('./app/warGame/index')
 
 const port = process.env.PORT || 2657
 const app = express()

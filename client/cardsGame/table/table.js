@@ -57,6 +57,7 @@ class Table extends React.Component {
       return {
         ...element,
         idx,
+        angle: 0,
       }
     }).map((element, idx) => {
       // Manipulate every player first
@@ -118,7 +119,7 @@ class Table extends React.Component {
             {...element}
           ></Pile>
         )
-      } else if(element.type === 'card') {
+      } else if(element.type === 'card' && !element.parent) {
         return (
           <ClassicCard key={'card' + element.idx}
             {...element}

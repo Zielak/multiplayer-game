@@ -5,6 +5,11 @@ export const getAllParents = (everything, target) => {
   if (target.parent) {
     const parents = []
     let parent = target.parent// = getElementById(everything, target.parent)
+    if (!getElementById(everything, target.parent)) {
+      // quick bail, parent doesn't exist yet
+      // TODO: check if it actually happens now
+      return []
+    }
     while (parent) {
       parents.unshift( getElementById(everything, parent) )
       parent = parents[0].parent
@@ -40,7 +45,7 @@ export const translatePoint = (point, offset) => {
   }
 }
 
-export const rotatePoint = (point, origin, angle) => {
+export const rotatePoint = (point, origin, angle = 0) => {
   angle -= 90
 
   const x1 = point.x - origin.x

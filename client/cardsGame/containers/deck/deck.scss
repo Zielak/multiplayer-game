@@ -16,5 +16,15 @@
   .label {
     display: block;
     align-self: center;
+    text-align: center;
+  }
+  
+  .ClassicCard {
+    transform:
+      rotate(var(--angle))
+      translate(calc(var(--deck-offset) * -0.6), calc(var(--deck-offset) * -0.6));
+    box-shadow:
+      calc(var(--deck-offset) * 0.3) calc(var(--deck-offset) * 0.3) white,
+      calc(var(--deck-offset) * 0.6) calc(var(--deck-offset) * 0.6) white;
   }
 }

@@ -1,5 +1,8 @@
-module.exports = {
-  add: (state, player) => state.players.list.push(player),
+const reducer = {
+  add: (state, player) => {
+    player.onUpdate = me => reducer.update(state, me)
+    state.players.list.push(player)
+  },
 
   update: (state, player) => {
     state.players.list.forEach(element => {
@@ -68,3 +71,4 @@ module.exports = {
     state.players.reversed = state.players.reversed
   }
 }
+module.exports = reducer
