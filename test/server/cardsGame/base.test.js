@@ -1,5 +1,5 @@
 import test from 'ava'
-import {Base} from '../../../rooms/cardsGame'
+import {Base} from '../../../app/cardsGame'
 
 test.beforeEach('clears all objects from Base', () => {
   Base._clear()
