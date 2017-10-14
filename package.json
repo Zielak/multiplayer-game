@@ -8,7 +8,7 @@
     "server": "node index.js",
     "precommit": "npm test && npm run lint",
     "lint": "./node_modules/.bin/eslint ./",
-    "test": "ava",
+    "test": "nyc ava",
     "test:watch": "ava --watch"
   },
   "author": "",
@@ -39,7 +39,9 @@
     "html-webpack-plugin": "^2.30.1",
     "husky": "^0.14.3",
     "node-sass": "^4.5.3",
+    "nyc": "^11.2.1",
     "sass-loader": "^6.0.6",
+    "schema-utils": "^0.3.0",
     "style-loader": "^0.19.0",
     "webpack": "^3.7.1",
     "webpack-dev-server": "^2.9.1"
@@ -48,5 +50,17 @@
     "require": [
       "babel-register"
     ]
+  },
+  "nyc": {
+    "include": [
+      "app/*",
+      "client/*"
+    ],
+    "all": true,
+    "reporter": [
+      "html",
+      "text-summary"
+    ],
+    "report-dir": "./dist/coverage"
   }
 }
