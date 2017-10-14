@@ -29,7 +29,7 @@ module.exports = class Deck extends Container {
 
     console.warn(`I myself have ${this.children.length} cards`)
     while(this.children.length > 0 && i < maxDeals){
-      console.info(`${i}: to containers[${i%containers.length}] => ${this.children.length} cards left`)
+      // console.info(`${i}: to containers[${i%containers.length}] => ${this.children.length} cards left`)
       const card = this.top()
       containers[i%containers.length].addChild(card)
       i++
@@ -37,9 +37,8 @@ module.exports = class Deck extends Container {
     this.onCardsDealt(containers)
   }
 
-  onCardsDealt(containers) {
+  onCardsDealt() {
     console.info('Done dealing cards.')
-    console.info(containers.map(el => el.children))
   }
 
 }

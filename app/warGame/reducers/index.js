@@ -2,7 +2,7 @@ module.exports = {
   clients: require('./arrayReducer')('clients'),
   players: require('./players'),
   cards: require('./arrayReducer')('cards'),
-  containers: require('./containers'),
+  containers: require('./arrayReducer')('containers'),
   testScore: {
     increase: (state) => {
       state.testScore++

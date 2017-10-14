@@ -1,30 +1,13 @@
+import store from './store'
 import {
-  combineReducers,
-  createStore
-} from 'redux'
-import {
-  players,
-  host,
-  containers,
-  cards,
-  gameState,
-  testScore,
-} from './reducers'
+  cardsListener,
+  containersListener,
+  playersListener,
+} from './listeners/index'
 
-const cardsApp = combineReducers({
-  players,
-  host,
-  containers,
-  cards,
-  gameState,
-  testScore,
-})
-
-const store = createStore(cardsApp)
-
-export default ({room, updateCallback}) => {
+export default ({ room, updateCallback }) => {
   console.log('creating controller, listening for new stuff')
-  
+
   /*const unsubscribe = */store.subscribe(updateCallback.bind(null, store.getState))
 
   // let angle = 0
@@ -47,6 +30,10 @@ export default ({room, updateCallback}) => {
       data: state.host,
     })
   })
+
+  // room.onUpdate.add(state => {
+  //   console.log('UPDATE:', state)
+  // })
 
   // listen to patches coming from the server
   room.listen('clients/:number', (change) => {
@@ -76,52 +63,14 @@ export default ({room, updateCallback}) => {
     })
   })
 
-  room.listen('players/list/:number', (change) => {
-    console.log('player list changed: ', change)
-    store.dispatch({
-      type: 'players.' + change.operation,
-      data: {
-        idx: parseInt(change.path.number),
-        player: change.value,
-      }
-    })
-  })
-  room.listen('players/reversed', (change) => {
-    console.log('player reversed changed: ', change)
-  })
-  room.listen('players/currentPlayerIdx', (change) => {
-    console.log('player currentPlayerIdx changed: ', change)
-  })
-  room.listen('players/currentPlayer', (change) => {
-    console.log('player currentPlayer changed: ', change)
-  })
-
-  room.listen('containers/:number', (change) => {
-    console.log('container changed: ', change)
-    store.dispatch({
-      type: 'containers.' + change.operation,
-      data: {
-        idx: parseInt(change.path.number),
-        container: change.value,
-      }
-    })
-  })
-
-  room.listen('cards/:number', (change) => {
-    // console.log('card changed: ', change)
-    store.dispatch({
-      type: 'cards.' + change.operation,
-      data: {
-        idx: parseInt(change.path.number),
-        card: change.value,
-      }
-    })
-  })
+  cardsListener(room)
+  containersListener(room)
+  playersListener(room)
 
   room.listen('game.start', () => {
     console.log('game.start!? ', arguments)
   })
-  
+
   return {
     store,
   }

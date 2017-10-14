@@ -1,6 +1,6 @@
 
 module.exports.players = (state, action) => {
-  if(state === undefined) {
+  if (state === undefined) {
     return {
       list: [],
       reversed: false,
@@ -35,20 +35,20 @@ module.exports.players = (state, action) => {
         }
       })
     }
-  // case 'players.update':
-  //   return {
-  //     ...state,
-  //     list: state.list.map(player => {
-  //       if(player.id === action.data.player.id){
-  //         return {
-  //           ...player,
-  //           ...action.data.player
-  //         }
-  //       } else {
-  //         return player
-  //       }
-  //     })
-  //   }
+    // case 'players.update':
+    //   return {
+    //     ...state,
+    //     list: state.list.map(player => {
+    //       if(player.id === action.data.player.id){
+    //         return {
+    //           ...player,
+    //           ...action.data.player
+    //         }
+    //       } else {
+    //         return player
+    //       }
+    //     })
+    //   }
   case 'players.reversed':
     return {
       ...state,
@@ -80,6 +80,40 @@ module.exports.containers = (state = [], action) => {
         ...container
       }
     })
+  case 'containers.update':
+    return state.map((container, idx) => {
+      if (idx !== action.data.idx) {
+        return container
+      }
+      const newContainer = { ...container }
+      newContainer[action.data.attribute] = action.data.value
+      return newContainer
+    })
+  case 'containers.addChild':
+    return state.map((container, idx) => {
+      if (idx !== action.data.idx) {
+        return container
+      }
+      return {
+        ...container,
+        children: container.children.map((childId, idx) =>
+          action.data.childIdx === idx ? action.data.value : childId
+        )
+      }
+    })
+  case 'containers.removeChild':
+    return state.map((container, idx) => {
+      if (idx !== action.data.idx) {
+        return container
+      }
+      return {
+        ...container,
+        children: [
+          ...container.children.slice(0, action.data.childIdx),
+          ...container.children.slice(action.data.childIdx + 1)
+        ]
+      }
+    })
   default:
     return state
   }
@@ -103,8 +137,17 @@ module.exports.cards = (state = [], action) => {
         return card
       }
       return {
-        ...card
+        ...action.data.card
       }
+    })
+  case 'cards.update':
+    return state.map((card, idx) => {
+      if (idx !== action.data.idx) {
+        return card
+      }
+      const newCard = { ...card }
+      newCard[action.data.attribute] = action.data.value
+      return newCard
     })
   default:
     return state
@@ -113,7 +156,7 @@ module.exports.cards = (state = [], action) => {
 
 module.exports.host = (state = null, action) => {
   action.type === 'host.add'
-  switch(action.type){
+  switch (action.type) {
   case 'host.add':
   case 'host.replace':
     return action.data
@@ -133,9 +176,9 @@ module.exports.gameState = (state = {}/*, action*/) => {
 }
 
 module.exports.testScore = (state = 0, action) => {
-  if(action.type === 'testScore.replace' || action.type === 'testScore.add'){
+  if (action.type === 'testScore.replace' || action.type === 'testScore.add') {
     return action.data
-  }else{
+  } else {
     return state
   }
 }

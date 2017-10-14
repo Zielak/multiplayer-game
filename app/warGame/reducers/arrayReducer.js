@@ -8,13 +8,9 @@ module.exports = (targetArray) => {
       state[targetArray] = state[targetArray].filter(el => el !== element)
     },
     update: (state, element) => {
-      state[targetArray].forEach(el => {
-        if (el.id === element.id) {
-          for (const key in element) {
-            el[key] = element[key]
-          }
-        }
-      })
+      // console.log('Maybe updateing', targetArray, element)
+      const idx = state[targetArray].indexOf(element)
+      state[targetArray][idx] = element
     },
   }
   return reducer
