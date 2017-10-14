@@ -1,3 +1,19 @@
+
+/* eslint-disable no-extend-native */
+Object.defineProperties(Array.prototype, {
+  'first': {
+    get: function() {
+      return this[0]
+    }
+  },
+  'last': {
+    get: function (){
+      return this[this.length-1]
+    }
+  }
+})
+/* eslint-enable no-extend-native */
+
 module.exports = {
   Base: require('./base'),
   BaseCard: require('./baseCard'),

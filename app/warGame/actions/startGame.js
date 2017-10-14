@@ -59,10 +59,9 @@ module.exports = (data, state) => {
   })
 
   // Deal all cards to players after delay
-  /*setTimeout(() => {
+  setTimeout(() => {
     // Get players hands
-    const hands = state.players.list.map(player => {
-
-    })
-  }, 500)*/
+    const decks = state.players.list.map(player => player.filterByType('deck').first)
+    mainDeck.deal(decks)
+  }, 2000)
 }

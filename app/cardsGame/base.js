@@ -87,6 +87,7 @@ module.exports = class Base {
     // Add to this list
     this.children.push(child.id)
     this.onUpdate(this)
+    child.onUpdate(child)
     return this
   }
 
@@ -97,14 +98,23 @@ module.exports = class Base {
    * @returns this
    */
   removeChild(element) {
-    // const childId = typeof element !== 'string' ? element.id : element
-    const child = typeof element !== 'string' ? element : Base.get(element)
+    const child = typeof element === 'string' ? Base.get(element) : element
+
+    if(!child) {
+      throw new ReferenceError(`couldn't find that chid: ${child}`)
+    }
+
+    // Confirm it's my child
+    if(!this.children.some(id => id === child.id)){
+      return this
+    }
 
     // Nullify its parent
     child.parent = null
 
-    this.children = this.children.filter(e => e !== child)
+    this.children = this.children.filter(id => id !== child.id)
     this.onUpdate(this)
+    child.onUpdate(child)
     return this
   }
 
@@ -115,14 +125,14 @@ module.exports = class Base {
    * FIXME: how to handle nested elements?
    * 
    * @param {string} type what kind of elements do you want
-   * @return {Array} list of found elements
+   * @return {Array<object>} list of found elements
    */
   filterByType(type) {
     const nested = []
     const found = this.children
-      .map(id => Base.get(id))
+      .map(Base.toObject)
       .filter(el => {
-        if(el.children.length > 1){
+        if (el.children.length > 1) {
           nested.push(...el.filterByType(type))
         }
         return el.type === type
@@ -140,6 +150,30 @@ module.exports = class Base {
   static get(id) {
     return objects.get(id)
   }
+
+  /**
+   * Maps an ID to object reference
+   * 
+   * @static
+   * @param {any} element preferably string ID
+   * @returns {object}
+   */
+  static toObject(element) {
+    return typeof element === 'string' ? Base.get(element) : element
+  }
+
+  // /**
+  //  * Maps all ID strings to an array of objects
+  //  * 
+  //  * @static
+  //  * @param {array} [elements=[]] array of strings
+  //  * @returns {array}
+  //  */
+  // static mapToObject(elements = []) {
+  //   console.warn('typeof elements: ', typeof elements)
+  //   console.warn(elements)
+  //   return elements.map(Base.toObject)
+  // }
 
   /**
    * Only for testing. Do not use while playing

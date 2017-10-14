@@ -1,15 +1,17 @@
 const Base = require('./base')
-const Conditions = require('./conditions')
+// const Conditions = require('./conditions')
 
 module.exports = class BaseCard extends Base {
 
   constructor(options = {}){
-    super(options)
-    this.name = options.name || 'card'
-    this.type = 'card'
+    super({
+      ...options,
+      name: options.name || 'card',
+      type: options.type || 'card',
+    })
 
     // set of conditions used during gameplay
-    this.conditions = new Conditions(options.conditions)
+    // this.conditions = new Conditions(options.conditions)
 
     // All the states at which a single card can be.
     // faceUp: boolean, rotated: number/angle, marked: boolean

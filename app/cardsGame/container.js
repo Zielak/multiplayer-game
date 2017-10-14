@@ -38,7 +38,7 @@ module.exports = class Container extends Base {
    * @return {object}
    */
   top() {
-    return this.children[this.children.length - 1]
+    return Container.get(this.children[this.children.length - 1])
   }
 
   /**
@@ -47,7 +47,7 @@ module.exports = class Container extends Base {
    * @return {object}
    */
   bottom() {
-    return this.children[0]
+    return Container.get(this.children[0])
   }
 
 }

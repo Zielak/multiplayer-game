@@ -38,6 +38,10 @@ test.afterEach('clears all objects from Base', () => {
 
 test('testing data', t => {
   t.is(t.context.things.children.length, 6, `confirm it's 6 root elements`)
+
+  t.context.things.children.forEach(el => {
+    t.true(typeof el === 'string', `some things are not ID STRINGS!`)
+  })
 })
 
 test('constructor', t => {
@@ -62,6 +66,27 @@ test('parent is updated with new child', t => {
   })
   t.true(parent.children.length === 1, `children array doesn't have only 1 child`)
   t.deepEqual(parent.children[0], child.id, `first child id doesn't match`)
+})
+
+test('removeChild throws error', t => {
+  t.throws(() => {
+    t.context.things.removeChild(undefined)
+  }, ReferenceError)
+})
+
+test('removeChild by ID', t => {
+  t.is(t.context.things.children.length, 6, 'before test')
+  t.context.things.removeChild(t.context.human.id)
+  t.is(t.context.things.children.length, 5, 'should be less')
+})
+
+test('removeChild dont remove not my child', t => {
+  t.is(t.context.fruityBag.children.length, 2, 'has 2 fruits')
+  const veggie = t.context.veggieBag.children[0]
+
+  t.context.fruityBag.removeChild(veggie)
+  t.is(t.context.fruityBag.children.length, 2, `we didn't touch fruits`)
+  t.is(t.context.veggieBag.children.length, 3, `that vegetable wasn't in fruity bag!`)
 })
 
 test('filterByType', t => {
