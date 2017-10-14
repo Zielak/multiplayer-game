@@ -21,8 +21,10 @@ const cardsDataFactory = (card, limits) => {
 module.exports = class Pile extends Container {
 
   constructor(options = {}) {
-    super(options)
-    this.type = 'pile'
+    super({
+      ...options,
+      type: options.type || 'pile',
+    })
 
     this.limits = Object.assign({}, {
       minAngle: -20,

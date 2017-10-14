@@ -17,7 +17,7 @@ module.exports = class Container extends Base {
   /**
    * Shuffle all elements, Fisher yates shuffle
    * 
-   * @return {Container}
+   * @return {Container} this for chaining
    */
   shuffle() {
     let i = this.children.length

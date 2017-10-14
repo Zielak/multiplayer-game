@@ -8,8 +8,10 @@ const Container = require('../container')
 module.exports = class Deck extends Container {
 
   constructor(options = {}) {
-    super(options)
-    this.type = 'deck'
+    super({
+      ...options,
+      type: options.type || 'deck',
+    })
   }
 
   /**

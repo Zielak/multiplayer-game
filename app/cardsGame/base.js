@@ -10,6 +10,7 @@ module.exports = class Base {
     // Store a reference to itself by ID
     objects.set(this.id, this)
 
+    this.type = utils.def(options.type, undefined)
     this.name = utils.def(options.name, undefined)
 
     // Has any dimensions? Add to seperate object
@@ -76,7 +77,7 @@ module.exports = class Base {
 
     // Notify element's last parent of change
     const lastParent = objects.get(child.parent)
-    if(lastParent) {
+    if (lastParent) {
       lastParent.removeChild(child)
     }
 
@@ -105,6 +106,28 @@ module.exports = class Base {
     this.children = this.children.filter(e => e !== child)
     this.onUpdate(this)
     return this
+  }
+
+  filterByName(/*name*/) { }
+
+  /**
+   * Get every child of a certain type
+   * FIXME: how to handle nested elements?
+   * 
+   * @param {string} type what kind of elements do you want
+   * @return {Array} list of found elements
+   */
+  filterByType(type) {
+    const nested = []
+    const found = this.children
+      .map(id => Base.get(id))
+      .filter(el => {
+        if(el.children.length > 1){
+          nested.push(...el.filterByType(type))
+        }
+        return el.type === type
+      })
+    return [...found, ...nested]
   }
 
   /**

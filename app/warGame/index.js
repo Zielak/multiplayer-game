@@ -1,16 +1,8 @@
 const colyseus = require('colyseus')
 const { canClientPerformThisAction } = require('../referee')
 
-const {
-  Deck,
-  Pile,
-  Hand,
-  Player,
-  Presets,
-} = require('../cardsGame/index')
-
-const randomName = () =>
-  [1, 2, 3].map(() => Math.floor(Math.random() * 25 + 65)).map((e) => String.fromCharCode(e)).join('')
+const reducer = require('./reducers/index')
+const startGame = require('./actions/startGame')
 
 const getActionType = (action) => {
   if (action === undefined) return ''
@@ -33,68 +25,6 @@ const performAction = (data, state) => {
   if (actionType === 'testScore') {
     // console.warn('trying to run',actionArgument)
     return reducer.testScore[actionArgument](state)
-  }
-}
-
-const startGame = (data, state) => {
-  // Gather players
-  // state.clients.forEach(client => {
-  [0, 1, 2].forEach(client => {
-    const newPlayer = new Player({
-      clientId: client,
-      name: randomName(),
-    })
-    reducer.players.add(state, newPlayer)
-  })
-
-  const mainDeck = new Deck({
-    x: 0, y: 0,
-  })
-  reducer.containers.add(state, mainDeck)
-
-  // Set the table, empty decks and rows
-  state.players.list.forEach(player => {
-    reducer.containers.add(state, new Deck({
-      x: 10,
-      parent: player,
-    }))
-    reducer.containers.add(state, new Hand({
-      parent: player,
-    }))
-    reducer.containers.add(state, new Pile({
-      parent: player,
-      name: 'stage',
-      y: -20,
-    }))
-    reducer.containers.add(state, new Pile({
-      parent: player,
-      name: 'dead heat',
-      // a situation in or result of a race
-      // in which two or more competitors are exactly even.
-      y: -20,
-      x: -20,
-    }))
-  })
-  
-  // Setup all cards
-  Presets.classicCards().forEach(card => {
-    reducer.cards.add(state, card)
-    mainDeck.addChild(card)
-  })
-}
-
-const reducer = {
-  clients: require('./reducers/arrayReducer')('clients'),
-  players: require('./reducers/players'),
-  cards: require('./reducers/arrayReducer')('cards'),
-  containers: require('./reducers/containers'),
-  testScore: {
-    increase: (state) => {
-      state.testScore++
-    },
-    decrease: (state) => {
-      state.testScore--
-    }
   }
 }
 
@@ -125,12 +55,6 @@ module.exports = class WarGame extends colyseus.Room {
       // Testing
       testScore: 0,
     })
-
-    // setInterval(() => {
-    //   console.log('trying to add dummie player')
-    //   this.state = reducer(this.state, { action: 'player.add', player: 'whoop' + Math.random() })
-    //   console.log('After change: ', JSON.stringify(this.state))
-    // }, 2000)
 
     console.log('WarGame room created!', options)
   }

@@ -7,8 +7,10 @@ const Container = require('../container')
 module.exports = class Hand extends Container {
 
   constructor(options = {}) {
-    super(options)
-    this.type = 'hand'
+    super({
+      ...options,
+      type: options.type || 'hand',
+    })
   }
 
 }
