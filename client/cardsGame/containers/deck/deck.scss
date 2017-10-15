@@ -1,7 +1,7 @@
 .Deck {
   position: absolute;
   justify-content: center;
-  display: flex;
+  display: block;
   width: var(--card-width);
   height: var(--card-height);
   transform:
@@ -13,18 +13,27 @@
   border-radius: calc( var(--line-size)*2 );
   font-size: 12px;
 
-  .label {
-    display: block;
-    align-self: center;
-    text-align: center;
+  & > div{
+    position: relative;
+    width: 100%;
+    height: 100%;
+
+    .label {
+      position: absolute;
+      display: block;
+      top: 0;
+      bottom: 0;
+      left: calc(100% + 0.3em);
+      writing-mode: vertical-rl;
+    }
   }
   
   .ClassicCard {
     transform:
       rotate(var(--angle))
-      translate(calc(var(--deck-offset) * -0.6), calc(var(--deck-offset) * -0.6));
+      translate(calc(var(--deck-offset) * -0.9), calc(var(--deck-offset) * -0.9));
     box-shadow:
-      calc(var(--deck-offset) * 0.3) calc(var(--deck-offset) * 0.3) white,
-      calc(var(--deck-offset) * 0.6) calc(var(--deck-offset) * 0.6) white;
+      calc(var(--deck-offset) * 0.4) calc(var(--deck-offset) * 0.4) white,
+      calc(var(--deck-offset) * 0.9) calc(var(--deck-offset) * 0.9) white;
   }
 }

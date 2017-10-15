@@ -1,12 +1,12 @@
 import store from '../store'
 
 export default room => {
-  room.listen('containers/:number', (change) => {
+  room.listen('containers/:idx', (change) => {
     console.log('container changed: ', change)
     store.dispatch({
       type: 'containers.' + change.operation,
       data: {
-        idx: parseInt(change.path.number),
+        idx: parseInt(change.path.idx),
         container: change.value,
       }
     })

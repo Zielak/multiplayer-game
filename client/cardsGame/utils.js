@@ -11,7 +11,7 @@ export const getAllParents = (everything, target) => {
       return []
     }
     while (parent) {
-      parents.unshift( getElementById(everything, parent) )
+      parents.unshift(getElementById(everything, parent))
       parent = parents[0].parent
     }
     return parents

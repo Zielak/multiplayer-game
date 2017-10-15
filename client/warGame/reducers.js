@@ -1,5 +1,6 @@
 
 module.exports.players = (state, action) => {
+  let newList
   if (state === undefined) {
     return {
       list: [],
@@ -10,9 +11,11 @@ module.exports.players = (state, action) => {
   }
   switch (action.type) {
   case 'players.add':
+    newList = [...state.list]
+    newList[action.data.idx] = action.data.player
     return {
       ...state,
-      list: [...state.list, action.data.player]
+      list: [...newList]
     }
   case 'players.remove':
     return {
@@ -60,12 +63,12 @@ module.exports.players = (state, action) => {
 }
 
 module.exports.containers = (state = [], action) => {
+  let newState
   switch (action.type) {
   case 'containers.add':
-    return [
-      ...state,
-      action.data.container
-    ]
+    newState = [...state]
+    newState[action.data.idx] = action.data.container
+    return [...newState]
   case 'containers.remove':
     return [
       ...state.slice(0, action.data.idx),
@@ -94,11 +97,11 @@ module.exports.containers = (state = [], action) => {
       if (idx !== action.data.idx) {
         return container
       }
+      newState = [...container.children]
+      newState[action.data.childIdx] = action.data.value
       return {
         ...container,
-        children: container.children.map((childId, idx) =>
-          action.data.childIdx === idx ? action.data.value : childId
-        )
+        children: [...newState],
       }
     })
   case 'containers.removeChild':
@@ -106,12 +109,15 @@ module.exports.containers = (state = [], action) => {
       if (idx !== action.data.idx) {
         return container
       }
+      newState = [...container.children]
+      newState[action.data.childIdx] = action.data.value
       return {
         ...container,
-        children: [
-          ...container.children.slice(0, action.data.childIdx),
-          ...container.children.slice(action.data.childIdx + 1)
-        ]
+        children: newState,
+        // children: [
+        //   ...container.children.slice(0, action.data.childIdx),
+        //   ...container.children.slice(action.data.childIdx + 1)
+        // ]
       }
     })
   default:
@@ -120,12 +126,12 @@ module.exports.containers = (state = [], action) => {
 }
 
 module.exports.cards = (state = [], action) => {
+  let newState
   switch (action.type) {
   case 'cards.add':
-    return [
-      ...state,
-      action.data.card
-    ]
+    newState = [...state]
+    newState[action.data.idx] = action.data.card
+    return newState
   case 'cards.remove':
     return [
       ...state.slice(0, action.data.idx),

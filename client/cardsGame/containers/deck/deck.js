@@ -11,38 +11,40 @@ class Deck extends React.Component {
 
   render() {
     const countCards = this.props.children ? this.props.children.length : 0
-    
+
     const top = this.props.children && this.props.children.length > 0 ?
-      <ClassicCard/> :
-      <div className="label">DECK<br />{countCards} cards</div>
-    
+      <ClassicCard /> : ''
+
     return (
       <div className="Deck"
         style={{
           left: this.props.x + 50 + '%',
           top: this.props.y + 50 + '%',
           '--angle': this.props.angle + 'deg',
-          '--deck-offset': this.props.children && this.props.children.length/5+'px',
+          '--deck-offset': this.props.children && this.props.children.length / 5 + 'px',
         }}
       >
-        {top}
+        <div>
+          <div className="label">{countCards} cards</div>
+          {top}
+        </div>
       </div>
     )
   }
 
-  renderFrontGraphics(/*suit, rank*/){
+  renderFrontGraphics(/*suit, rank*/) {
     return 'card'
   }
-  
-  renderBackGraphics(){
+
+  renderBackGraphics() {
     return 'bg'
   }
 
-  renderRank(rank){
+  renderRank(rank) {
     return rank
   }
 
-  renderSuit(suit){
+  renderSuit(suit) {
     return suit
   }
 

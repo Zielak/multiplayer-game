@@ -31,7 +31,7 @@ module.exports = (data, state) => {
   // Set the table, empty decks and rows
   state.players.list.forEach(player => {
     reducer.containers.add(state, new Deck({
-      x: 10,
+      x: 20,
       parent: player,
     }))
     reducer.containers.add(state, new Hand({

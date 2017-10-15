@@ -8,15 +8,6 @@ import {
 export default ({ room, updateCallback }) => {
   console.log('creating controller, listening for new stuff')
 
-  /*const unsubscribe = */store.subscribe(updateCallback.bind(null, store.getState))
-
-  // let angle = 0
-
-  // setInterval(() => {
-  //   angle += 3
-  //   updateCallback(store.getState, angle)
-  // }, 250)
-
   room.onUpdate.addOnce(state => {
     console.log('initial lobby data:', state)
     state.clients.forEach((el, idx) => store.dispatch({
@@ -31,9 +22,10 @@ export default ({ room, updateCallback }) => {
     })
   })
 
-  // room.onUpdate.add(state => {
-  //   console.log('UPDATE:', state)
-  // })
+  room.onUpdate.add(state => {
+    console.log('UPDATE', state)
+    updateCallback.call(null, store.getState)
+  })
 
   // listen to patches coming from the server
   room.listen('clients/:number', (change) => {

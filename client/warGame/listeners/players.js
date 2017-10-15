@@ -1,12 +1,12 @@
 import store from '../store'
 
 export default room => {
-  room.listen('players/list/:number', (change) => {
+  room.listen('players/list/:idx', (change) => {
     console.log('player list changed: ', change)
     store.dispatch({
       type: 'players.' + change.operation,
       data: {
-        idx: parseInt(change.path.number),
+        idx: parseInt(change.path.idx),
         player: change.value,
       }
     })
