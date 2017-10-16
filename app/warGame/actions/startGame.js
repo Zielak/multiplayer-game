@@ -1,6 +1,3 @@
-
-const reducer = require('../reducers/index')
-
 const {
   Deck,
   Pile,
@@ -12,7 +9,7 @@ const {
 const randomName = () =>
   [1, 2, 3].map(() => Math.floor(Math.random() * 25 + 65)).map((e) => String.fromCharCode(e)).join('')
 
-module.exports = (data, state) => {
+module.exports = (state, reducer) => {
   // Gather players
   // state.clients.forEach(client => {
   [0, 1, 2].forEach(client => {

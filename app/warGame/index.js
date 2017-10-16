@@ -1,32 +1,9 @@
 const colyseus = require('colyseus')
-const { canClientPerformThisAction } = require('../referee')
 
+const rules = require('./rules')
+const actions = require('./actions/index')
 const reducer = require('./reducers/index')
-const startGame = require('./actions/startGame')
-
-const getActionType = (action) => {
-  if (action === undefined) return ''
-  const firstDot = action.indexOf('.')
-  return action.slice(0, firstDot)
-}
-const getActionArgument = (action) => {
-  if (action === undefined) return ''
-  const firstDot = action.indexOf('.') + 1
-  return action.slice(firstDot)
-}
-
-const performAction = (data, state) => {
-  const actionType = getActionType(data.action)
-  const actionArgument = getActionArgument(data.action)
-  switch (data.action) {
-  case 'game.start':
-    return startGame(data, state)
-  }
-  if (actionType === 'testScore') {
-    // console.warn('trying to run',actionArgument)
-    return reducer.testScore[actionArgument](state)
-  }
-}
+const Referee = require('../referee')(rules, actions, reducer)
 
 module.exports = class WarGame extends colyseus.Room {
 
@@ -85,11 +62,11 @@ module.exports = class WarGame extends colyseus.Room {
   onMessage(client, data) {
     console.log('MSG: ', JSON.stringify(data))
 
-    const actionStatus = canClientPerformThisAction(client, data.action, this.state)
+    const actionStatus = Referee.canClientPerformThisAction(client, data.action, this.state)
     console.info(`action: ${data.action}`)
     if (actionStatus.success) {
       console.log(` - success: ${actionStatus.description}`)
-      performAction(data, this.state)
+      Referee.performAction(data.action, this.state)
     } else {
       console.error(` - fail: ${actionStatus.description}`)
       this.broadcast({

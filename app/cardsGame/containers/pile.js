@@ -38,11 +38,13 @@ module.exports = class Pile extends Container {
     this.cardsData = []
   }
 
+  // FIXME: addChild plz
   push(element) {
     this.cardsData.push(cardsDataFactory(element, this.limits))
     return super.push(element)
   }
 
+  // FIXME: removeChild plz
   remove(element) {
     const idx = this.elements.indexOf(element)
     return this.elements.splice(idx, 1)

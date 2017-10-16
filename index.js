@@ -7,9 +7,10 @@ const colyseus = require('colyseus')
 require('./consoleColors')
 
 // Require ChatRoom handler
-// const Lobby = require('./rooms/lobby')
-// const MonstrousEscapeRoom = require('./rooms/monstrousEscape')
-const WarGame = require('./app/warGame/index')
+const rooms = {
+  warGame: require('./app/warGame/index')
+  // lobby: require('./app/lobby')
+}
 
 const port = process.env.PORT || 2657
 const app = express()
@@ -22,7 +23,7 @@ const gameServer = new colyseus.Server({ server: httpServer })
 
 // Register Lobby as 'lobby'
 // gameServer.register('lobby', Lobby)
-gameServer.register('warGame', WarGame)
+gameServer.register('warGame', rooms.warGame)
 
 app.use(express.static(path.join(__dirname, 'static')))
 app.use('/', serveIndex(path.join(__dirname, 'static'), {'icons': true}))

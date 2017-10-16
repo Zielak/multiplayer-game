@@ -13,7 +13,7 @@ module.exports = class Player extends Base {
     // Defaults
     this.score = 0
     // Infinite time left for testing
-    this.timeleft = "Infinity"
+    this.timeleft = 'Infinity'
   }
 
 }
