@@ -3,4 +3,5 @@ module.exports = (success = true, description = '') => {
   o.valueOf = function valueOf() {
     this.success
   }
+  return o
 }

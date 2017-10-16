@@ -6,10 +6,22 @@ const {
   Presets,
 } = require('../../cardsGame/index')
 
+const actionStatusFactory = require('../../utils/actionStatusFactory')
+
 const randomName = () =>
   [1, 2, 3].map(() => Math.floor(Math.random() * 25 + 65)).map((e) => String.fromCharCode(e)).join('')
 
-module.exports = (state, reducer) => {
+const condition = (client, state) => {
+  if(client.id !== state.host){
+    return actionStatusFactory(false, `Client '${client.id}' is not a host: '${state.host}'`)
+  }else if (state.clients.length < 1){
+    return actionStatusFactory(false, `Not enough clients: only '${state.clients.length}' clients in the room`)
+  }else{
+    return actionStatusFactory()
+  }
+}
+
+const action = (state, reducer) => {
   // Gather players
   // state.clients.forEach(client => {
   [0, 1, 2].forEach(client => {
@@ -62,3 +74,5 @@ module.exports = (state, reducer) => {
     mainDeck.deal(decks)
   }, 2000)
 }
+
+module.exports = {condition, action}

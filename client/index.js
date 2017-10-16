@@ -43,8 +43,11 @@ warGameController({
 warGameRoom.onJoin.add(function() {
   console.log(client.id, "joined", warGameRoom.name)
   
-  // Testing, just init with players
-  warGameRoom.send({ action: 'game.start' })
+  setTimeout(() => {
+    // Testing, just init with players
+    console.log('GO NOW!')
+    warGameRoom.send({ action: 'gameStart' })
+  }, 100)
 })
 
 // Initial render plz

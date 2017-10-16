@@ -1,9 +1,8 @@
 const colyseus = require('colyseus')
 
-const rules = require('./rules')
 const actions = require('./actions/index')
 const reducer = require('./reducers/index')
-const Referee = require('../referee')(rules, actions, reducer)
+const Referee = require('../referee')(actions, reducer)
 
 module.exports = class WarGame extends colyseus.Room {
 
@@ -62,19 +61,18 @@ module.exports = class WarGame extends colyseus.Room {
   onMessage(client, data) {
     console.log('MSG: ', JSON.stringify(data))
 
-    const actionStatus = Referee.canClientPerformThisAction(client, data.action, this.state)
-    console.info(`action: ${data.action}`)
-    if (actionStatus.success) {
-      console.log(` - success: ${actionStatus.description}`)
-      Referee.performAction(data.action, this.state)
-    } else {
-      console.error(` - fail: ${actionStatus.description}`)
+    const permission = Referee.canClientPerformThisAction(client, data.action, this.state)
+    console.info(`action: ${data.action} => ${JSON.stringify(permission)}`)
+    if (!permission.success) {
       this.broadcast({
         event: 'game.error',
         data: `Client "${client.id}" failed to perform "${data.action}" action.
-        Details: ${actionStatus.description}`
+        Details: ${permission.description}`
       })
+      return
     }
+    const action = Referee.performAction(data.action, this.state)
+    console.info('ACTION: ', JSON.stringify(action))
   }
 
   onDispose() {
