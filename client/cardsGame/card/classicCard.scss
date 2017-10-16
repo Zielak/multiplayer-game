@@ -7,6 +7,8 @@
   transform:
     translate(calc(var(--card-width) * -0.5), calc(var(--card-height) * -0.5))
     rotate( var(--angle) );
+  
+  transition: 0.35s left ease-out, 0.35s top ease-out, 0.35s transform ease-out;
 
   .back {
     width: 100%;

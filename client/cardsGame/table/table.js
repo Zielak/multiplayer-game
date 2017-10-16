@@ -132,7 +132,7 @@ const renderElements = element => {
         {...element}
       ></Pile>
     )
-  } else if (element.type === 'card' && !element.parent) {
+  } else if (element.type === 'card') {
     return (
       <ClassicCard key={'card' + element.idx}
         {...element}
