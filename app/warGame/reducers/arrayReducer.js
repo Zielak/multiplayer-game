@@ -8,7 +8,6 @@ module.exports = (targetArray) => {
       state[targetArray] = state[targetArray].filter(el => el !== element)
     },
     update: (state, element) => {
-      // console.log('Maybe updateing', targetArray, element)
       const idx = state[targetArray].indexOf(element)
       state[targetArray][idx] = element
     },

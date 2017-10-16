@@ -6,7 +6,7 @@ module.exports = {
   entry: './client/index.js',
   output: {
     filename: 'index.js',
-    path: path.resolve(__dirname, 'static')
+    path: path.resolve(__dirname, 'dist')
   },
   devtool: 'inline-source-map',
   devServer: {
