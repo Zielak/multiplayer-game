@@ -1,4 +1,8 @@
+import React from 'react'
+import ReactDOM from 'react-dom'
+import PropTypes from 'prop-types'
 
+/* eslint-disable no-unused-vars */
 const rad2deg = (angle) => {
   return angle * 57.29577951308232 // angle / Math.PI * 180
 }
@@ -29,36 +33,51 @@ const rotatePoint = (point, origin, angle = 0) => {
   }
 }
 
-const findAllParents = (child, everything) => everything.filter(el => el.name === child.parent)
+const getParent = (child, everything) => everything.filter(el => el.name === child.parent)[0]
 
+const arrayWithoutElement = (element, everything) => everything.filter(el => el.name !== element.name)
 
-const Box = props => (
-  <div className="box" style={{
-    '--x': props.x + '%',
-    '--y': props.y + '%',
-    '--angle': props.angle + 'deg',
-  }}>
-    <p><strong>{props.name}</strong></p>
-    <div style={{ fontSize: '12px' }}>angle: {props.angle}<br />x: {props.x}<br />y: {props.y}</div>
-  </div>
-)
+const findAllParents = (child, everything) => {
+  const result = []
+  if (child.parent) {
+    const newParent = getParent(child, everything)
+    result.push(newParent)
+    if (newParent.parent) {
+      result.push(...findAllParents(newParent, arrayWithoutElement(newParent, everything)))
+    }
+  }
+  return result
+}
 
-const Container = props => (
-  <div>
-    <div>container here</div>
-    {props.children}
-  </div>
-)
+const Box = props => <div className="box" style={{
+  '--x': props.x + '%',
+  '--y': props.y + '%',
+  '--angle': props.angle + 'deg',
+}}>
+  <p><strong>{props.name}</strong></p>
+  <div style={{ fontSize: '12px' }}>angle: {props.angle}<br />x: {props.x}<br />y: {props.y}</div>
+</div>
+Box.propTypes = {
+  x: PropTypes.number,
+  y: PropTypes.number,
+  angle: PropTypes.number,
+  name: PropTypes.string,
+}
+
+const Container = props => <div>
+  <div>container here</div>
+  {props.children}
+</div>
 
 const boxes = [
-  { name: 'A', x: 5, y: 10, angle: 0 },
-  { name: 'B', x: 50, y: 70, angle: 0 },
+  { name: 'zero', x: 0, y: 0, angle: 0 },
+  { name: 'B', x: 50, y: 50, angle: 10 },
   { name: 'C', x: 20, y: 80, angle: 0 },
   { name: 'D', x: 60, y: 25, angle: 0 },
 
   { name: 'B 1', y: 10, parent: 'B' },
-  
-  { name: 'B 1 A', y: 10, parent: 'B 1' },
+
+  { name: 'B 1 A', x: 10, parent: 'B 1' },
 ]
   .map(box => {
     // Provide defaults
@@ -82,7 +101,7 @@ const boxes = [
     }
   })
   // Finally
-  .map(box => <Box {...box} />)
+  .map((box, idx) => <Box key={idx} {...box} />)
 
 ReactDOM.render(
   <Container>
