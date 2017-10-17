@@ -55,7 +55,7 @@ const positionTest = {
   devtool: 'inline-source-map',
   devServer: {
     contentBase: './dist',
-    hot: true
+    // hot: true
   },
   module: {
     loaders: [
@@ -70,7 +70,7 @@ const positionTest = {
     new HtmlWebpackPlugin({
       template: 'client/testPositions.ejs'
     }),
-    new webpack.HotModuleReplacementPlugin()
+    // new webpack.HotModuleReplacementPlugin()
   ]
 }
 

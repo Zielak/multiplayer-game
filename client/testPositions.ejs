@@ -23,11 +23,12 @@
       position: absolute;
       left: var(--x);
       top: var(--y);
-      transform: rotate(var(--angle)) translate(-50px, -37.5px);
+      transform: translate(-30px, -40px) rotate(var(--angle));
+      transition: left 0.5s linear, top 0.5s linear, transform 0.5s linear;
       text-align: center;
 
-      width: 75px;
-      height: 100px;
+      width: 60px;
+      height: 80px;
       background: #777;
       border: 3px solid green;
     }
