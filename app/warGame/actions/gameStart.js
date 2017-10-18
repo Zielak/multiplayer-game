@@ -6,12 +6,12 @@ const {
   Presets,
 } = require('../../cardsGame/index')
 
-const actionStatusFactory = require('../../utils/actionStatusFactory')
+const actionStatusFactory = require('../../../shared/utils').actionStatusFactory
 
 const randomName = () =>
   [1, 2, 3].map(() => Math.floor(Math.random() * 25 + 65)).map((e) => String.fromCharCode(e)).join('')
 
-const condition = (client, state) => {
+const condition = (state, client) => {
   if(client.id !== state.host){
     return actionStatusFactory(false, `Client '${client.id}' is not a host: '${state.host}'`)
   }else if (state.clients.length < 1){
@@ -21,7 +21,7 @@ const condition = (client, state) => {
   }
 }
 
-const action = (state, reducer) => {
+const action = (state, reducer) => new Promise((ressolve/*, reject*/) => {
   // Gather players
   // state.clients.forEach(client => {
   [0, 1, 2].forEach(client => {
@@ -69,10 +69,13 @@ const action = (state, reducer) => {
 
   // Deal all cards to players after delay
   setTimeout(() => {
-    // Get players hands
+    // Get players decks
     const decks = state.players.list.map(player => player.filterByType('deck').first)
     mainDeck.deal(decks)
   }, 2000)
-}
+  mainDeck.on(Deck.events.DEALT, () => {
+    ressolve()
+  })
+})
 
 module.exports = {condition, action}

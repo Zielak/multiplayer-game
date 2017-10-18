@@ -30,6 +30,4 @@ module.exports = {
   Player: require('./player'),
   Presets: require('./presets'),
   Table: require('./table'),
-
-  utils: require('./utils'),
 }

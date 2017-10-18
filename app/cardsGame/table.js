@@ -1,4 +1,4 @@
-const utils = require('./utils')
+const utils = require('../../shared/utils')
 
 /**
  * Table is where all the containers and cards are laid out.

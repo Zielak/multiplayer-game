@@ -1,13 +1,13 @@
 const Container = require('../container')
-const Utils = require('../utils.js')
+const utils = require('../../../shared/utils')
 
 const cardsDataFactory = (card, limits) => {
   return {
     id: card.id,
-    rotation: Utils.float(limits.minAngle, limits.maxAngle),
+    rotation: utils.float(limits.minAngle, limits.maxAngle),
     offset: {
-      x: Utils.float(limits.minX, limits.maxX),
-      y: Utils.float(limits.minY, limits.maxY),
+      x: utils.float(limits.minX, limits.maxX),
+      y: utils.float(limits.minY, limits.maxY),
     }
   }
 }
@@ -38,13 +38,13 @@ module.exports = class Pile extends Container {
     this.cardsData = []
   }
 
-  // FIXME: addChild plz
+  // FIXME: listen for self addChild events?
   push(element) {
     this.cardsData.push(cardsDataFactory(element, this.limits))
     return super.push(element)
   }
 
-  // FIXME: removeChild plz
+  // FIXME: listen for self removeChild events? plz
   remove(element) {
     const idx = this.elements.indexOf(element)
     return this.elements.splice(idx, 1)

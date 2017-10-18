@@ -1,4 +1,4 @@
-const status = require('../../utils/actionStatusFactory')
+const status = require('../../../shared/utils').actionStatusFactory
 
 module.exports = {
   gameStart: require('./gameStart'),

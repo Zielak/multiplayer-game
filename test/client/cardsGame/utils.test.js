@@ -1,7 +1,7 @@
 import test from 'ava'
 import {
   getElementById
-} from '../../../client/cardsGame/utils'
+} from '../../../shared/utils.js'
 import uuid from 'uuid/v4'
 
 test('getElementById', t => {
@@ -16,7 +16,3 @@ test('getElementById', t => {
 
   t.deepEqual(getElementById(elements, 'somethingImaginary'), undefined, `didn't return undefined`)
 })
-
-test.todo('translatePoint')
-
-test.todo('rotatePoint')

@@ -7,7 +7,7 @@
     "start": "webpack-dev-server",
     "server": "node index.js",
     "precommit": "npm test && npm run lint",
-    "lint": "./node_modules/.bin/eslint ./",
+    "lint": "./node_modules/.bin/eslint ./ -f visualstudio",
     "test": "nyc ava",
     "test:watch": "ava --watch"
   },

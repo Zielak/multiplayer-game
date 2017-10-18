@@ -1,7 +1,7 @@
 import test from 'ava'
 import {
   findAllParents
-} from '../../../client/cardsGame/utils'
+} from '../../../shared/utils.js'
 import uuid from 'uuid/v4'
 
 test.beforeEach('prepare elements', t => {

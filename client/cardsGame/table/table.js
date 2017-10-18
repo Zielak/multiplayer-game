@@ -9,7 +9,7 @@ import { rotateDEG, translate, transform, applyToPoint, identity } from 'transfo
 import ClassicCard from '../card/classicCard'
 import {
   findAllParents,
-} from '../utils'
+} from '../../../shared/utils.js'
 
 import Player from '../player/player'
 import Deck from '../containers/deck/deck'

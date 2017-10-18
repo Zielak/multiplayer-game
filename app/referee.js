@@ -1,4 +1,4 @@
-const status = require('./utils/actionStatusFactory')
+const status = require('../shared/utils').actionStatusFactory
 
 // const getActionType = (action) => {
 //   if (action === undefined) return ''
@@ -30,7 +30,7 @@ module.exports = (actions, reducer) => {
         // console.info(`Action without condition "${action}".`)
         return status(true, `Action without condition "${actionName}".`)
       }
-      return actions[actionName].condition(client, state)
+      return actions[actionName].condition(state, client)
     },
     performAction: (actionName, state) => {
       if (actions[actionName] === undefined) {

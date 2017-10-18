@@ -1,10 +1,12 @@
 const uuid = require('uuid/v4')
-const utils = require('./utils')
+const utils = require('../../shared/utils')
+const EventEmitter = require('events')
 
 const objects = new Map()
 
-module.exports = class Base {
+class Base extends EventEmitter {
   constructor(options = {}) {
+    super()
     this.id = uuid()
 
     // Store a reference to itself by ID
@@ -13,9 +15,6 @@ module.exports = class Base {
     this.type = utils.def(options.type, undefined)
     this.name = utils.def(options.name, undefined)
 
-    // Has any dimensions? Add to seperate object
-    // if (utils.exists(options.x) || utils.exists(options.y)
-    // || utils.exists(options.y) || utils.exists(options.y)) {
     this.dimensions = {
       // Real-life size (in CM) and position
       x: utils.def(options.x, 0),
@@ -23,7 +22,6 @@ module.exports = class Base {
       width: utils.def(options.width, 5),
       height: utils.def(options.height, 5),
     }
-    // }
 
     // List of children ID's
     this.children = []
@@ -47,6 +45,8 @@ module.exports = class Base {
       const parent = objects.get(options.parent)
       parent && parent.addChild(this.id)
     }
+
+    this.startListeningForEvents()
   }
 
   /**
@@ -65,6 +65,24 @@ module.exports = class Base {
     }
   }
 
+  startListeningForEvents() {
+    this.on('child.removed', child => this.removeChild(child))
+    // this.on('child.added')
+  }
+
+  /**
+   * Move this element to a different `parent`.
+   * addChild method ensures that both new and old parents are
+   * updated with the change.
+   * 
+   * @param {any} newParent 
+   * @returns this
+   */
+  moveTo(newParent) {
+    newParent.addChild(this)
+    return this
+  }
+
   /**
    * Adds new child to this element, ensuring that its last parent
    * knows about this change.
@@ -78,6 +96,7 @@ module.exports = class Base {
     // Notify element's last parent of change
     const lastParent = objects.get(child.parent)
     if (lastParent) {
+      // this.emit('child.removes', this.id)
       lastParent.removeChild(child)
     }
 
@@ -100,12 +119,12 @@ module.exports = class Base {
   removeChild(element) {
     const child = typeof element === 'string' ? Base.get(element) : element
 
-    if(!child) {
+    if (!child) {
       throw new ReferenceError(`couldn't find that chid: ${child}`)
     }
 
     // Confirm it's my child
-    if(!this.children.some(id => id === child.id)){
+    if (!this.children.some(id => id === child.id)) {
       return this
     }
 
@@ -184,3 +203,9 @@ module.exports = class Base {
     objects.clear()
   }
 }
+
+Base.events = {
+  TEST: 'test'
+}
+
+module.exports = Base

@@ -1,7 +1,7 @@
 const Conditions = require('./conditions')
 const Base = require('./base')
 
-module.exports = class Container extends Base {
+class Container extends Base {
 
   constructor(options = {}) {
     super(options)
@@ -29,6 +29,7 @@ module.exports = class Container extends Base {
       this.children[i] = tempj
       this.children[j] = tempi
     }
+    this.emit(Container.SHUFFLED)
     return this
   }
 
@@ -51,3 +52,10 @@ module.exports = class Container extends Base {
   }
 
 }
+
+Container.events = {
+  ...Base.events,
+  SHUFFLED: 'shuffled',
+}
+
+module.exports = Container

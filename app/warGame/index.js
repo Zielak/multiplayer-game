@@ -20,10 +20,11 @@ module.exports = class WarGame extends colyseus.Room {
         reversed: false,
         currentPlayerIdx: 0,
         currentPlayer: null,
+        currentPlayerPhase: 0,
       },
       // Initial array of all available cards in the game
       cards: [],
-      // Container holding (or not yet) cards
+      // Containers holding (or not yet) cards
       containers: [],
       // Table
       table: null,

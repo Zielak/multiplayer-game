@@ -1,5 +1,5 @@
 import test from 'ava'
-import * as utils from '../../../app/cardsGame/utils'
+import * as utils from '../../../shared/utils'
 
 test('exists', t => {
   t.deepEqual(utils.exists(), false, `literally nothing passed to function`)

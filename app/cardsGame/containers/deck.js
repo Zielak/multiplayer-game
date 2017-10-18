@@ -5,7 +5,7 @@ const Container = require('../container')
  * Deck respects card's `faceUp` state,
  * and will show the face or back of visible card
  */
-module.exports = class Deck extends Container {
+class Deck extends Container {
 
   constructor(options = {}) {
     super({
@@ -44,7 +44,15 @@ module.exports = class Deck extends Container {
   }
 
   onCardsDealt() {
+    this.emit('dealt')
     console.info('Done dealing cards.')
   }
 
 }
+
+Deck.events = {
+  ...Container.events,
+  DEALT: 'dealt'
+}
+
+module.exports = Deck
