@@ -27,13 +27,4 @@
       writing-mode: vertical-rl;
     }
   }
-  
-  .ClassicCard {
-    transform:
-      rotate(var(--angle))
-      translate(calc(var(--deck-offset) * -0.9), calc(var(--deck-offset) * -0.9));
-    box-shadow:
-      calc(var(--deck-offset) * 0.4) calc(var(--deck-offset) * 0.4) white,
-      calc(var(--deck-offset) * 0.9) calc(var(--deck-offset) * 0.9) white;
-  }
 }

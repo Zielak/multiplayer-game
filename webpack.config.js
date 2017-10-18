@@ -2,9 +2,7 @@ const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const webpack = require('webpack')
 
-/* eslint-disable no-unused-vars */
-const main = {
-/* eslint-enable no-unused-vars */
+const main = { // eslint-disable-line no-unused-vars
   entry: './client/index.js',
   output: {
     filename: 'index.js',
@@ -46,7 +44,7 @@ const main = {
   ]
 }
 
-const positionTest = {
+const positionTest = { // eslint-disable-line no-unused-vars
   entry: './client/testPositions.js',
   output: {
     filename: 'testPositions.js',
@@ -74,4 +72,4 @@ const positionTest = {
   ]
 }
 
-module.exports = positionTest
+module.exports = main

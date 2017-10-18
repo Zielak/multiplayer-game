@@ -1,23 +1,23 @@
 
 export const getElementById = (everything, id) => everything.find(el => el.id === id)
 
-export const getAllParents = (everything, target) => {
-  if (target.parent) {
-    const parents = []
-    let parent = target.parent// = getElementById(everything, target.parent)
-    if (!getElementById(everything, target.parent)) {
-      // quick bail, parent doesn't exist yet
-      // TODO: check if it actually happens now
-      return []
+export const getParent = (child, everything) => everything.filter(el => el.id === child.parent)[0]
+
+export const arrayWithoutElement = (element, everything) => everything.filter(el => el.id !== element.id)
+
+export const findAllParents = (child, everything) => {
+  const result = []
+  if (child.parent) {
+    const newParent = getParent(child, everything)
+    if (!newParent) {
+      return
     }
-    while (parent) {
-      parents.unshift(getElementById(everything, parent))
-      parent = parents[0].parent
+    result.unshift(newParent)
+    if (newParent.parent) {
+      result.unshift(...findAllParents(newParent, arrayWithoutElement(newParent, everything)))
     }
-    return parents
-  } else {
-    return []
   }
+  return result
 }
 
 export const rad2deg = (angle) => {

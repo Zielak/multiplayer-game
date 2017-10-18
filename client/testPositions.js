@@ -7,15 +7,6 @@ import { rotateDEG, translate, transform, applyToPoint, identity } from 'transfo
 var _angle = 0
 /* eslint-enable*/
 
-/* eslint-disable no-unused-vars */
-const rad2deg = (angle) => {
-  return angle * 57.29577951308232 // angle / Math.PI * 180
-}
-
-const deg2rad = (angle) => {
-  return angle * 0.017453292519943295 // (angle / 180) * Math.PI;
-}
-
 const getParent = (child, everything) => everything.filter(el => el.name === child.parent)[0]
 
 const arrayWithoutElement = (element, everything) => everything.filter(el => el.name !== element.name)

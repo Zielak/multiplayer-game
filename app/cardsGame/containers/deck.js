@@ -27,14 +27,20 @@ module.exports = class Deck extends Container {
     containers = containers.map(Container.toObject)
     const maxDeals = count * containers.length
 
-    console.warn(`I myself have ${this.children.length} cards`)
-    while(this.children.length > 0 && i < maxDeals){
-      // console.info(`${i}: to containers[${i%containers.length}] => ${this.children.length} cards left`)
+    console.log(`DECK: I myself have ${this.children.length} cards`)
+    
+    const dealOne = () => {
       const card = this.top()
       containers[i%containers.length].addChild(card)
       i++
+      
+      if (this.children.length > 0 && i < maxDeals) {
+        setTimeout(dealOne, 40)
+      } else {
+        this.onCardsDealt(containers)
+      }
     }
-    this.onCardsDealt(containers)
+    dealOne()
   }
 
   onCardsDealt() {

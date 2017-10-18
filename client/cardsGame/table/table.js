@@ -4,13 +4,11 @@
  */
 import React from 'react'
 import PropTypes from 'prop-types'
+import { rotateDEG, translate, transform, applyToPoint, identity } from 'transformation-matrix'
 
 import ClassicCard from '../card/classicCard'
 import {
-  // getElementById,
-  getAllParents,
-  translatePoint,
-  rotatePoint,
+  findAllParents,
 } from '../utils'
 
 import Player from '../player/player'
@@ -44,8 +42,6 @@ const getOwnerId = (element) => {
   }
 }
 
-// const findById = (elements, id) => elements.some(elem => elem.id === id)
-
 const addIndexProp = (element, idx) => {
   // Add index for later, keys are important in React
   return {
@@ -54,13 +50,23 @@ const addIndexProp = (element, idx) => {
   }
 }
 
-const addAngleProp = element => ({ ...element, angle: 0 })
+const addTransformProps = element => ({
+  ...element,
+  dimensions: {
+    x: element.dimensions.x || 0,
+    y: element.dimensions.y || 0,
+    angle: element.dimensions.angle || 0,
+  },
+  angle: 0,
+  x: 0,
+  y: 0,
+})
 
 const positionAndRotatePlayers = (element, idx, elements) => {
-  const angle = getPartialAngle(elements)
-
   // Manipulate every player first
   if (element.type !== 'player') return element
+  
+  const angle = getPartialAngle(elements)
 
   // Get initial correct position on the table, and add an angle
   const position = positionFromAngle(angle * idx + startingAngle, 40)
@@ -69,36 +75,34 @@ const positionAndRotatePlayers = (element, idx, elements) => {
     dimensions: {
       x: position.x,
       y: position.y,
+      angle: angle * idx ,
     },
-    angle: angle * idx + startingAngle,
   }
 }
 
-const positionAndRotateElements = (element, idx, elements) => {
-  // Get all parents
-  const parents = getAllParents(elements, element)
+const addTransformMatrices = element => {
+  const trans = transform(
+    translate(element.dimensions.x, element.dimensions.y),
+    rotateDEG(element.dimensions.angle)
+  )
+  return {
+    ...element,
+    transform: trans
+  }
+}
 
-  // Transform this element regarding all parents transforms
-  const position = parents.reduce((point, parent) => {
-    const parentPos = {
-      x: parent.dimensions.x,
-      y: parent.dimensions.y,
-    }
-    let p = translatePoint(point, parentPos)
-    p = rotatePoint(p, parentPos, parent.angle)
-    return p
-  }, { x: element.dimensions.x, y: element.dimensions.y })
-
-  // Just get the final angle
-  const angle = parents[parents.length - 1] ?
-    parents[parents.length - 1].angle - startingAngle :
-    startingAngle
+const setWorldCoordinates = (element, idx, everything) => {
+  const parents = findAllParents(element, everything)
+  const rotation = parents.reduce((acc, parent) => acc + parent.dimensions.angle, element.dimensions.angle)
+  const matrices = parents.map(parent => parent.transform)
+  const matrix = matrices.length > 0 ? transform(matrices) : identity()
+  const pos = applyToPoint(matrix, { x: element.dimensions.x, y: element.dimensions.y })
 
   return {
     ...element,
-    x: position.x,
-    y: position.y,
-    angle,
+    x: pos.x,
+    y: pos.y,
+    angle: rotation,
   }
 }
 
@@ -116,27 +120,19 @@ const renderElements = element => {
   // Finally render them all to React components
   if (element.type === 'player') {
     return (
-      <Player key={'player' + element.idx}
-        {...element}
-      ></Player>
+      <Player key={'player' + element.idx} {...element}/>
     )
   } else if (element.type === 'deck') {
     return (
-      <Deck key={'deck' + element.idx}
-        {...element}
-      ></Deck>
+      <Deck key={'deck' + element.idx} {...element}/>
     )
   } else if (element.type === 'pile') {
     return (
-      <Pile key={'pile' + element.idx}
-        {...element}
-      ></Pile>
+      <Pile key={'pile' + element.idx} {...element}/>
     )
   } else if (element.type === 'card') {
     return (
-      <ClassicCard key={'card' + element.idx}
-        {...element}
-      ></ClassicCard>
+      <ClassicCard key={'card' + element.idx} {...element}/>
     )
   }
 }
@@ -145,7 +141,7 @@ class Table extends React.Component {
 
   render() {
 
-    // Parse all current elements from props
+    // Parse all current objects from props
     // Returns renderable html elements
     const elements = [
       ...this.props.players && this.props.players.list || [],
@@ -153,9 +149,10 @@ class Table extends React.Component {
       ...this.props.cards || [],
     ]
       .map(addIndexProp)
-      .map(addAngleProp)
+      .map(addTransformProps)
       .map(positionAndRotatePlayers)
-      .map(positionAndRotateElements)
+      .map(addTransformMatrices)
+      .map(setWorldCoordinates)
       .map(stripUndefinedChildren)
       .map(renderElements)
 

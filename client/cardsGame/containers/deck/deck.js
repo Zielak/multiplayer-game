@@ -3,7 +3,6 @@
  */
 import React from 'react'
 import PropTypes from 'prop-types'
-import ClassicCard from '../../card/classicCard'
 
 import './deck.scss'
 
@@ -11,9 +10,6 @@ class Deck extends React.Component {
 
   render() {
     const countCards = this.props.children ? this.props.children.length : 0
-
-    const top = this.props.children && this.props.children.length > 0 ?
-      <ClassicCard /> : ''
 
     return (
       <div className="Deck"
@@ -26,7 +22,6 @@ class Deck extends React.Component {
       >
         <div>
           <div className="label">{countCards} cards</div>
-          {top}
         </div>
       </div>
     )
