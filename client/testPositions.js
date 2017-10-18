@@ -29,16 +29,16 @@ const findAllParents = (child, everything) => {
       result.push(...findAllParents(newParent, arrayWithoutElement(newParent, everything)))
     }
   }
-  return result
+  return result.reverse()
 }
 
-const Box = props => <div className="box" style={{
-  '--x': props.worldX * 5 + 'px',
-  '--y': props.worldY * 5 + 'px',
+const Box = props => <div style={{
+  '--x': props.worldX + '%',
+  '--y': props.worldY + '%',
   '--angle': props.worldAngle + 'deg',
-}}>
+}} className="box">
   <div><strong>{props.name}</strong></div>
-  <div style={{ fontSize: '12px' }}>angle: {props.angle}<br />({props.x}, {props.y})</div>
+  <div style={{ fontSize: '14px' }}>{props.angle}°<br />({props.x}, {props.y})</div>
 </div>
 Box.propTypes = {
   x: PropTypes.number,
@@ -62,13 +62,17 @@ Container.propTypes = {
 
 const boxes = [
   { name: 'zero', x: 0, y: 0, angle: 0 },
-  { name: 'B', x: 50, y: 50, angle: 45 },
-  { name: 'C', x: 20, y: 80, angle: 0 },
-  { name: 'D', x: 60, y: 25, angle: 0 },
+  { name: 'B', x: 50, y: 25, angle: 45 },
+  { name: 'C', x: 25, y: 70, angle: 270 },
+  { name: 'D', x: 80, y: 15, angle: 0 },
 
-  { name: 'B 1', y: 20, parent: 'B' },
-
-  { name: 'B 1 A', x: 10, parent: 'B 1' },
+  { name: 'B1', y: 20, parent: 'B' },
+  { name: 'B1A', x: 13, parent: 'B1' },
+  
+  { name: 'C-down', y: 16, parent: 'C' },
+  { name: 'C-up', y: -16, parent: 'C' },
+  { name: 'C-left', x: -16, parent: 'C' },
+  { name: 'C-right', x: 16, parent: 'C' },
 ]
 
 const render = () => {
@@ -89,7 +93,7 @@ const render = () => {
       } else {
         return {
           ...box,
-          angle: _angle,
+          angle: box.angle + _angle,
         }
       }
     })
