@@ -54,6 +54,7 @@ class Base extends EventEmitter {
    * 
    * @readonly
    * @return {Player|null} `Player` or `null` if this container doesn't belong to anyone
+   * @memberof Base
    */
   get owner() {
     if (typeof Base.get(this.parent) === 'object') {
@@ -77,6 +78,7 @@ class Base extends EventEmitter {
    * 
    * @param {any} newParent 
    * @returns this
+   * @memberof Base
    */
   moveTo(newParent) {
     newParent.addChild(this)
@@ -89,6 +91,7 @@ class Base extends EventEmitter {
    * 
    * @param {any|string} element reference to an object or its ID
    * @returns this
+   * @memberof Base
    */
   addChild(element) {
     const child = typeof element === 'string' ? objects.get(element) : element
@@ -115,6 +118,7 @@ class Base extends EventEmitter {
    * 
    * @param {any|string} element reference to an object or its ID
    * @returns this
+   * @memberof Base
    */
   removeChild(element) {
     const child = typeof element === 'string' ? Base.get(element) : element
@@ -141,22 +145,36 @@ class Base extends EventEmitter {
 
   /**
    * Get every child of a certain type
-   * FIXME: how to handle nested elements?
    * 
    * @param {string} type what kind of elements do you want
-   * @return {Array<object>} list of found elements
+   * @param {boolean} [deep=true] deep search?
+   * @returns {Array<object>} list of found elements
+   * @memberof Base
    */
-  filterByType(type) {
+  getAllByType(type, deep = true) {
     const nested = []
     const found = this.children
       .map(Base.toObject)
       .filter(el => {
-        if (el.children.length > 1) {
-          nested.push(...el.filterByType(type))
+        if (deep && el.children.length > 1) {
+          nested.push(...el.getAllByType(type))
         }
         return el.type === type
       })
     return [...found, ...nested]
+  }
+
+  /**
+   * Get only one child of a certain type
+   * Order or lookup is not defined
+   * (you should be certain that there's only one element of that type)
+   * 
+   * @param {string} type 
+   * @returns {pbject}
+   * @memberof Base
+   */
+  getByType(type) {
+    return this.getAllByType(type, false)[0]
   }
 
   /**
@@ -165,6 +183,7 @@ class Base extends EventEmitter {
    * @static
    * @param {string} id 
    * @returns {any}
+   * @memberof Base
    */
   static get(id) {
     return objects.get(id)
@@ -176,6 +195,7 @@ class Base extends EventEmitter {
    * @static
    * @param {any} element preferably string ID
    * @returns {object}
+   * @memberof Base
    */
   static toObject(element) {
     return typeof element === 'string' ? Base.get(element) : element
@@ -198,6 +218,7 @@ class Base extends EventEmitter {
    * Only for testing. Do not use while playing
    * 
    * @static
+   * @memberof Base
    */
   static _clear() {
     objects.clear()

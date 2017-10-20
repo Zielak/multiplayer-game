@@ -62,18 +62,24 @@ module.exports = class WarGame extends colyseus.Room {
   onMessage(client, data) {
     console.log('MSG: ', JSON.stringify(data))
 
-    const permission = Referee.canClientPerformThisAction(client, data.action, this.state)
-    console.info(`action: ${data.action} => ${JSON.stringify(permission)}`)
-    if (!permission.success) {
-      this.broadcast({
-        event: 'game.error',
-        data: `Client "${client.id}" failed to perform "${data.action}" action.
-        Details: ${permission.description}`
+    Referee.canClientPerformThisAction(client, data.action, this.state)
+      .then(() => {
+        Referee.performAction(data.action, this.state)
+          .then(status => {
+            console.log('index, action resolved!', status)
+          })
+          .catch(status => {
+            console.error('index, action failed!', status)
+          })
       })
-      return
-    }
-    const action = Referee.performAction(data.action, this.state)
-    console.info('ACTION: ', JSON.stringify(action))
+      .catch(status => {
+        console.error('Referee disallowed!', status)
+        this.broadcast({
+          event: 'game.error',
+          data: `Client "${client.id}" failed to perform "${data.action}" action.
+          Details: ${status}`
+        })
+      })
   }
 
   onDispose() {

@@ -27,6 +27,7 @@ class Player extends React.Component {
 }
 
 Player.propTypes = {
+  children: PropTypes.array,
   angle: PropTypes.number,
   childs: PropTypes.array,
   idx: PropTypes.number,

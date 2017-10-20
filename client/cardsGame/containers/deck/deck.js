@@ -17,7 +17,6 @@ class Deck extends React.Component {
           left: this.props.x + 50 + '%',
           top: this.props.y + 50 + '%',
           '--angle': this.props.angle + 'deg',
-          '--deck-offset': this.props.children && this.props.children.length / 5 + 'px',
         }}
       >
         <div>

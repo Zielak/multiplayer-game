@@ -2,23 +2,30 @@ const {
   Player,
 } = require('../../cardsGame/index')
 
-const status = require('../../../shared/utils').actionStatusFactory
-
-const condition = (state, client) => {
+const condition = (state, client) => new Promise((resolve, reject) => {
   const player = Player.get(
     state.players.list.find(player => player.clientId === client)
   )
   if (!player) {
-    status(false, `Couldn't find this client in players list`)
+    reject(`Couldn't find this client in players list`)
   }
 
-  // const hand = 
-  // TODO: finish me
+  resolve()
+})
 
-}
+const action = (state, reducer, client) => new Promise((resolve/*, reject*/) => {
+  const player = Player.get(
+    state.players.list.find(player => player.clientId === client)
+  )
 
-const action = (state, reducer) => new Promise((ressolve, reject) => {
-  state, reducer, ressolve, reject
+  const myDeck = player.getByType('deck')
+  const myHand = player.getByType('hand')
+
+  const cardsToTake = 3 - myHand.length
+
+  myDeck.deal(myHand, cardsToTake)
+
+  setTimeout(resolve, 100)
 })
 
 module.exports = {condition, action}

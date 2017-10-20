@@ -89,16 +89,16 @@ test('removeChild dont remove not my child', t => {
   t.is(t.context.veggieBag.children.length, 3, `that vegetable wasn't in fruity bag!`)
 })
 
-test('filterByType', t => {
-  t.is(t.context.things.filterByType('bag').length, 2, `only 2 bags here`)
-  t.is(t.context.things.filterByType('fruit').length, 3, `there should be 3 fruits, one not in the bag`)
-  t.is(t.context.things.filterByType('vegetable').length, 5, `there should be 5 vegetables, 2 not in the bag`)
+test('getAllByType', t => {
+  t.is(t.context.things.getAllByType('bag').length, 2, `only 2 bags here`)
+  t.is(t.context.things.getAllByType('fruit').length, 3, `there should be 3 fruits, one not in the bag`)
+  t.is(t.context.things.getAllByType('vegetable').length, 5, `there should be 5 vegetables, 2 not in the bag`)
 
   const fruityBag = t.context.fruityBag
-  t.is(fruityBag.filterByType('fruit').length, 2, `2 fruits in the fruity bag`)
-  t.is(fruityBag.filterByType('vegetable').length, 0, `no vegetables in this bag`)
+  t.is(fruityBag.getAllByType('fruit').length, 2, `2 fruits in the fruity bag`)
+  t.is(fruityBag.getAllByType('vegetable').length, 0, `no vegetables in this bag`)
 
   const veggieBag = t.context.veggieBag
-  t.is(veggieBag.filterByType('vegetable').length, 3, `3 vegetables in the bag`)
-  t.is(veggieBag.filterByType('fruit').length, 0, `no fruits in this bag`)
+  t.is(veggieBag.getAllByType('vegetable').length, 3, `3 vegetables in the bag`)
+  t.is(veggieBag.getAllByType('fruit').length, 0, `no fruits in this bag`)
 })

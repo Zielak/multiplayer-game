@@ -6,22 +6,19 @@ const {
   Presets,
 } = require('../../cardsGame/index')
 
-const actionStatusFactory = require('../../../shared/utils').actionStatusFactory
-
 const randomName = () =>
   [1, 2, 3].map(() => Math.floor(Math.random() * 25 + 65)).map((e) => String.fromCharCode(e)).join('')
 
-const condition = (state, client) => {
+const condition = (state, client) => new Promise((resolve, reject) => {
   if(client.id !== state.host){
-    return actionStatusFactory(false, `Client '${client.id}' is not a host: '${state.host}'`)
+    reject(`Client '${client.id}' is not a host: '${state.host}'`)
   }else if (state.clients.length < 1){
-    return actionStatusFactory(false, `Not enough clients: only '${state.clients.length}' clients in the room`)
-  }else{
-    return actionStatusFactory()
+    reject(`Not enough clients: only '${state.clients.length}' clients in the room`)
   }
-}
+  resolve()
+})
 
-const action = (state, reducer) => new Promise((ressolve/*, reject*/) => {
+const action = (state, reducer) => new Promise((resolve/*, reject*/) => {
   // Gather players
   // state.clients.forEach(client => {
   [0, 1, 2].forEach(client => {
@@ -70,11 +67,11 @@ const action = (state, reducer) => new Promise((ressolve/*, reject*/) => {
   // Deal all cards to players after delay
   setTimeout(() => {
     // Get players decks
-    const decks = state.players.list.map(player => player.filterByType('deck').first)
+    const decks = state.players.list.map(player => player.getAllByType('deck').first)
     mainDeck.deal(decks)
   }, 2000)
   mainDeck.on(Deck.events.DEALT, () => {
-    ressolve()
+    resolve()
   })
 })
 

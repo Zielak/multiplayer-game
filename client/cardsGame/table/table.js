@@ -14,7 +14,7 @@ import {
 import Player from '../player/player'
 import Deck from '../containers/deck/deck'
 import Pile from '../containers/pile/pile'
-// import Hand from '../containers/hand/hand'
+import Hand from '../containers/hand/hand'
 
 import './table.scss'
 
@@ -65,7 +65,7 @@ const addTransformProps = element => ({
 const positionAndRotatePlayers = (element, idx, elements) => {
   // Manipulate every player first
   if (element.type !== 'player') return element
-  
+
   const angle = getPartialAngle(elements)
 
   // Get initial correct position on the table, and add an angle
@@ -75,7 +75,7 @@ const positionAndRotatePlayers = (element, idx, elements) => {
     dimensions: {
       x: position.x,
       y: position.y,
-      angle: angle * idx ,
+      angle: angle * idx,
     },
   }
 }
@@ -118,21 +118,26 @@ const stripUndefinedChildren = element => {
 
 const renderElements = element => {
   // Finally render them all to React components
-  if (element.type === 'player') {
+  switch (element.type) {
+  case 'player':
     return (
-      <Player key={'player' + element.idx} {...element}/>
+      <Player key={'player' + element.idx} {...element} />
     )
-  } else if (element.type === 'deck') {
+  case 'deck':
     return (
-      <Deck key={'deck' + element.idx} {...element}/>
+      <Deck key={'deck' + element.idx} {...element} />
     )
-  } else if (element.type === 'pile') {
+  case 'hand':
     return (
-      <Pile key={'pile' + element.idx} {...element}/>
+      <Hand key={'hand' + element.idx} {...element} />
     )
-  } else if (element.type === 'card') {
+  case 'pile':
     return (
-      <ClassicCard key={'card' + element.idx} {...element}/>
+      <Pile key={'pile' + element.idx} {...element} />
+    )
+  case 'card':
+    return (
+      <ClassicCard key={'card' + element.idx} {...element} />
     )
   }
 }
