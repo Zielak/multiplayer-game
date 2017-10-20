@@ -26,6 +26,24 @@ class Deck extends React.Component {
     )
   }
 
+  componentWillMount() {
+    this.props.registerMyself(this)
+  }
+
+  componentWillUpdate() {
+    this.mapThroughChildren(this.props.id, (child, idx) => {
+      child.setState((prevState) => {
+        return {
+          ...prevState,
+          style: {
+            ...prevState.style,
+            ...this.restyleNthChild(prevState.style, idx)
+          }
+        }
+      })
+    })
+  }
+
   renderFrontGraphics(/*suit, rank*/) {
     return 'card'
   }
@@ -42,10 +60,32 @@ class Deck extends React.Component {
     return suit
   }
 
+  /**
+   * Function used in restyling each of its child.
+   * 
+   * @param {object} style current style object from the other react component
+   * @param {number} idx index of the element in my array
+   * @returns new style object with applied changes
+   * @memberof Deck
+   */
+  restyleNthChild(style, idx) {
+    return {
+      ...style,
+      left: style.left + idx / 2,
+      top: style.top + idx / 2,
+    }
+  }
+
+  // Table.js will provide me with that function
+  mapThroughChildren(/*myId, mapper*/) { }
+
 }
 
 Deck.propTypes = {
+  id: PropTypes.string,
   children: PropTypes.array,
+  registerMyself: PropTypes.func,
+
   cards: PropTypes.array,
   rank: PropTypes.string,
   faceUp: PropTypes.bool,

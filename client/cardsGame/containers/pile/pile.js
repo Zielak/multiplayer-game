@@ -26,6 +26,10 @@ class Pile extends React.Component {
     )
   }
 
+  handleStyleChange(style){
+    style
+  }
+
 }
 
 Pile.propTypes = {

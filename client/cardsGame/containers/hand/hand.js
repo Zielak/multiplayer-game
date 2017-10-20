@@ -22,6 +22,10 @@ class Hand extends React.Component {
       </div>
     )
   }
+  
+  handleStyleChange(style){
+    style
+  }
 
 }
 

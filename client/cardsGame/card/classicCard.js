@@ -5,20 +5,55 @@ require('./classicCard.scss')
 
 class ClassicCard extends React.Component {
 
+  constructor(props) {
+    super(props)
+    this.state = {
+      style: {
+        left: props.x,
+        top: props.y,
+        angle: props.angle || 0,
+      }
+    }
+  }
+
   render() {
     const render = this.props.faceUp ?
       this.renderFrontGraphics(this.props.suit, this.props.rank) :
       this.renderBackGraphics()
 
     return (
-      <div className="ClassicCard" style={{
-        left: this.props.x + 50 + '%',
-        top: this.props.y + 50 + '%',
-        '--angle': (this.props.angle || 0) + 'deg',
-      }}>
+      <div className="ClassicCard" style={this.parseStyle(this.state.style)}>
         {render}
       </div>
     )
+  }
+
+  componentWillMount() {
+    this.props.registerMyself(this)
+  }
+
+  componentWillReceiveProps(newProps) {
+    this.setState(prevState => {
+      return {
+        ...prevState,
+        style: {
+          left: newProps.x,
+          top: newProps.y,
+          angle: newProps.angle || 0,
+        }
+      }
+    })
+  }
+
+  parseStyle(stateStyle) {
+    const style = {
+      ...stateStyle
+    }
+    style.left = `${stateStyle.left + 50}%`
+    style.top = `${stateStyle.top + 50}%`
+    style['--angle'] = `${stateStyle.angle}deg`
+
+    return style
   }
 
   renderFrontGraphics(suit, rank) {
@@ -51,6 +86,7 @@ class ClassicCard extends React.Component {
 }
 
 ClassicCard.propTypes = {
+  registerMyself: PropTypes.func,
   name: PropTypes.string,
   suit: PropTypes.string,
   rank: PropTypes.any,

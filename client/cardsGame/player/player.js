@@ -24,6 +24,10 @@ class Player extends React.Component {
       </div>
     )
   }
+  
+  handleStyleChange(style){
+    style
+  }
 }
 
 Player.propTypes = {

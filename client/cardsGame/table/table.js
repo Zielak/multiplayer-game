@@ -116,29 +116,58 @@ const stripUndefinedChildren = element => {
   }
 }
 
+/**
+ * Used in comunication between siblings.
+ * 'parent': ['children'],
+ */
+const proxy = {}
+// TODO: state of that proxy never changes.
+// The game goes by, but the proxy remembers only initial parent/child relation.
+
+const registerElement = (component) => {
+  const props = component.props
+  // Root element, and not yet registered by its child.
+  if (!props.parent && !Array.isArray(proxy[props.id])) {
+    proxy[props.id] = []
+  }
+  // My parent still didn't register.
+  if (props.parent && !Array.isArray(proxy[props.parent])) {
+    proxy[props.parent] = []
+  }
+  // I want to register at parent's place
+  if (props.parent) {
+    proxy[props.parent].push(component)
+  }
+
+  // I have some children, allow me to map through them later
+  if (props.children.length > 0) {
+    // Component should call `mapThroughChildren(this.myFunction)`
+    // to be able to map through all its children
+    component.mapThroughChildren = (myId, mapper) => {
+      proxy[myId].map(mapper)
+    }
+  }
+}
+
+// const mapMyChildren = (id) => proxy[id].map
+
 const renderElements = element => {
   // Finally render them all to React components
+
+  // An element will be able to register itself once its initialized
+  element.registerMyself = (component) => registerElement(component)
+
   switch (element.type) {
   case 'player':
-    return (
-      <Player key={'player' + element.idx} {...element} />
-    )
+    return <Player key={'player' + element.idx} {...element} />
   case 'deck':
-    return (
-      <Deck key={'deck' + element.idx} {...element} />
-    )
+    return <Deck key={'deck' + element.idx} {...element} />
   case 'hand':
-    return (
-      <Hand key={'hand' + element.idx} {...element} />
-    )
+    return <Hand key={'hand' + element.idx} {...element} />
   case 'pile':
-    return (
-      <Pile key={'pile' + element.idx} {...element} />
-    )
+    return <Pile key={'pile' + element.idx} {...element} />
   case 'card':
-    return (
-      <ClassicCard key={'card' + element.idx} {...element} />
-    )
+    return <ClassicCard key={'card' + element.idx} {...element} />
   }
 }
 
