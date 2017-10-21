@@ -55,13 +55,15 @@
   "nyc": {
     "include": [
       "app/*",
-      "client/*"
+      "client/*",
+      "shared/*"
     ],
     "all": true,
     "reporter": [
       "html",
       "text-summary"
     ],
+    "sourceMap": true,
     "report-dir": "./dist/coverage"
   }
 }

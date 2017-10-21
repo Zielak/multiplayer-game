@@ -57,14 +57,6 @@ const deg2rad = (angle) => {
   return angle * 0.017453292519943295 // (angle / 180) * Math.PI;
 }
 
-const actionStatusFactory = (success = true, description = '') => {
-  const o = { success, description }
-  o.valueOf = function valueOf() {
-    this.success
-  }
-  return o
-}
-
 module.exports = {
   float,
   def,
@@ -76,5 +68,4 @@ module.exports = {
   findAllParents,
   rad2deg,
   deg2rad,
-  actionStatusFactory,
 }

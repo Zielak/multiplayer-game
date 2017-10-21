@@ -1,4 +1,10 @@
-const status = require('../../../shared/utils').actionStatusFactory
+const status = (success = true, description = '') => {
+  const o = { success, description }
+  o.valueOf = function valueOf() {
+    this.success
+  }
+  return o
+}
 
 module.exports = {
   gameStart: require('./gameStart'),
