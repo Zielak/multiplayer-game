@@ -17,7 +17,7 @@ class ClassicCard extends React.Component {
   }
 
   render() {
-    const render = this.props.faceUp ?
+    const render = this.props.state.faceUp ?
       this.renderFrontGraphics(this.props.suit, this.props.rank) :
       this.renderBackGraphics()
 
@@ -29,7 +29,10 @@ class ClassicCard extends React.Component {
   }
 
   componentWillMount() {
-    this.props.registerMyself(this)
+    this.props.registerAsChild(this)
+  }
+  componentDidUpdate() {
+    this.props.registerAsChild(this)
   }
 
   componentWillReceiveProps(newProps) {
@@ -52,12 +55,13 @@ class ClassicCard extends React.Component {
     style.left = `${stateStyle.left + 50}%`
     style.top = `${stateStyle.top + 50}%`
     style['--angle'] = `${stateStyle.angle}deg`
+    style.zIndex = stateStyle.zIndex
 
     return style
   }
 
   renderFrontGraphics(suit, rank) {
-    return <div className="front">
+    return <div className={`front suit-${suit}`}>
       <div className="icons">
         <div className="rank">{this.renderRank(rank)}</div>
         <div className="suit">{this.renderSuit(suit)}</div>
@@ -71,7 +75,7 @@ class ClassicCard extends React.Component {
 
   renderBackGraphics() {
     return <div className="back">
-      card
+
     </div>
   }
 
@@ -80,20 +84,29 @@ class ClassicCard extends React.Component {
   }
 
   renderSuit(suit) {
-    return suit
+    switch (suit) {
+    case 'D': return '♦'
+    case 'C': return '♣'
+    case 'H': return '♥'
+    case 'S': return '♠'
+    }
   }
 
 }
 
 ClassicCard.propTypes = {
-  registerMyself: PropTypes.func,
+  registerAsChild: PropTypes.func,
+  parent: PropTypes.string,
+
   name: PropTypes.string,
   suit: PropTypes.string,
   rank: PropTypes.any,
 
-  faceUp: PropTypes.bool,
-  rotated: PropTypes.number,
-  marked: PropTypes.bool,
+  state: PropTypes.shape({
+    faceUp: PropTypes.bool,
+    rotated: PropTypes.number,
+    marked: PropTypes.bool,
+  }),
 
   x: PropTypes.number,
   y: PropTypes.number,

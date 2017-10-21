@@ -12,22 +12,16 @@ import './pile.scss'
 
 class Pile extends React.Component {
 
-  render(){
-  // const shadow = ()
-
+  render() {
     return (
       <div className="Pile" style={{
         left: this.props.x + 50 + '%',
         top: this.props.y + 50 + '%',
-        '--angle': this.props.angle+'deg',
+        '--angle': this.props.angle + 'deg',
       }}>
         <div className="label">PILE</div>
       </div>
     )
-  }
-
-  handleStyleChange(style){
-    style
   }
 
 }

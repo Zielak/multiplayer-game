@@ -18,13 +18,6 @@ import Hand from '../containers/hand/hand'
 
 import './table.scss'
 
-const getElementsByType = (array, type) =>
-  array.filter(el => el.type === type)
-
-const getPartialAngle = elements => {
-  return 360 / getElementsByType(elements, 'player').length
-}
-
 // TODO: align angle to the current player
 const startingAngle = 90
 
@@ -42,14 +35,6 @@ const getOwnerId = (element) => {
   }
 }
 
-const addIndexProp = (element, idx) => {
-  // Add index for later, keys are important in React
-  return {
-    ...element,
-    idx,
-  }
-}
-
 const addTransformProps = element => ({
   ...element,
   dimensions: {
@@ -63,10 +48,7 @@ const addTransformProps = element => ({
 })
 
 const positionAndRotatePlayers = (element, idx, elements) => {
-  // Manipulate every player first
-  if (element.type !== 'player') return element
-
-  const angle = getPartialAngle(elements)
+  const angle = 360 / elements.length
 
   // Get initial correct position on the table, and add an angle
   const position = positionFromAngle(angle * idx + startingAngle, 40)
@@ -120,54 +102,91 @@ const stripUndefinedChildren = element => {
  * Used in comunication between siblings.
  * 'parent': ['children'],
  */
-const proxy = {}
-// TODO: state of that proxy never changes.
-// The game goes by, but the proxy remembers only initial parent/child relation.
+const parentChildrenList = {}
 
-const registerElement = (component) => {
-  const props = component.props
-  // Root element, and not yet registered by its child.
-  if (!props.parent && !Array.isArray(proxy[props.id])) {
-    proxy[props.id] = []
+/**
+ * Place only an element if its a child.
+ * Will create a parent's list if it's the first child to report.
+ */
+const registerAsChild = (component) => {
+  // const id = component.props.id
+  // const children = component.props.children
+  const parent = component.props.parent
+
+  // Or, I don't have any parent, I'm independent
+  if (!parent) {
+    return
   }
   // My parent still didn't register.
-  if (props.parent && !Array.isArray(proxy[props.parent])) {
-    proxy[props.parent] = []
+  if (!Array.isArray(parentChildrenList[parent])) {
+    parentChildrenList[parent] = []
   }
   // I want to register at parent's place
-  if (props.parent) {
-    proxy[props.parent].push(component)
+  const alreadyHere = parentChildrenList[parent].some(fromList => {
+    return fromList.props.id === component.props.id
+  })
+  if (!alreadyHere) {
+    // Remove yourself from any parent you used to be before
+    removeFromAnyParent(component.props.id)
+    // Register at the new place
+    parentChildrenList[parent].push(component)
+  }
+}
+
+const removeFromAnyParent = (id) => {
+  Object.keys(parentChildrenList).forEach(key => {
+    parentChildrenList[key] = parentChildrenList[key].filter(child => {
+      return child.props.id !== id
+    })
+  })
+}
+
+/**
+ * Each parent component will call this to report new state of its children.
+ * The list should be sorted and lost children should be removed.
+ * @param {string} componentId
+ * @param {array<string>} list of ids, children of the component
+ */
+const updateChildrenList = (componentId, list) => {
+
+  const getChildById = (componentId, childId) => {
+    return parentChildrenList[componentId].find(child => child.props.id === childId)
   }
 
-  // I have some children, allow me to map through them later
-  if (props.children.length > 0) {
-    // Component should call `mapThroughChildren(this.myFunction)`
-    // to be able to map through all its children
-    component.mapThroughChildren = (myId, mapper) => {
-      proxy[myId].map(mapper)
-    }
-  }
+  const sortedArray = list.map(childId => {
+    return getChildById(componentId, childId)
+  })
+
+  parentChildrenList[componentId] = sortedArray
+}
+
+const mapThroughChildren = (myId, mapper) => {
+  parentChildrenList[myId] && parentChildrenList[myId].map(mapper)
 }
 
 // const mapMyChildren = (id) => proxy[id].map
 
-const renderElements = element => {
+const renderElements = (element, idx) => {
   // Finally render them all to React components
 
-  // An element will be able to register itself once its initialized
-  element.registerMyself = (component) => registerElement(component)
+  // Element can register itself as a child
+  element.registerAsChild = registerAsChild
+  // Parent will be able to map through its child
+  element.mapThroughChildren = mapThroughChildren
+  // Parent will be able to sort list of its chilren
+  element.updateChildrenList = updateChildrenList
 
   switch (element.type) {
   case 'player':
-    return <Player key={'player' + element.idx} {...element} />
+    return <Player key={'player' + idx} {...element} />
   case 'deck':
-    return <Deck key={'deck' + element.idx} {...element} />
+    return <Deck key={'deck' + idx} {...element} />
   case 'hand':
-    return <Hand key={'hand' + element.idx} {...element} />
+    return <Hand key={'hand' + idx} {...element} />
   case 'pile':
-    return <Pile key={'pile' + element.idx} {...element} />
+    return <Pile key={'pile' + idx} {...element} />
   case 'card':
-    return <ClassicCard key={'card' + element.idx} {...element} />
+    return <ClassicCard key={'card' + idx} {...element} />
   }
 }
 
@@ -177,14 +196,14 @@ class Table extends React.Component {
 
     // Parse all current objects from props
     // Returns renderable html elements
-    const elements = [
-      ...this.props.players && this.props.players.list || [],
-      ...this.props.containers || [],
-      ...this.props.cards || [],
-    ]
-      .map(addIndexProp)
-      .map(addTransformProps)
+    const players = (this.props.players ? [...this.props.players.list] : [])
       .map(positionAndRotatePlayers)
+    const elements = [
+      ...this.props.cards || [],
+      ...this.props.containers || [],
+      ...players,
+    ]
+      .map(addTransformProps)
       .map(addTransformMatrices)
       .map(setWorldCoordinates)
       .map(stripUndefinedChildren)

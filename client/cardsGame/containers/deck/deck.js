@@ -26,12 +26,16 @@ class Deck extends React.Component {
     )
   }
 
-  componentWillMount() {
-    this.props.registerMyself(this)
+  componentDidMount() {
+    this.restyleAllChildren()
   }
 
-  componentWillUpdate() {
-    this.mapThroughChildren(this.props.id, (child, idx) => {
+  componentDidUpdate() {
+    this.restyleAllChildren()
+  }
+
+  restyleAllChildren() {
+    this.props.mapThroughChildren(this.props.id, (child, idx) => {
       child.setState((prevState) => {
         return {
           ...prevState,
@@ -42,22 +46,6 @@ class Deck extends React.Component {
         }
       })
     })
-  }
-
-  renderFrontGraphics(/*suit, rank*/) {
-    return 'card'
-  }
-
-  renderBackGraphics() {
-    return 'bg'
-  }
-
-  renderRank(rank) {
-    return rank
-  }
-
-  renderSuit(suit) {
-    return suit
   }
 
   /**
@@ -71,20 +59,19 @@ class Deck extends React.Component {
   restyleNthChild(style, idx) {
     return {
       ...style,
-      left: style.left + idx / 2,
-      top: style.top + idx / 2,
+      left: style.left + idx * 0.1,
+      top: style.top - idx * 0.1,
+      zIndex: idx + 1
     }
   }
-
-  // Table.js will provide me with that function
-  mapThroughChildren(/*myId, mapper*/) { }
 
 }
 
 Deck.propTypes = {
+  mapThroughChildren: PropTypes.func,
+
   id: PropTypes.string,
   children: PropTypes.array,
-  registerMyself: PropTypes.func,
 
   cards: PropTypes.array,
   rank: PropTypes.string,

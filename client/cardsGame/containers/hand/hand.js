@@ -9,22 +9,18 @@ import './hand.scss'
 
 class Hand extends React.Component {
 
-  render(){
+  render() {
     // const shadow = ()
 
     return (
       <div className="Hand" style={{
         left: this.props.x + 50 + '%',
         top: this.props.y + 50 + '%',
-        '--angle': this.props.angle+'deg',
+        '--angle': this.props.angle + 'deg',
       }}>
-        
+
       </div>
     )
-  }
-  
-  handleStyleChange(style){
-    style
   }
 
 }

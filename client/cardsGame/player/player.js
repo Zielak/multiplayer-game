@@ -11,8 +11,8 @@ import './player.scss'
 // }
 
 class Player extends React.Component {
-  
-  render(){
+
+  render() {
     return (
       <div className="Player" style={{
         left: this.props.x + 50 + '%',
@@ -24,10 +24,7 @@ class Player extends React.Component {
       </div>
     )
   }
-  
-  handleStyleChange(style){
-    style
-  }
+
 }
 
 Player.propTypes = {

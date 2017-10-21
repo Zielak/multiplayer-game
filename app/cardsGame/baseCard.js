@@ -16,7 +16,7 @@ module.exports = class BaseCard extends Base {
     // All the states at which a single card can be.
     // faceUp: boolean, rotated: number/angle, marked: boolean
     this.state = Object.assign({}, {
-      faceUp: true,
+      faceUp: false,
       rotated: 0,
       marked: false,
     }, options.state)
