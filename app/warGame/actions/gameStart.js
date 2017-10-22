@@ -6,6 +6,8 @@ const {
   Presets,
 } = require('../../cardsGame/index')
 
+const drawUpToThree = require('./drawUpToThree')
+
 const randomName = () =>
   [1, 2, 3].map(() => Math.floor(Math.random() * 25 + 65)).map((e) => String.fromCharCode(e)).join('')
 
@@ -18,7 +20,7 @@ const condition = (state, client) => new Promise((resolve, reject) => {
   resolve()
 })
 
-const action = (state, reducer) => new Promise((resolve/*, reject*/) => {
+const action = (state, reducer) => new Promise((resolve, reject) => {
   // Gather players
   // state.clients.forEach(client => {
   [0, 1, 2].forEach(client => {
@@ -71,7 +73,16 @@ const action = (state, reducer) => new Promise((resolve/*, reject*/) => {
     mainDeck.deal(decks)
   }, 2000)
   mainDeck.on(Deck.events.DEALT, () => {
-    resolve()
+    
+    setTimeout(() => {
+      Promise.all(state.players.list.map(player => {
+        return drawUpToThree.action(state, reducer, player.clientId)
+      })).then(values => {
+        resolve(values)
+      }).catch(values => {
+        reject(values)
+      })
+    }, 500)
   })
 })
 

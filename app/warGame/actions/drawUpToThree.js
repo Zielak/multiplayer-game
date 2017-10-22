@@ -15,7 +15,7 @@ const condition = (state, client) => new Promise((resolve, reject) => {
 
 const action = (state, reducer, client) => new Promise((resolve/*, reject*/) => {
   const player = Player.get(
-    state.players.list.find(player => player.clientId === client)
+    state.players.list.find(player => player.clientId === client).id
   )
 
   const myDeck = player.getByType('deck')
@@ -25,7 +25,7 @@ const action = (state, reducer, client) => new Promise((resolve/*, reject*/) => 
 
   myDeck.deal(myHand, cardsToTake)
 
-  setTimeout(resolve, 100)
+  setTimeout(resolve, 250)
 })
 
 module.exports = {condition, action}
