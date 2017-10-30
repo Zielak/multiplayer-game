@@ -2,7 +2,8 @@ const colyseus = require('colyseus')
 
 const actions = require('./actions/index')
 const reducer = require('./reducers/index')
-const Referee = require('../referee')(actions, reducer)
+const Referee = require('../cardsGame/referee')(actions/*, reducer*/)
+const CommandsManager = require('../cardsGame/commandManager')
 
 module.exports = class WarGame extends colyseus.Room {
 
@@ -64,7 +65,7 @@ module.exports = class WarGame extends colyseus.Room {
 
     Referee.canClientPerformThisAction(client, data.action, this.state)
       .then(() => {
-        Referee.performAction(data.action, this.state)
+        CommandsManager.performAction(data.action, this.state)
           .then(status => {
             console.log('index, action resolved!', status)
           })
