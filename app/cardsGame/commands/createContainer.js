@@ -10,27 +10,32 @@ const containerClasses = {
 
 module.exports = class CreateContainer extends Command {
 
-  constructor(state, type, options) {
-    super()
-    this._state = state
-    this._type = type
-    this._options = options
+  /**
+   * Creates an instance of CreateContainer.
+   * @param {object} invoker who tries to invoke this action
+   * @param {array} conditions list of conditions to check before executing
+   * @param {CreateContainerContext} context
+   * 
+   * @typedef {object} CreateContainerContext
+   * @property {object} state 
+   * @property {string} type kind of container to create (lowercase name)
+   * @property {object} options for containers constructor
+   * 
+   * @memberof CreateContainer
+   */
+  constructor(invoker, conditions, context) {
+    super(invoker, conditions, context)
   }
 
   execute() {
-    return new Promise((resolve/*, reject*/) => {
-      this._newContainer = new containerClasses[this._type](this._options)
-      this._state.containers.push(this._newContainer)
-      resolve()
-    })
+    this.context.newContainer = new containerClasses[this._type](this._options)
+    this.context.state.containers.push(this._newContainer)
   }
 
   undo() {
-    return new Promise((resolve, reject) => {
-      if (!this._newContainer) {
-        reject()
-      }
-      // TODO: undo me.
-    })
+    if (!this.context.newContainer) {
+      return false
+    }
+    // TODO: undo plz
   }
 }
