@@ -1,8 +1,8 @@
 const colyseus = require('colyseus')
 
-const actions = require('./actions/index')
+const commands = require('./commands/index')
 const reducer = require('./reducers/index')
-const Referee = require('../cardsGame/referee')(actions/*, reducer*/)
+const Referee = require('../cardsGame/referee')(commands/*, reducer*/)
 const CommandsManager = require('../cardsGame/commandManager')
 
 module.exports = class WarGame extends colyseus.Room {

@@ -21,6 +21,8 @@ module.exports = {
   Conditions: require('./conditions'),
   Container: require('./container'),
 
+  Command: require('./commands/command'),
+
   Deck: require('./containers/deck'),
   Hand: require('./containers/hand'),
   Pile: require('./containers/pile'),
