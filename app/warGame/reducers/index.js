@@ -3,12 +3,12 @@ module.exports = {
   players: require('./players'),
   cards: require('./arrayReducer')('cards'),
   containers: require('./arrayReducer')('containers'),
-  testScore: {
-    increase: (state) => {
-      state.testScore++
-    },
-    decrease: (state) => {
-      state.testScore--
-    }
-  }
+  // testScore: {
+  //   increase: (state) => {
+  //     state.testScore++
+  //   },
+  //   decrease: (state) => {
+  //     state.testScore--
+  //   }
+  // }
 }
