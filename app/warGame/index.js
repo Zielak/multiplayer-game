@@ -1,13 +1,17 @@
 const colyseus = require('colyseus')
+const { Game } = require('../cardsGame/index')
 
 const commands = require('./commands/index')
 const reducer = require('./reducers/index')
-const Referee = require('../cardsGame/referee')(commands/*, reducer*/)
-const CommandsManager = require('../cardsGame/commandManager')
 
 module.exports = class WarGame extends colyseus.Room {
 
   onInit(options) {
+    this.game = new Game({
+      commands,
+      reducer,
+    })
+
     this.setState({
       clients: [],
       maxClients: options.maxClients || 2,
@@ -63,18 +67,12 @@ module.exports = class WarGame extends colyseus.Room {
   onMessage(client, data) {
     console.log('MSG: ', JSON.stringify(data))
 
-    Referee.canClientPerformThisAction(client, data.action, this.state)
-      .then(() => {
-        CommandsManager.performAction(data.action, this.state)
-          .then(status => {
-            console.log('index, action resolved!', status)
-          })
-          .catch(status => {
-            console.error('index, action failed!', status)
-          })
+    this.game.performAction(client, data.action, this.state)
+      .then(status => {
+        console.log('action resolved!', status)
       })
       .catch(status => {
-        console.error('Referee disallowed!', status)
+        console.error('action failed!', status)
         this.broadcast({
           event: 'game.error',
           data: `Client "${client.id}" failed to perform "${data.action}" action.

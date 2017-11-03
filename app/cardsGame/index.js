@@ -15,6 +15,8 @@ Object.defineProperties(Array.prototype, {
 /* eslint-enable no-extend-native */
 
 module.exports = {
+  Game: require('./game'),
+
   Base: require('./base'),
   BaseCard: require('./baseCard'),
   ClassicCard: require('./classicCard'),
