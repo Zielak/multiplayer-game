@@ -18,7 +18,7 @@ class MoveCardToContainer extends Command {
    * 
    * @memberof MoveCardToContainer
    */
-  constructor(invoker, conditions, context){
+  constructor(invoker, conditions, context) {
     super(invoker, conditions)
 
     /** @type {MoveCardToContainerContext} */

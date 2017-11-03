@@ -12,12 +12,10 @@ module.exports = class CreateContainer extends Command {
 
   /**
    * Creates an instance of CreateContainer.
-   * @param {object} invoker who tries to invoke this action
    * @param {array} conditions list of conditions to check before executing
    * @param {CreateContainerContext} context
    * 
    * @typedef {object} CreateContainerContext
-   * @property {object} state 
    * @property {string} type kind of container to create (lowercase name)
    * @property {object} options for containers constructor
    * 
