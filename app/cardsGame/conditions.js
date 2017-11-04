@@ -5,9 +5,9 @@ const Base = require('./base')
  * Conditions define how the game plays during player's round
  */
 
-module.exports = class Conditions extends Map {
+class Conditions extends Map {
 
-  constructor(set = [], context = null){
+  constructor(set = [], context = null) {
     super()
     Object.keys(set).forEach(key => {
       this.set(key, set[key])
@@ -16,12 +16,14 @@ module.exports = class Conditions extends Map {
     this.context = context !== null ? context.id : null
   }
 
-  check(key, args = undefined){
-    if(this.has(key) && typeof this.get(key) === 'function'){
+  check(key, args = undefined) {
+    if (this.has(key) && typeof this.get(key) === 'function') {
       return this.get(key).apply(Base.get(this.context), args)
-    }else{
+    } else {
       throw new Error(`There's no valid condition called ${key}.`)
     }
   }
 
 }
+
+module.exports = Conditions

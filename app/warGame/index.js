@@ -4,7 +4,7 @@ const { Game } = require('../cardsGame/index')
 const commands = require('./commands/index')
 const reducer = require('./reducers/index')
 
-module.exports = class WarGame extends colyseus.Room {
+class WarGame extends colyseus.Room {
 
   onInit(options) {
     this.game = new Game({
@@ -75,7 +75,7 @@ module.exports = class WarGame extends colyseus.Room {
         this.broadcast({
           event: 'game.error',
           data: `Client "${client.id}" failed to perform "${data.action}" action.
-          Details: ${status}`
+            Details: ${status}`
         })
       })
   }
@@ -86,3 +86,5 @@ module.exports = class WarGame extends colyseus.Room {
   }
 
 }
+
+module.exports = WarGame

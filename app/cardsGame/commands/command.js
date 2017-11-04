@@ -1,6 +1,6 @@
-module.exports = class Command {
+class Command {
 
-  constructor(context = {}){
+  constructor(context = {}) {
     this.context = context
   }
 
@@ -9,3 +9,5 @@ module.exports = class Command {
   undo() { }
 
 }
+
+module.exports = Command

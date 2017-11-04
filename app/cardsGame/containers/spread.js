@@ -1,6 +1,6 @@
 const Container = require('../container')
 
-module.exports = class Spread extends Container {
+class Spread extends Container {
 
   constructor(options = {}) {
     super({
@@ -10,3 +10,5 @@ module.exports = class Spread extends Container {
   }
 
 }
+
+module.exports = Spread

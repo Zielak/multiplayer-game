@@ -18,7 +18,8 @@ const cardsDataFactory = (card, limits) => {
  * Should hold info of each card's position
  * and rotation when it lands in container
  */
-module.exports = class Pile extends Container {
+
+class Pile extends Container {
 
   constructor(options = {}) {
     super({
@@ -53,3 +54,5 @@ module.exports = class Pile extends Container {
   // TODO: Store data about each card's rotation
 
 }
+
+module.exports = Pile

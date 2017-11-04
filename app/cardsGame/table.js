@@ -7,9 +7,10 @@ const utils = require('../../shared/utils')
  * On server we don't know anything about user's screen,
  * so we're not going to assume the dimensions.
  */
-module.exports = class Table {
 
-  constructor(options = {}){
+class Table {
+
+  constructor(options = {}) {
     this.width = utils.def(options.width, 55)
     this.height = utils.def(options.height, 55)
     this.x = 0
@@ -17,3 +18,5 @@ module.exports = class Table {
   }
 
 }
+
+module.exports = Table

@@ -1,8 +1,8 @@
 const BaseCard = require('./baseCard')
 
-module.exports = class ClassicCard extends BaseCard {
+class ClassicCard extends BaseCard {
 
-  constructor(options = {}){
+  constructor(options = {}) {
     super(options)
     try {
       this.suit = options.suit
@@ -14,11 +14,13 @@ module.exports = class ClassicCard extends BaseCard {
     this.name = this.rank + this.suit
   }
 
-  show(){
+  show() {
     this.state.faceUp = true
   }
-  hide(){
+  hide() {
     this.state.faceUp = false
   }
 
 }
+
+module.exports = ClassicCard

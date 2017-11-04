@@ -1,10 +1,10 @@
 const colyseus = require('colyseus')
 
 const isValidMessage = text => {
-  return (''+text).length > 0
+  return ('' + text).length > 0
 }
 
-module.exports = class Lobby extends colyseus.Room {
+class Lobby extends colyseus.Room {
 
   onInit(options) {
     this.setState({
@@ -32,7 +32,7 @@ module.exports = class Lobby extends colyseus.Room {
   }
 
   onMessage(client, data) {
-    if(isValidMessage(data.message)){
+    if (isValidMessage(data.message)) {
       this.state.messages.push({
         text: data.message,
         client: client.id
@@ -46,3 +46,5 @@ module.exports = class Lobby extends colyseus.Room {
   }
 
 }
+
+module.exports = Lobby

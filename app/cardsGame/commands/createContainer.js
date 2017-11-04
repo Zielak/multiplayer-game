@@ -8,7 +8,7 @@ const containerClasses = {
   'spread': require('./containers/spread'),
 }
 
-module.exports = class CreateContainer extends Command {
+class CreateContainer extends Command {
 
   /**
    * Creates an instance of CreateContainer.
@@ -37,3 +37,5 @@ module.exports = class CreateContainer extends Command {
     // TODO: undo plz
   }
 }
+
+module.exports = CreateContainer

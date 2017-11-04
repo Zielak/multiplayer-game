@@ -1,4 +1,4 @@
-module.exports = class CommandManager {
+class CommandManager {
 
   constructor() {
     this.commands = []
@@ -26,3 +26,5 @@ module.exports = class CommandManager {
   }
 
 }
+
+module.exports = CommandManager

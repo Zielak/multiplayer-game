@@ -1,9 +1,9 @@
 const Base = require('./base')
 // const Conditions = require('./conditions')
 
-module.exports = class BaseCard extends Base {
+class BaseCard extends Base {
 
-  constructor(options = {}){
+  constructor(options = {}) {
     super({
       ...options,
       name: options.name || 'card',
@@ -22,6 +22,8 @@ module.exports = class BaseCard extends Base {
     }, options.state)
   }
 
-  canBeTakenBy(){}
+  canBeTakenBy() { }
 
 }
+
+module.exports = BaseCard
