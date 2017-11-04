@@ -16,7 +16,7 @@ class Hand extends Container {
 
   addChild(element) {
     super.addChild(element)
-    console.log('Let me show that card!', element.type)
+    // console.log('Let me show that card!', element.type)
     if (element.type === 'card') {
       element.show && element.show()
     }

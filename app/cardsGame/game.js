@@ -42,7 +42,10 @@ class Game extends EventEmitter {
         .then(() => this.commandManager.execute(
           this.commands[actionName].command, client, state, this.reducer
         ))
-        .then(status => resolve(status))
+        .then(status => {
+          console.log('resolving inside game.js')
+          resolve(status)
+        })
         .catch(status => reject(`Conditions didn't pass: ${status}`))
     })
   }

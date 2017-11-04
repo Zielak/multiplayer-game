@@ -93,6 +93,7 @@ const command = class GameStartCommand extends Command {
           })
           // FIXME: now it's fire and forget. I should listen until myDeck
           // finished dealing cards to each player
+          console.log('resolving inside gameStart.js')
           resolve()
         }, 500)
       })

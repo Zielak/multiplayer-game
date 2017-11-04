@@ -14,11 +14,9 @@ class CommandManager {
    */
   execute(command, invoker, state, reducer) {
     const newCommand = new command()
-
-    newCommand.execute(invoker, state, reducer)
-
     this.commands.push(newCommand)
     this.lastCommand = newCommand
+    return newCommand.execute(invoker, state, reducer)
   }
 
   get canUndo() {
