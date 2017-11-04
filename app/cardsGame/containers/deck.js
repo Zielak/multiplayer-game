@@ -20,6 +20,7 @@ class Deck extends Container {
    * 
    * @param {array|Container} containers 
    * @param {[number]} count how many cards should I deal for each player?
+   * @returns {Deck} this for chaining
    */
   deal(containers, count = Infinity) {
     let i = 0
@@ -41,10 +42,12 @@ class Deck extends Container {
       }
     }
     dealOne()
+
+    return this
   }
 
   onCardsDealt() {
-    this.emit('dealt')
+    this.emit(Deck.events.DEALT)
     console.info('Done dealing cards.')
   }
 

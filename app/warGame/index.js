@@ -51,7 +51,6 @@ module.exports = class WarGame extends colyseus.Room {
 
   onJoin(client) {
     console.log('WarGame: JOINED: ', client.id)
-    // this.state.clients.push(client.id)
     reducer.clients.add(this.state, client.id)
     if (!this.state.host) {
       this.state.host = client.id

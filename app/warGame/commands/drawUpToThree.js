@@ -1,5 +1,7 @@
 const {
+  Command,
   Player,
+  Deck,
 } = require('../../cardsGame/index')
 
 const condition = (state, client) => new Promise((resolve, reject) => {
@@ -13,19 +15,25 @@ const condition = (state, client) => new Promise((resolve, reject) => {
   resolve()
 })
 
-const action = (state, reducer, client) => new Promise((resolve/*, reject*/) => {
-  const player = Player.get(
-    state.players.list.find(player => player.clientId === client).id
-  )
+const command = class DrawUpToThreeCommand extends Command {
 
-  const myDeck = player.getByType('deck')
-  const myHand = player.getByType('hand')
+  execute(invoker, state/*, reducer*/) {
+    return new Promise((resolve) => {
+      const player = Player.get(
+        state.players.list.find(player => player.clientId === invoker).id
+      )
 
-  const cardsToTake = 3 - myHand.length
+      const myDeck = player.getByType('deck')
+      const myHand = player.getByType('hand')
 
-  myDeck.deal(myHand, cardsToTake)
+      const cardsToTake = 3 - myHand.length
 
-  setTimeout(resolve, 250)
-})
+      myDeck.deal(myHand, cardsToTake)
+        .on(Deck.events.DEALT, () => setTimeout(resolve, 250))
 
-module.exports = {condition, action}
+    })
+  }
+
+}
+
+module.exports = { condition, command }

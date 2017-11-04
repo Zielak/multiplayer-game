@@ -22,11 +22,10 @@ const condition = (state, client) => new Promise((resolve, reject) => {
 const command = class GameStartCommand extends Command {
 
   constructor() {
-    super()
-    this.context = {
+    super({
       createdPlayers: [],
       createdContainers: [],
-    }
+    })
   }
 
   execute(invoker, state, reducer) {
