@@ -2,6 +2,7 @@ const EventEmitter = require('eventemitter3')
 const CommandManager = require('./commandManager')
 
 class Game extends EventEmitter {
+
   constructor({ commands, reducer }) {
     super()
 
@@ -10,7 +11,7 @@ class Game extends EventEmitter {
 
     this.commandManager = new CommandManager()
   }
-  
+
   /**
    * 
    * 
@@ -43,13 +44,21 @@ class Game extends EventEmitter {
           this.commands[actionName].command, client, state, this.reducer
         ))
         .then(status => {
-          console.log('resolving inside game.js')
           resolve(status)
+          this.emit(Game.events.ACTION_COMPLETED, actionName, status)
         })
-        .catch(status => reject(`Conditions didn't pass: ${status}`))
+        .catch(status => {
+          reject(`FAIL, something went wrong: ${status}`)
+          this.emit(Game.events.ACTION_FAILED, actionName, status)
+        })
     })
   }
 
+}
+
+Game.events = {
+  ACTION_COMPLETED: 'actionCompleted',
+  ACTION_FAILED: 'actionFailed',
 }
 
 module.exports = Game

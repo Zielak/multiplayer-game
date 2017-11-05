@@ -1,5 +1,15 @@
 TODO: document this API
 
+# Game
+
+## Events
+
+- `ACTION_COMPLETED(actionName, status)`
+- `ACTION_FAILED(actionName, status)`
+
+
+# Elements
+
 ### Sizes
 
 All cards and containers should have a defined real-like dimensions. Classic playing cards are about 5,6 cm x 8,7 cm (at least here in Europe). 

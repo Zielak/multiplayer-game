@@ -1,6 +1,6 @@
-const reducer = {
+const containersReducer = {
   add: (state, container) => {
-    container.onUpdate = me => reducer.update(state, me)
+    container.onUpdate = me => containersReducer.update(state, me)
     state.containers.push(container)
   },
   remove: (state, container) => {
@@ -22,4 +22,4 @@ const reducer = {
   }
 }
 
-module.exports = reducer
+module.exports = containersReducer

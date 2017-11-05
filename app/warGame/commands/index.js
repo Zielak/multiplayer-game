@@ -1,20 +1,10 @@
-// const status = (success = true, description = '') => {
-//   const o = { success, description }
-//   o.valueOf = function valueOf() {
-//     this.success
-//   }
-//   return o
-// }
+const defaultCommands = require('../../cardsGame/commands/index')
 
 module.exports = {
   gameStart: require('./gameStart'),
+
+  nextPlayer: defaultCommands.nextPlayer,
+  prevPlayer: defaultCommands.prevPlayer,
+
   drawUpToThree: require('./drawUpToThree'),
-  // testScore_increase: {
-  //   condition: () => status(true),
-  //   action: (state, reducer) => reducer.testScore['increase'](state),
-  // },
-  // testScore_decrease: {
-  //   condition: () => status(true),
-  //   action: (state, reducer) => reducer.testScore['decrease'](state),
-  // }
 }

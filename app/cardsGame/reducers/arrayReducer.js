@@ -1,4 +1,4 @@
-module.exports = (targetArray) => {
+const createArrayReducer = (targetArray) => {
   const reducer = {
     add: (state, element) => {
       element.onUpdate = me => reducer.update(state, me)
@@ -14,3 +14,5 @@ module.exports = (targetArray) => {
   }
   return reducer
 }
+
+module.exports = createArrayReducer

@@ -1,8 +1,15 @@
 const colyseus = require('colyseus')
-const { Game } = require('../cardsGame/index')
+const {
+  Game, Reducers
+} = require('../cardsGame/index')
 
 const commands = require('./commands/index')
-const reducer = require('./reducers/index')
+const reducer = {
+  clients: Reducers.createArrayReducer('clients'),
+  cards: Reducers.createArrayReducer('cards'),
+  containers: Reducers.createArrayReducer('containers'),
+  players: Reducers.players,
+}
 
 class WarGame extends colyseus.Room {
 

@@ -1,4 +1,4 @@
-module.exports = {
+const clientsReducer = {
   add: (state, client) => {
     state.clients.push(client)
   },
@@ -6,3 +6,5 @@ module.exports = {
     state.clients = state.clients.filter(el => el !== client)
   }
 }
+
+module.exports = clientsReducer

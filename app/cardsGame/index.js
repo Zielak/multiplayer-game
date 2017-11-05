@@ -24,6 +24,7 @@ module.exports = {
   Container: require('./container'),
 
   Command: require('./commands/command'),
+  Reducers: require('./reducers/index'),
 
   Deck: require('./containers/deck'),
   Hand: require('./containers/hand'),

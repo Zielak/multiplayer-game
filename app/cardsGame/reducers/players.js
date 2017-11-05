@@ -1,6 +1,6 @@
-const reducer = {
+const playersReducer = {
   add: (state, player) => {
-    player.onUpdate = me => reducer.update(state, me)
+    player.onUpdate = me => playersReducer.update(state, me)
     state.players.list.push(player)
   },
 
@@ -71,4 +71,5 @@ const reducer = {
     state.players.reversed = state.players.reversed
   }
 }
-module.exports = reducer
+
+module.exports = playersReducer
