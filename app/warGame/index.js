@@ -72,7 +72,22 @@ class WarGame extends colyseus.Room {
 
   onMessage(client, data) {
     console.log('MSG: ', JSON.stringify(data))
+    this.performAction(data, client)
+  }
 
+  onDispose() {
+    console.log('Dispose WarGame')
+    console.log('===========================')
+  }
+
+  /**
+   * 
+   * 
+   * @param {object} client or undefined, if action is needed to perform by "game" itself
+   * @param {object} data 
+   * @memberof WarGame
+   */
+  performAction(client, data) {
     this.game.performAction(client, data.action, this.state)
       .then(status => {
         console.log('action resolved!', status)
@@ -82,14 +97,22 @@ class WarGame extends colyseus.Room {
         this.broadcast({
           event: 'game.error',
           data: `Client "${client.id}" failed to perform "${data.action}" action.
-            Details: ${status}`
+          Details: ${status}`
         })
       })
   }
 
-  onDispose() {
-    console.log('Dispose WarGame')
-    console.log('===========================')
+  attatchEvents() {
+    const eventMap = {
+      gameStart: this.onGameStart,
+    }
+    this.game.on(Game.events.ACTION_COMPLETED, (actionName, status) => {
+      eventMap[actionName](status)
+    })
+  }
+
+  onGameStart() {
+    
   }
 
 }

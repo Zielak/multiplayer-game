@@ -15,13 +15,16 @@ class Game extends EventEmitter {
   /**
    * 
    * 
-   * @param {object} client object, with id and stuff
+   * @param {object} client object, with id and stuff. Otherwise will act as the "game" itself issues this command
    * @param {string} actionName 
    * @param {object} state 
    * @returns {Promise}
    * @memberof Game
    */
   performAction(client, actionName, state) {
+    if(client === null || typeof client !== 'object'){
+      client = Game.id
+    }
     return new Promise((resolve, reject) => {
       console.info(`performAction(${client}, ${actionName}, state)`)
       if (!state.clients || state.clients.length <= 0) {
@@ -60,5 +63,7 @@ Game.events = {
   ACTION_COMPLETED: 'actionCompleted',
   ACTION_FAILED: 'actionFailed',
 }
+
+Game.id = {id: Symbol('gameid')}
 
 module.exports = Game
