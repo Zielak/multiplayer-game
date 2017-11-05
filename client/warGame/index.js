@@ -1,8 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import {PlayersList} from '../components'
-import {Table} from '../cardsGame'
+import { PlayersList } from '../components'
+import { Table } from '../cardsGame'
 
 // require('./styles.scss')
 
@@ -10,34 +10,27 @@ class WarGame extends React.Component {
 
   render() {
     return (
-      <div>
-        <div className="flex">
+      <div className='game'>
+        <div className='flex header'>
           <div>
-            <button onClick={()=>this.props.initGameHandler()}>
+            <h1>WarGame</h1>
+          </div>
+          <div>
+            <button onClick={() => this.props.initGameHandler()}>
               Maybe START?
             </button>
           </div>
-          <div>
-            <button onClick={()=>this.props.testScoreHandler(1)}>
-              + 1
-            </button>
-            <button onClick={()=>this.props.testScoreHandler(-1)}>
-              - 1
-            </button>
-            {this.props.testScore}
-          </div>
-          <PlayersList
-            title='Players'
-            players={this.props.players}
-            host={this.props.host}
-          ></PlayersList>
         </div>
         <Table
-          testAngle={this.props.testAngle}
           players={this.props.players}
           cards={this.props.cards}
           containers={this.props.containers}
         ></Table>
+        <PlayersList
+          title='Players'
+          players={this.props.players}
+          host={this.props.host}
+        ></PlayersList>
       </div>
     )
   }

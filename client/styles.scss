@@ -1,5 +1,5 @@
 body {
-  font-family: Tahoma, Geneva, sans-serif;
+  font-family: 'Tahoma, Geneva, sans-serif';
 }
 
 .flex {
@@ -7,4 +7,11 @@ body {
   align-items: flex-start;
   justify-content: space-around;
   flex-wrap: wrap;
+}
+
+.game {
+  display: grid;
+  grid-template-areas:
+    '<grid-area-name> | . | none | ...'
+    '...';
 }
