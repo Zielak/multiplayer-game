@@ -9,10 +9,10 @@
     width: var(--player-icon-size);
     height: var(--player-icon-size);
     transform: translate(calc(var(--player-icon-size) * -0.5), calc(var(--player-icon-size) * -0.5));
-  
+
     background: red;
     border-radius: 50%;
-    
+
     .name {
       position: absolute;
       bottom: -1em;

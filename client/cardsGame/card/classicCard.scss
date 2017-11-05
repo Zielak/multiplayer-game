@@ -4,9 +4,8 @@
   display: flex;
   width: var(--card-width);
   height: var(--card-height);
-  transform:
-    translate(calc(var(--card-width) * -0.5), calc(var(--card-height) * -0.5))
-    rotate( var(--angle) );
+  transform: translate(calc(var(--card-width) * -0.5), calc(var(--card-height) * -0.5))
+  rotate( var(--angle) );
 
   transition: 0.3s left ease-out, 0.3s top ease-out, 0.3s transform ease-out, 0.1s z-index linear 0.1s;
 
@@ -41,10 +40,8 @@
       font-size: 12px;
 
       .rank {
-        
       }
       .suit {
-
       }
     }
   }
