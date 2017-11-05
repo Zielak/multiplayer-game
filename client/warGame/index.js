@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import { PlayersList } from '../components'
 import { Table } from '../cardsGame'
 
-// require('./styles.scss')
+require('./game.scss')
 
 class WarGame extends React.Component {
 

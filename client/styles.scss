@@ -8,10 +8,3 @@ body {
   justify-content: space-around;
   flex-wrap: wrap;
 }
-
-.game {
-  display: grid;
-  grid-template-areas:
-    '<grid-area-name> | . | none | ...'
-    '...';
-}

@@ -1,25 +1,32 @@
 .PlayersList {
-  
+
   .name {
     color: green;
-    
-    &.host{
+
+    &.host {
       background: yellow;
       font-weight: bold;
     }
   }
-  
-  .player .stats {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    
-    .score{
-      
+
+  .player {
+
+    .stats {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+
+      .score {
+
+      }
+
+      .timeleft {
+
+      }
     }
-    .timeleft{
-      
+
+    &.current {
+      background: gold;
     }
   }
-  
 }

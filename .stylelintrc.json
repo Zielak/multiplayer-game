@@ -98,15 +98,7 @@
     "number-no-trailing-zeros": true,
     "property-case": "lower",
     "rule-empty-line-before": [
-      "always-multi-line",
-      {
-        "except": [
-          "first-nested"
-        ],
-        "ignore": [
-          "after-comment"
-        ]
-      }
+      "always-multi-line"
     ],
     "selector-attribute-brackets-space-inside": "never",
     "selector-attribute-operator-space-after": "never",
@@ -121,7 +113,6 @@
     "selector-pseudo-class-parentheses-space-inside": "never",
     "selector-pseudo-element-case": "lower",
     "selector-pseudo-element-colon-notation": "double",
-    "selector-type-case": "lower",
     "string-quotes": "single",
     "unit-case": "lower",
     "value-list-comma-newline-after": "always-multi-line",

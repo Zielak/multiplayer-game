@@ -1,0 +1,19 @@
+.game {
+  display: grid;
+  grid-template-areas:
+    'header header'
+    'table playerslist';
+  grid-template-columns: 1fr 150px;
+
+  .header {
+    grid-area: header;
+  }
+
+  Table {
+    grid-area: table;
+  }
+
+  PlayersList {
+    grid-area: playerslinst;
+  }
+}
