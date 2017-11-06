@@ -99,7 +99,7 @@ const command = class GameStartCommand extends Command {
       })
     })
   }
-  
+
   undo() { }
 
 }

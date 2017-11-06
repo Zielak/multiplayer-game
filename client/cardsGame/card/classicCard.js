@@ -18,31 +18,12 @@ class ClassicCard extends React.Component {
     )
   }
 
-  componentWillMount() {
-    this.props.registerAsChild(this)
-  }
-  componentDidUpdate() {
-    this.props.registerAsChild(this)
-  }
-
-  /*componentWillReceiveProps(newProps) {
-    this.setState(prevState => {
-      return {
-        ...prevState,
-        // style: {
-        //   left: newProps.x,
-        //   top: newProps.y,
-        //   angle: newProps.angle || 0,
-        // }
-      }
-    })
-  }*/
-
   parseStyle() {
     return {
       left: this.props.x + '%',
       top: this.props.y + '%',
       '--angle': this.props.angle + 'deg',
+      zIndex: this.props.zIndex,
     }
   }
 
@@ -82,7 +63,6 @@ class ClassicCard extends React.Component {
 
 ClassicCard.propTypes = {
   id: PropTypes.string,
-  registerAsChild: PropTypes.func,
   parent: PropTypes.string,
 
   localTransform: PropTypes.object,

@@ -26,6 +26,10 @@ const getParent = (child, everything) => everything.filter(el => {
 
 const arrayWithoutElement = (element, everything) => everything.filter(el => el.id !== element.id)
 
+const findAllChildren = (parent, everything) => {
+  return everything.filter(el => el.parent === parent.id)
+}
+
 const findAllParents = (child, everything) => {
   const result = []
   if (child.parent) {
@@ -68,6 +72,7 @@ module.exports = {
   getParent,
   arrayWithoutElement,
   findAllParents,
+  findAllChildren,
   rad2deg,
   deg2rad,
 }
