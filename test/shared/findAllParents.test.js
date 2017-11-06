@@ -1,7 +1,7 @@
 import test from 'ava'
 import {
   findAllParents
-} from '../../../shared/utils.js'
+} from '../../shared/utils'
 import uuid from 'uuid/v4'
 
 test.beforeEach('prepare elements', t => {
@@ -25,10 +25,23 @@ test.beforeEach('prepare elements', t => {
   elements.push({
     name: 'nestedChildOfA', id: uuid(), parent: elements[3].id
   })
+  elements.push({
+    name: 'noRealParent', id: uuid(), parent: 'aaaaaaaaaaaaaaaa'
+  })
 })
 
 test('returns empty array for root', t => {
-  t.deepEqual(findAllParents(t.context.elements, t.context.elements[0]).length, 0)
+  const actual = findAllParents(t.context.elements[0], t.context.elements)
+  t.deepEqual(actual.length, 0)
+  t.is(typeof actual, 'object')
+  t.is(Array.isArray(actual), true)
+})
+
+test('returns empty array for inexisting parent', t => {
+  const actual = findAllParents(t.context.elements[6], t.context.elements)
+  t.is(actual.length, 0)
+  t.is(typeof actual, 'object')
+  t.is(Array.isArray(actual), true)
 })
 
 test('1 element for parentA', t => {
