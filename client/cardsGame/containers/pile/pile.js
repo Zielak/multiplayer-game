@@ -35,7 +35,6 @@ class Pile extends React.Component {
 
 Pile.propTypes = {
   id: PropTypes.string,
-  mapThroughChildren: PropTypes.func,
   children: PropTypes.array,
 
   localTransform: PropTypes.object,

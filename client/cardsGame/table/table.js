@@ -9,7 +9,8 @@ import { rotateDEG, translate, transform, identity, applyToPoint } from 'transfo
 import ClassicCard from '../card/classicCard'
 import {
   findAllParents,
-  // def,
+  findAllChildren,
+  def,
 } from '../../../shared/utils.js'
 
 import Player from '../player/player'
@@ -22,12 +23,6 @@ import './table.scss'
 // TODO: align angle to the current player
 // const startingAngle = 90
 
-// const positionFromAngle = (angle, distance) => {
-//   const x = Math.round(distance * Math.cos(angle * (Math.PI * 2 / 360)) * 100) / 100
-//   const y = Math.round(distance * Math.sin(angle * (Math.PI * 2 / 360)) * 100) / 100
-//   return { x, y }
-// }
-
 const getOwnerId = (element) => {
   if (element.parent) {
     return getOwnerId(element.parent)
@@ -36,15 +31,15 @@ const getOwnerId = (element) => {
   }
 }
 
-// Everything is gonna have this. All extend the Base class
-// const addTransformProps = element => ({
-//   ...element,
-//   _localTransform: {
-//     x: def(element._localTransform.x, 0),
-//     y: def(element._localTransform.y, 0),
-//     angle: def(element._localTransform.angle, 0),
-//   }
-// })
+const addRenderingProps = (element) => {
+  return {
+    ...element,
+    x: def(element.x, 0),
+    y: def(element.y, 0),
+    angle: def(element.angle, 0),
+    zIndex: def(element.zIndex, 0),
+  }
+}
 
 const addTransformForPlayers = (player, idx, players) => {
   const angle = 360 / players.length * idx
@@ -72,7 +67,33 @@ const addLocalTransform = (element) => {
       element.parent ? identity() : translate(50, 50),
       translate(element._local.x, element._local.y),
     ]),
+    angle: element._local.angle,
   }
+}
+
+const parentTransforms = {
+  deck: Deck.restyleChild,
+  hand: Hand.restyleChild,
+}
+const applyParentTransform = (element, idx, everything) => {
+  // This method is only for parents
+  if (!element.children || element.children.length === 0 || !parentTransforms[element.type]) {
+    return element
+  }
+
+  const children = findAllChildren(element, everything)
+  children.map((child, idx, allChildren) => {
+    const newTransform = parentTransforms[element.type](child, idx, allChildren.length)
+
+    child.localTransform = transform([
+      child.localTransform,
+      rotateDEG(def(newTransform.angle, 0)),
+      translate(def(newTransform.x, 0), def(newTransform.y, 0))
+    ])
+    child.angle += def(newTransform.angle, 0)
+    child.zIndex += def(newTransform.zIndex, 0)
+  })
+  return element
 }
 
 const setWorldCoordinates = (element, idx, everything) => {
@@ -82,13 +103,13 @@ const setWorldCoordinates = (element, idx, everything) => {
     ...parentTransforms,
     element.localTransform,
   ])
-  const point = applyToPoint(resultTransform, {x:0, y:0})
-  const angle = allParents.reduce((acc, el) => acc + el._local.angle, 0)
+  const point = applyToPoint(resultTransform, { x: 0, y: 0 })
+  const angle = allParents.reduce((acc, el) => acc + el._local.angle + el.angle, element.angle)
   return {
     ...element,
     x: point.x,
     y: point.y,
-    angle: typeof element.angle === 'undefined' ? angle : element.angle,
+    angle: angle,
   }
 }
 
@@ -102,77 +123,8 @@ const stripUndefinedChildren = element => {
   }
 }
 
-/**
- * Used in comunication between siblings.
- * 'parent': ['children'],
- */
-const parentChildrenList = {}
-
-/**
- * Place only an element if its a child.
- * Will create a parent's list if it's the first child to report.
- */
-const registerAsChild = (component) => {
-  const parent = component.props.parent
-  if (!parent) {
-    return
-  }
-  // My parent still didn't register.
-  if (!Array.isArray(parentChildrenList[parent])) {
-    parentChildrenList[parent] = []
-  }
-  // I want to register at parent's place
-  const alreadyHere = parentChildrenList[parent].some(fromList => {
-    return fromList.props.id === component.props.id
-  })
-  if (!alreadyHere) {
-    // Remove yourself from any parent you used to be before
-    removeFromAnyParent(component.props.id)
-    // Register at the new place
-    parentChildrenList[parent].push(component)
-  }
-}
-
-const removeFromAnyParent = (id) => {
-  Object.keys(parentChildrenList).forEach(key => {
-    parentChildrenList[key] = parentChildrenList[key].filter(child => {
-      return child.props.id !== id
-    })
-  })
-}
-
-/**
- * Each parent component will call this to report new state of its children.
- * The list should be sorted and lost children should be removed.
- * @param {string} componentId
- * @param {array<string>} list of ids, children of the component
- */
-const updateChildrenList = (componentId, list) => {
-
-  const getChildById = (componentId, childId) => {
-    return parentChildrenList[componentId].find(child => child.props.id === childId)
-  }
-
-  const sortedArray = list.map(childId =>
-    getChildById(componentId, childId)
-  )
-
-  parentChildrenList[componentId] = sortedArray
-}
-
-const mapThroughChildren = (myId, mapper) => {
-  parentChildrenList[myId] && parentChildrenList[myId].map(mapper)
-}
-
 const renderElements = (element, idx) => {
   // Finally render them all to React components
-
-  // Element can register itself as a child
-  element.registerAsChild = registerAsChild
-  // Parent will be able to map through its child
-  element.mapThroughChildren = mapThroughChildren
-  // Parent will be able to sort list of its chilren
-  element.updateChildrenList = updateChildrenList
 
   switch (element.type) {
   case 'player':
@@ -202,7 +154,9 @@ class Table extends React.Component {
       ...this.props.containers || [],
       ...players,
     ]
+      .map(addRenderingProps)
       .map(addLocalTransform)
+      .map(applyParentTransform)
       .map(setWorldCoordinates)
       .map(stripUndefinedChildren)
       .map(renderElements)
