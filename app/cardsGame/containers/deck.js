@@ -28,13 +28,10 @@ class Deck extends Container {
     containers = containers.map(Container.toObject)
     const maxDeals = count * containers.length
 
-    console.log(`DECK: I myself have ${this.children.length} cards`)
-    
     const dealOne = () => {
       const card = this.top()
-      containers[i%containers.length].addChild(card)
+      card.moveTo(containers[i % containers.length])
       i++
-      
       if (this.children.length > 0 && i < maxDeals) {
         setTimeout(dealOne, 40)
       } else {
