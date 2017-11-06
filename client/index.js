@@ -1,4 +1,4 @@
-import {Client} from 'colyseus.js'
+import { Client } from 'colyseus.js'
 import React from 'react'
 import ReactDOM from 'react-dom'
 
@@ -10,11 +10,11 @@ import WarGame from './warGame/index'
 // === === === === === === == = -
 
 const host = window.document.location.host.replace(/:.*/, '')
-const client = new Client('ws://' + host + (location.port ? ':'+2657 : ''))
+const client = new Client('ws://' + host + (location.port ? ':' + 2657 : ''))
 
 const warGameRoom = client.join('warGame')
 
-const render = (getState, testAngle=0) => {
+const render = (getState, testAngle = 0) => {
   const state = getState ? getState() : {}
   ReactDOM.render(
     <WarGame
@@ -40,14 +40,26 @@ warGameController({
   updateCallback: render,
 })
 
-warGameRoom.onJoin.add(function() {
+warGameRoom.onJoin.add(function () {
   console.log(client.id, "joined", warGameRoom.name)
-  
   setTimeout(() => {
     // Testing, just init with players
     console.log('GO NOW!')
     warGameRoom.send({ action: 'gameStart' })
   }, 100)
+})
+
+warGameRoom.onLeave.add(function () {
+  console.info('ON: Leave!')
+  warGameRoom.removeAllListeners()
+  warGameRoom.leave()
+
+  setTimeout(() => {
+    document.location.href += ''
+  }, 250)
+})
+warGameRoom.onError.add(function () {
+  console.info('ON: Error!')
 })
 
 // Initial render plz

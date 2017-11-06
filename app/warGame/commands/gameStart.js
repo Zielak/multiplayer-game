@@ -83,7 +83,7 @@ const command = class GameStartCommand extends Command {
         // Get players decks
         const decks = state.players.list.map(player => player.getAllByType('deck').first)
         mainDeck.deal(decks)
-      }, 2000)
+      }, 1000)
       mainDeck.on(Deck.events.DEALT, () => {
         setTimeout(() => {
           state.players.list.map(player => {
