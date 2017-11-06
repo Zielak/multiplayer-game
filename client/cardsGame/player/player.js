@@ -24,7 +24,11 @@ class Player extends React.Component {
   }
 
   parseStyle() {
-    // return worldTransformCSS(this.props.parentTransform, this.props.localTransform)
+    return {
+      left: this.props.x + '%',
+      top: this.props.y + '%',
+      '--angle': this.props.angle + 'deg',
+    }
   }
 
 }
@@ -34,17 +38,11 @@ Player.propTypes = {
   name: PropTypes.string,
   children: PropTypes.array,
 
-  parentTransform: PropTypes.shape({
-    transform: PropTypes.object,
-    angle: PropTypes.number,
-    zIndex: PropTypes.number,
-  }),
-  localTransform: PropTypes.shape({
-    x: PropTypes.number,
-    y: PropTypes.number,
-    angle: PropTypes.number,
-    zIndex: PropTypes.number,
-  }),
+  localTransform: PropTypes.object,
+  x: PropTypes.number,
+  y: PropTypes.number,
+  angle: PropTypes.number,
+  zIndex: PropTypes.number,
 }
 
 export default Player
