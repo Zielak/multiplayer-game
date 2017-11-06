@@ -4,6 +4,9 @@
  */
 import React from 'react'
 import PropTypes from 'prop-types'
+// import { worldTransformCSS } from '../../renderer'
+
+// import { translate, transform } from 'transformation-matrix'
 
 import './hand.scss'
 
@@ -13,14 +16,14 @@ class Hand extends React.Component {
     // const shadow = ()
 
     return (
-      <div className="Hand" style={{
-        left: this.props.x + 50 + '%',
-        top: this.props.y + 50 + '%',
-        '--angle': this.props.angle + 'deg',
-      }}>
+      <div className="Hand" style={this.parseStyle()}>
 
       </div>
     )
+  }
+
+  parseStyle() {
+    // return worldTransformCSS(this.props.parentTransform, this.props.localTransform)
   }
 
   componentDidMount() {
@@ -32,17 +35,22 @@ class Hand extends React.Component {
   }
 
   restyleAllChildren() {
-    this.props.mapThroughChildren(this.props.id, (child, idx, array) => {
-      child.setState((prevState) => {
-        return {
-          ...prevState,
-          style: {
-            ...prevState.style,
-            ...this.restyleNthChild(prevState.style, idx, array.length)
-          }
-        }
-      })
-    })
+    /*this.props.mapThroughChildren(this.props.id, (child, idx, array) => {
+      const half = length * 0.5
+      child.props.parentTransform.transform = transform([
+        child.props.parentTransform.transform,
+        translate(-half * 1.6 + idx * 1.6, 0),
+      ])
+      // child.setState((prevState) => {
+      //   return {
+      //     ...prevState,
+      //     style: {
+      //       ...prevState.style,
+      //       ...this.restyleNthChild(prevState.style, idx, array.length)
+      //     }
+      //   }
+      // })
+    })*/
   }
 
   /**
@@ -58,8 +66,8 @@ class Hand extends React.Component {
     const half = length * 0.5
     return {
       ...style,
-      left: style.left - half*1.6 + idx*1.6,
-      angle: style.angle - half*10 + (idx+0.5)*10,
+      left: style.left - half * 1.6 + idx * 1.6,
+      angle: style.angle - half * 10 + (idx + 0.5) * 10,
       zIndex: idx + 1
     }
   }
@@ -67,14 +75,21 @@ class Hand extends React.Component {
 }
 
 Hand.propTypes = {
-  mapThroughChildren: PropTypes.func,
-
   id: PropTypes.string,
+  mapThroughChildren: PropTypes.func,
   children: PropTypes.array,
 
-  x: PropTypes.number,
-  y: PropTypes.number,
-  angle: PropTypes.number,
+  parentTransform: PropTypes.shape({
+    transform: PropTypes.object,
+    angle: PropTypes.number,
+    zIndex: PropTypes.number,
+  }),
+  localTransform: PropTypes.shape({
+    x: PropTypes.number,
+    y: PropTypes.number,
+    angle: PropTypes.number,
+    zIndex: PropTypes.number,
+  }),
 }
 
 export default Hand

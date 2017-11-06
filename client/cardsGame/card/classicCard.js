@@ -1,20 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+// import { worldTransformCSS } from '../renderer'
 
 require('./classicCard.scss')
 
 class ClassicCard extends React.Component {
-
-  constructor(props) {
-    super(props)
-    this.state = {
-      style: {
-        left: props.x,
-        top: props.y,
-        angle: props.angle || 0,
-      }
-    }
-  }
 
   render() {
     const render = this.props.state.faceUp ?
@@ -22,7 +12,7 @@ class ClassicCard extends React.Component {
       this.renderBackGraphics()
 
     return (
-      <div className="ClassicCard" style={this.parseStyle(this.state.style)}>
+      <div className="ClassicCard" style={this.parseStyle()}>
         {render}
       </div>
     )
@@ -35,29 +25,25 @@ class ClassicCard extends React.Component {
     this.props.registerAsChild(this)
   }
 
-  componentWillReceiveProps(newProps) {
+  /*componentWillReceiveProps(newProps) {
     this.setState(prevState => {
       return {
         ...prevState,
-        style: {
-          left: newProps.x,
-          top: newProps.y,
-          angle: newProps.angle || 0,
-        }
+        // style: {
+        //   left: newProps.x,
+        //   top: newProps.y,
+        //   angle: newProps.angle || 0,
+        // }
       }
     })
-  }
+  }*/
 
-  parseStyle(stateStyle) {
-    const style = {
-      ...stateStyle
+  parseStyle() {
+    return {
+      left: this.props.x + '%',
+      top: this.props.y + '%',
+      '--angle': this.props.angle + 'deg',
     }
-    style.left = `${stateStyle.left + 50}%`
-    style.top = `${stateStyle.top + 50}%`
-    style['--angle'] = `${stateStyle.angle}deg`
-    style.zIndex = stateStyle.zIndex
-
-    return style
   }
 
   renderFrontGraphics(suit, rank) {
@@ -95,8 +81,16 @@ class ClassicCard extends React.Component {
 }
 
 ClassicCard.propTypes = {
+  id: PropTypes.string,
   registerAsChild: PropTypes.func,
   parent: PropTypes.string,
+
+  localTransform: PropTypes.object,
+
+  x: PropTypes.number,
+  y: PropTypes.number,
+  angle: PropTypes.number,
+  zIndex: PropTypes.number,
 
   name: PropTypes.string,
   suit: PropTypes.string,
@@ -108,9 +102,6 @@ ClassicCard.propTypes = {
     marked: PropTypes.bool,
   }),
 
-  x: PropTypes.number,
-  y: PropTypes.number,
-  angle: PropTypes.number,
 }
 
 export default ClassicCard
