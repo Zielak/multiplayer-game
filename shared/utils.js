@@ -20,7 +20,9 @@ const noop = () => { }
 
 const getElementById = (everything, id) => everything.find(el => el.id === id)
 
-const getParent = (child, everything) => everything.filter(el => el.id === child.parent)[0]
+const getParent = (child, everything) => everything.filter(el => {
+  return el && el.id === child.parent
+})[0]
 
 const arrayWithoutElement = (element, everything) => everything.filter(el => el.id !== element.id)
 
@@ -29,7 +31,7 @@ const findAllParents = (child, everything) => {
   if (child.parent) {
     const newParent = getParent(child, everything)
     if (!newParent) {
-      return
+      return result
     }
     result.unshift(newParent)
     if (newParent.parent) {
