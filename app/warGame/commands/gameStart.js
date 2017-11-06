@@ -32,7 +32,7 @@ const command = class GameStartCommand extends Command {
     return new Promise((resolve/*, reject*/) => {
       // Gather players
       // state.clients.forEach(client => {
-      [0, 1, 2].forEach(client => {
+      [0, 1].forEach(client => {
         const newPlayer = new Player({
           clientId: client,
           name: randomName(),

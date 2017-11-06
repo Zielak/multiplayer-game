@@ -1,11 +1,11 @@
 const Command = require('./command')
 const containerClasses = {
-  'container': require('./container'),
-  'deck': require('./containers/deck'),
-  'hand': require('./containers/hand'),
-  'pile': require('./containers/pile'),
-  'row': require('./containers/row'),
-  'spread': require('./containers/spread'),
+  'container': require('../container'),
+  'deck': require('../containers/deck'),
+  'hand': require('../containers/hand'),
+  'pile': require('../containers/pile'),
+  'row': require('../containers/row'),
+  'spread': require('../containers/spread'),
 }
 
 class CreateContainer extends Command {
