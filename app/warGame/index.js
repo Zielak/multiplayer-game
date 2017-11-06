@@ -72,7 +72,7 @@ class WarGame extends colyseus.Room {
 
   onMessage(client, data) {
     console.log('MSG: ', JSON.stringify(data))
-    this.performAction(data, client)
+    this.performAction(client, data)
   }
 
   onDispose() {
