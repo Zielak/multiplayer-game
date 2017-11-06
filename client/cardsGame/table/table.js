@@ -52,9 +52,11 @@ const addTransformForPlayers = (player, idx, players) => {
     ...player,
     localTransform: transform([
       identity(),
+      translate(50, 50),
       rotateDEG(angle),
-      translate(0, 30)
+      translate(0, 40),
     ]),
+    angle,
   }
 }
 
@@ -67,22 +69,18 @@ const addLocalTransform = (element) => {
     localTransform: transform([
       identity(),
       rotateDEG(element._local.angle),
-      translate(element._local.x, element._local.y)
+      element.parent ? identity() : translate(50, 50),
+      translate(element._local.x, element._local.y),
     ]),
   }
 }
 
 const setWorldCoordinates = (element, idx, everything) => {
   const allParents = findAllParents(element, everything)
-  if (allParents.length === 0) {
-    return {
-      ...element,
-    }
-  }
   const parentTransforms = allParents.map(el => el.localTransform)
   const resultTransform = transform([
+    ...parentTransforms,
     element.localTransform,
-    ...parentTransforms
   ])
   const point = applyToPoint(resultTransform, {x:0, y:0})
   const angle = allParents.reduce((acc, el) => acc + el._local.angle, 0)
@@ -90,7 +88,7 @@ const setWorldCoordinates = (element, idx, everything) => {
     ...element,
     x: point.x,
     y: point.y,
-    angle: angle,
+    angle: typeof element.angle === 'undefined' ? angle : element.angle,
   }
 }
 
