@@ -4,11 +4,12 @@
  */
 import React from 'react'
 import PropTypes from 'prop-types'
-import { rotateDEG, translate, transform, applyToPoint, identity } from 'transformation-matrix'
+import { rotateDEG, translate, transform, identity, applyToPoint } from 'transformation-matrix'
 
 import ClassicCard from '../card/classicCard'
 import {
   findAllParents,
+  // def,
 } from '../../../shared/utils.js'
 
 import Player from '../player/player'
@@ -19,13 +20,13 @@ import Hand from '../containers/hand/hand'
 import './table.scss'
 
 // TODO: align angle to the current player
-const startingAngle = 90
+// const startingAngle = 90
 
-const positionFromAngle = (angle, distance) => {
-  const x = Math.round(distance * Math.cos(angle * (Math.PI * 2 / 360)) * 100) / 100
-  const y = Math.round(distance * Math.sin(angle * (Math.PI * 2 / 360)) * 100) / 100
-  return { x, y }
-}
+// const positionFromAngle = (angle, distance) => {
+//   const x = Math.round(distance * Math.cos(angle * (Math.PI * 2 / 360)) * 100) / 100
+//   const y = Math.round(distance * Math.sin(angle * (Math.PI * 2 / 360)) * 100) / 100
+//   return { x, y }
+// }
 
 const getOwnerId = (element) => {
   if (element.parent) {
@@ -35,56 +36,61 @@ const getOwnerId = (element) => {
   }
 }
 
-const addTransformProps = element => ({
-  ...element,
-  dimensions: {
-    x: element.dimensions.x || 0,
-    y: element.dimensions.y || 0,
-    angle: element.dimensions.angle || 0,
-  },
-  angle: 0,
-  x: 0,
-  y: 0,
-})
+// Everything is gonna have this. All extend the Base class
+// const addTransformProps = element => ({
+//   ...element,
+//   _localTransform: {
+//     x: def(element._localTransform.x, 0),
+//     y: def(element._localTransform.y, 0),
+//     angle: def(element._localTransform.angle, 0),
+//   }
+// })
 
-const positionAndRotatePlayers = (element, idx, elements) => {
-  const angle = 360 / elements.length
-
-  // Get initial correct position on the table, and add an angle
-  const position = positionFromAngle(angle * idx + startingAngle, 40)
+const addTransformForPlayers = (player, idx, players) => {
+  const angle = 360 / players.length * idx
   return {
-    ...element,
-    dimensions: {
-      x: position.x,
-      y: position.y,
-      angle: angle * idx,
-    },
+    ...player,
+    localTransform: transform([
+      identity(),
+      rotateDEG(angle),
+      translate(0, 30)
+    ]),
   }
 }
 
-const addTransformMatrices = element => {
-  const trans = transform(
-    translate(element.dimensions.x, element.dimensions.y),
-    rotateDEG(element.dimensions.angle)
-  )
+const addLocalTransform = (element) => {
+  if (element.localTransform) {
+    return element
+  }
   return {
     ...element,
-    transform: trans
+    localTransform: transform([
+      identity(),
+      rotateDEG(element._local.angle),
+      translate(element._local.x, element._local.y)
+    ]),
   }
 }
 
 const setWorldCoordinates = (element, idx, everything) => {
-  const parents = findAllParents(element, everything)
-  const rotation = parents.reduce((acc, parent) => acc + parent.dimensions.angle, element.dimensions.angle)
-  const matrices = parents.map(parent => parent.transform)
-  const matrix = matrices.length > 0 ? transform(matrices) : identity()
-  const pos = applyToPoint(matrix, { x: element.dimensions.x, y: element.dimensions.y })
-
+  const allParents = findAllParents(element, everything)
+  if (allParents.length === 0) {
+    return {
+      ...element,
+    }
+  }
+  const parentTransforms = allParents.map(el => el.localTransform)
+  const resultTransform = transform([
+    element.localTransform,
+    ...parentTransforms
+  ])
+  const point = applyToPoint(resultTransform, {x:0, y:0})
+  const angle = allParents.reduce((acc, el) => acc + el._local.angle, 0)
   return {
     ...element,
-    x: pos.x,
-    y: pos.y,
-    angle: rotation,
+    x: point.x,
+    y: point.y,
+    angle: angle,
   }
 }
 
@@ -109,11 +115,7 @@ const parentChildrenList = {}
  * Will create a parent's list if it's the first child to report.
  */
 const registerAsChild = (component) => {
-  // const id = component.props.id
-  // const children = component.props.children
   const parent = component.props.parent
-
-  // Or, I don't have any parent, I'm independent
   if (!parent) {
     return
   }
@@ -153,9 +155,9 @@ const updateChildrenList = (componentId, list) => {
     return parentChildrenList[componentId].find(child => child.props.id === childId)
   }
 
-  const sortedArray = list.map(childId => {
-    return getChildById(componentId, childId)
-  })
+  const sortedArray = list.map(childId =>
+    getChildById(componentId, childId)
+  )
 
   parentChildrenList[componentId] = sortedArray
 }
@@ -163,8 +165,6 @@ const updateChildrenList = (componentId, list) => {
 const mapThroughChildren = (myId, mapper) => {
   parentChildrenList[myId] && parentChildrenList[myId].map(mapper)
 }
-
-// const mapMyChildren = (id) => proxy[id].map
 
 const renderElements = (element, idx) => {
   // Finally render them all to React components
@@ -197,14 +197,14 @@ class Table extends React.Component {
     // Parse all current objects from props
     // Returns renderable html elements
     const players = (this.props.players ? [...this.props.players.list] : [])
-      .map(positionAndRotatePlayers)
+      .map(addTransformForPlayers)
+
     const elements = [
       ...this.props.cards || [],
       ...this.props.containers || [],
       ...players,
     ]
-      .map(addTransformProps)
-      .map(addTransformMatrices)
+      .map(addLocalTransform)
       .map(setWorldCoordinates)
       .map(stripUndefinedChildren)
       .map(renderElements)

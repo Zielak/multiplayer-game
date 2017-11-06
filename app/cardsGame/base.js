@@ -15,13 +15,14 @@ class Base extends EventEmitter {
     this.type = utils.def(options.type, undefined)
     this.name = utils.def(options.name, undefined)
 
-    this.dimensions = {
-      // Real-life size (in CM) and position
+    // Real-life size (in CM) and position
+    this._local = {
       x: utils.def(options.x, 0),
       y: utils.def(options.y, 0),
-      width: utils.def(options.width, 5),
-      height: utils.def(options.height, 5),
+      angle: utils.def(options.angle, 0),
     }
+    this.width = utils.def(options.width, 5)
+    this.height = utils.def(options.height, 5)
 
     // List of children ID's
     this.children = []
