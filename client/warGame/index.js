@@ -17,7 +17,7 @@ class WarGame extends React.Component {
           </div>
           <div>
             <button onClick={() => this.props.initGameHandler()}>
-              Maybe START?
+              Test Deal
             </button>
           </div>
         </div>

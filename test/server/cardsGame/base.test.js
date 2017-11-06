@@ -102,3 +102,10 @@ test('getAllByType', t => {
   t.is(veggieBag.getAllByType('vegetable').length, 3, `3 vegetables in the bag`)
   t.is(veggieBag.getAllByType('fruit').length, 0, `no fruits in this bag`)
 })
+
+test('addChild, adds at the top', t => {
+  const newThing = new Base({name: 'corn'})
+  t.context.veggieBag.addChild(newThing)
+  t.is(t.context.veggieBag.children[t.context.veggieBag.children.length-1], newThing.id)
+  t.deepEqual(t.context.veggieBag.top(), newThing)
+})

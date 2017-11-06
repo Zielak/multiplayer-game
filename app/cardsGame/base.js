@@ -73,6 +73,24 @@ class Base extends EventEmitter {
   }
 
   /**
+   * Gives you the topmost element in this container
+   * 
+   * @return {object}
+   */
+  top() {
+    return Base.get(this.children[this.children.length - 1])
+  }
+
+  /**
+   * Gives you an element from the bottom
+   * 
+   * @return {object}
+   */
+  bottom() {
+    return Base.get(this.children[0])
+  }
+
+  /**
    * Move this element to a different `parent`.
    * addChild method ensures that both new and old parents are
    * updated with the change.
@@ -109,8 +127,8 @@ class Base extends EventEmitter {
 
     // Add to this list
     this.children.push(child.id)
-    this.onUpdate(this)
     child.onUpdate(child)
+    this.onUpdate(this)
     return this
   }
 

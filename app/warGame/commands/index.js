@@ -7,4 +7,6 @@ module.exports = {
   prevPlayer: defaultCommands.prevPlayer,
 
   drawUpToThree: require('./drawUpToThree'),
+
+  testDeal: require('./testDeal'),
 }

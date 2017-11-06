@@ -19,7 +19,7 @@ const render = (getState, testAngle = 0) => {
   ReactDOM.render(
     <WarGame
       initGameHandler={() =>
-        warGameRoom.send({ action: 'game.start' })
+        warGameRoom.send({ action: 'testDeal' })
       }
       testScoreHandler={add =>
         warGameRoom.send({
@@ -41,11 +41,12 @@ warGameController({
 })
 
 warGameRoom.onJoin.add(function () {
-  console.log(client.id, "joined", warGameRoom.name)
+  console.log(client.id, 'joined', warGameRoom.name)
   setTimeout(() => {
     // Testing, just init with players
     console.log('GO NOW!')
     warGameRoom.send({ action: 'gameStart' })
+    // warGameRoom.send({ action: 'testDeal' })
   }, 100)
 })
 

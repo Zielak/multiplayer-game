@@ -22,7 +22,7 @@ class Game extends EventEmitter {
    * @memberof Game
    */
   performAction(client, actionName, state) {
-    if(client === null || typeof client !== 'object'){
+    if (client === null || typeof client !== 'object') {
       client = Game.id
     }
     return new Promise((resolve, reject) => {
@@ -41,7 +41,25 @@ class Game extends EventEmitter {
       if (this.commands[actionName] === undefined) {
         reject(`Unknown action.`)
       }
+
+      // Doesn't have condition, just run it
+      if (this.commands[actionName].condition === undefined) {
+        this.commandManager.execute(
+          this.commands[actionName].command, client, state, this.reducer
+        )
+          .then(status => {
+            resolve(status)
+            this.emit(Game.events.ACTION_COMPLETED, actionName, status)
+          })
+          .catch(status => {
+            reject(`FAIL, something went wrong: ${status}`)
+            this.emit(Game.events.ACTION_FAILED, actionName, status)
+          })
+        return
+      }
+
       // Run conditions if it's possible to do it now
+
       this.commands[actionName].condition(state, client)
         .then(() => this.commandManager.execute(
           this.commands[actionName].command, client, state, this.reducer
@@ -64,6 +82,6 @@ Game.events = {
   ACTION_FAILED: 'actionFailed',
 }
 
-Game.id = {id: Symbol('gameid')}
+Game.id = { id: Symbol('gameid') }
 
 module.exports = Game

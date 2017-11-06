@@ -78,7 +78,10 @@ const command = class GameStartCommand extends Command {
         mainDeck.addChild(card)
       })
 
+      resolve()
+
       // Deal all cards to players after delay
+      /*
       setTimeout(() => {
         // Get players decks
         const decks = state.players.list.map(player => player.getAllByType('deck').first)
@@ -96,7 +99,7 @@ const command = class GameStartCommand extends Command {
           console.log('resolving inside gameStart.js')
           resolve()
         }, 500)
-      })
+      })*/
     })
   }
 

@@ -33,24 +33,6 @@ class Container extends Base {
     return this
   }
 
-  /**
-   * Gives you the topmost element in this container
-   * 
-   * @return {object}
-   */
-  top() {
-    return Container.get(this.children[this.children.length - 1])
-  }
-
-  /**
-   * Gives you an element from the bottom
-   * 
-   * @return {object}
-   */
-  bottom() {
-    return Container.get(this.children[0])
-  }
-
 }
 
 Container.events = {
