@@ -47,14 +47,6 @@ export default ({ room, updateCallback }) => {
     })
   })
 
-  room.listen('testScore', change => {
-    // console.log('new testScore: ', change.value)
-    store.dispatch({
-      type: 'testScore.' + change.operation,
-      data: change.value,
-    })
-  })
-
   cardsListener(room)
   containersListener(room)
   playersListener(room)

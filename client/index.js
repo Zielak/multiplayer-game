@@ -18,13 +18,14 @@ const render = (getState, testAngle = 0) => {
   const state = getState ? getState() : {}
   ReactDOM.render(
     <WarGame
-      initGameHandler={() =>
+      testDealHandler={() =>
         warGameRoom.send({ action: 'testDeal' })
       }
-      testScoreHandler={add =>
-        warGameRoom.send({
-          action: add > 0 ? 'testScore.increase' : 'testScore.decrease'
-        })
+      cardPickedHandler={card =>
+        warGameRoom.send({ action: 'cardPick', card })
+      }
+      containerPickedHandler={container =>
+        warGameRoom.send({ action: 'containerPick', container })
       }
       testAngle={testAngle}
       {...state}
@@ -46,7 +47,6 @@ warGameRoom.onJoin.add(function () {
     // Testing, just init with players
     console.log('GO NOW!')
     warGameRoom.send({ action: 'gameStart' })
-    // warGameRoom.send({ action: 'testDeal' })
   }, 100)
 })
 
