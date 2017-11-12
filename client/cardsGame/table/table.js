@@ -74,6 +74,7 @@ const addLocalTransform = (element) => {
 const parentTransforms = {
   deck: Deck.restyleChild,
   hand: Hand.restyleChild,
+  pile: Pile.restyleChild,
 }
 const applyParentTransform = (element, idx, everything) => {
   // This method is only for parents

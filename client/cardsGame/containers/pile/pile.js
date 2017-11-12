@@ -30,7 +30,16 @@ class Pile extends React.Component {
       '--angle': this.props.angle + 'deg',
     }
   }
+}
 
+Pile.restyleChild = (child, idx/*, length*/) => {
+  return {
+    // TODO: random value generator based on child's ID :3
+    x: Math.random() * 4 - 2,
+    y: Math.random() * 4 - 2,
+    angle: Math.random() * 50 - 25,
+    zIndex: idx + 5,
+  }
 }
 
 Pile.propTypes = {
