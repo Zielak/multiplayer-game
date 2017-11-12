@@ -34,7 +34,7 @@ Deck.restyleChild = (child, idx/*, length*/) => {
     x: idx * .1,
     y: -idx * .1,
     angle: 0,
-    zIndex: idx,
+    zIndex: idx + 5,
   }
 }
 

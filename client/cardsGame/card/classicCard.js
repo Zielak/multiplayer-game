@@ -14,6 +14,7 @@ class ClassicCard extends React.Component {
     return (
       <div className="ClassicCard" style={this.parseStyle()}>
         {render}
+        <span className="debug">{this.props.name}</span>
       </div>
     )
   }

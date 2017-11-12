@@ -81,18 +81,28 @@ const applyParentTransform = (element, idx, everything) => {
     return element
   }
 
-  const children = findAllChildren(element, everything)
-  children.map((child, idx, allChildren) => {
-    const newTransform = parentTransforms[element.type](child, idx, allChildren.length)
+  findAllChildren(element, everything)
+    .map(child => {
+      // Add current idx in the parent's array
+      child._sortIdx = element.children.indexOf(child.id)
+      return child
+    })
+    .sort((a, b) => a._sortIdx - b._sortIdx)
+    .map(child => {
+      delete child._sortIdx
+      return child
+    })
+    .map((child, idx, allChildren) => {
+      const newTransform = parentTransforms[element.type](child, idx, allChildren.length)
 
-    child.localTransform = transform([
-      child.localTransform,
-      rotateDEG(def(newTransform.angle, 0)),
-      translate(def(newTransform.x, 0), def(newTransform.y, 0))
-    ])
-    child.angle += def(newTransform.angle, 0)
-    child.zIndex += def(newTransform.zIndex, 0)
-  })
+      child.localTransform = transform([
+        child.localTransform,
+        rotateDEG(def(newTransform.angle, 0)),
+        translate(def(newTransform.x, 0), def(newTransform.y, 0))
+      ])
+      child.angle += def(newTransform.angle, 0)
+      child.zIndex += def(newTransform.zIndex, 0)
+    })
   return element
 }
 
@@ -123,9 +133,11 @@ const stripUndefinedChildren = element => {
   }
 }
 
-const addEventHandlers = element => {
-  eventHandlers
-}
+const addEventHandlers = (context) =>
+  (element) => {
+    context.props.eventHandlers
+    return element
+  }
 
 const renderElements = (element, idx) => {
   // Finally render them all to React components
@@ -163,7 +175,7 @@ class Table extends React.Component {
       .map(applyParentTransform)
       .map(setWorldCoordinates)
       .map(stripUndefinedChildren)
-      .map(addEventHandlers)
+      .map(addEventHandlers(this))
       .map(renderElements)
 
     return (
