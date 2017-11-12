@@ -28,10 +28,11 @@ class Hand extends React.Component {
 
 Hand.restyleChild = (child, idx, length) => {
   const half = length * 0.5
+  const x = -half * 1.6 + idx * 1.6
   return {
-    x: -half * 1.6 + idx * 1.6,
-    y: 0,
-    angle: -half * 10 + (idx + 0.5) * 10,
+    x: x,
+    y: -x * (x/14),
+    angle: -half * 8 + (idx + 0.5) * 8,
     zIndex: idx + 1,
   }
 }

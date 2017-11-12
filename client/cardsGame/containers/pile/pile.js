@@ -7,9 +7,7 @@
  */
 import React from 'react'
 import PropTypes from 'prop-types'
-// import { worldTransformCSS } from '../../renderer'
-
-// import { translate, transform } from 'transformation-matrix'
+import { procNumberFromString } from '../../../../shared/utils'
 
 import './pile.scss'
 
@@ -34,10 +32,9 @@ class Pile extends React.Component {
 
 Pile.restyleChild = (child, idx/*, length*/) => {
   return {
-    // TODO: random value generator based on child's ID :3
-    x: Math.random() * 4 - 2,
-    y: Math.random() * 4 - 2,
-    angle: Math.random() * 50 - 25,
+    x: Math.cos(procNumberFromString(child.id, -2, 2)),
+    y: Math.sin(procNumberFromString(child.id, -2, 2)),
+    angle: procNumberFromString(child.id, -45, 45),
     zIndex: idx + 5,
   }
 }
