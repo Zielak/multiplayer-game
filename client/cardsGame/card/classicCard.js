@@ -28,7 +28,7 @@ class ClassicCard extends React.Component {
   }
 
   renderFrontGraphics(suit, rank) {
-    return <div className={`front suit-${suit}`}>
+    return <div className={`front suit-${suit}`} onClick={e => this.props.interactionHandler(e)}>
       <div className="icons">
         <div className="rank">{this.renderRank(rank)}</div>
         <div className="suit">{this.renderSuit(suit)}</div>
@@ -82,6 +82,7 @@ ClassicCard.propTypes = {
     marked: PropTypes.bool,
   }),
 
+  interactionHandler: PropTypes.func,
 }
 
 export default ClassicCard

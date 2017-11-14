@@ -21,11 +21,8 @@ const render = (getState, testAngle = 0) => {
       testDealHandler={() =>
         warGameRoom.send({ action: 'testDeal' })
       }
-      cardPickedHandler={card =>
-        warGameRoom.send({ action: 'cardPick', card })
-      }
-      containerPickedHandler={container =>
-        warGameRoom.send({ action: 'containerPick', container })
+      interactionHandler={(player, reporter, element) =>
+        warGameRoom.send({ action: 'interaction', player, reporter, element })
       }
       testAngle={testAngle}
       {...state}
