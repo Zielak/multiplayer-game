@@ -134,11 +134,15 @@ const stripUndefinedChildren = element => {
   }
 }
 
-const addEventHandlers = (context) =>
-  (element) => {
-    context.props.eventHandlers
+// Passes the event up to the game controller (i hope)
+const addEventHandlers = context => {
+  element => {
+    element.interactionHandler = (event) => {
+      context.interactionHandler(event)
+    }
     return element
   }
+}
 
 const renderElements = (element, idx) => {
   // Finally render them all to React components
@@ -176,7 +180,7 @@ class Table extends React.Component {
       .map(applyParentTransform)
       .map(setWorldCoordinates)
       .map(stripUndefinedChildren)
-      .map(addEventHandlers(this))
+      .map(addEventHandlers)
       .map(renderElements)
 
     return (
@@ -189,28 +193,11 @@ class Table extends React.Component {
 }
 
 Table.propTypes = {
-  eventHandlers: PropTypes.objectOf((propValue, key, componentName, location, propFullName) => {
-    if (typeof propValue !== 'object') {
-      return new Error(
-        `${componentName} => prop '${propFullName} should be an object.`
-      )
-    }
-  }),
-  /*
-  eventHandlers: {
-    'eventType': {
-      target: element | null,
-      ???
-    },
-    // ...
-  }
-  */
-
   players: PropTypes.object,
   cards: PropTypes.array,
   containers: PropTypes.array,
 
-  testAngle: PropTypes.number,
+  interactionHandler: PropTypes.func,
 }
 
 export default Table
