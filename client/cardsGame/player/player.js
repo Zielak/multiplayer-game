@@ -1,7 +1,6 @@
 
 import React from 'react'
 import PropTypes from 'prop-types'
-// import { worldTransformCSS } from '../renderer'
 
 import './player.scss'
 
