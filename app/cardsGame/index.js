@@ -20,10 +20,10 @@ module.exports = {
   Base: require('./base'),
   BaseCard: require('./baseCard'),
   ClassicCard: require('./classicCard'),
-  Conditions: require('./conditions'),
   Container: require('./container'),
 
   Command: require('./commands/command'),
+  Conditions: require('./conditions/index'),
   Reducers: require('./reducers/index'),
 
   Deck: require('./containers/deck'),

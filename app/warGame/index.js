@@ -3,7 +3,7 @@ const {
   Game, Reducers
 } = require('../cardsGame/index')
 
-const commands = require('./commands/index')
+const actions = require('./actions/index')
 const reducer = {
   clients: Reducers.createArrayReducer('clients'),
   cards: Reducers.createArrayReducer('cards'),
@@ -15,35 +15,19 @@ class WarGame extends colyseus.Room {
 
   onInit(options) {
     this.game = new Game({
-      commands,
+      actions,
       reducer,
     })
 
-    this.setState({
-      clients: [],
+    this.setState(Object.assign({}, Game.baseState(), {
       maxClients: options.maxClients || 2,
       host: options.host,
 
-      // Has the game started?
-      started: false,
-      // Clients that are actually playing the game plus some turn order variables
-      players: {
-        list: [],
-        reversed: false,
-        currentPlayerIdx: 0,
-        currentPlayer: null,
-        currentPlayerPhase: 0,
-      },
       // Initial array of all available cards in the game
       cards: [],
       // Containers holding (or not yet) cards
       containers: [],
-      // Table
-      table: null,
-
-      // Testing
-      testScore: 0,
-    })
+    }))
 
     console.log('WarGame room created!', options)
   }
@@ -72,7 +56,11 @@ class WarGame extends colyseus.Room {
 
   onMessage(client, data) {
     console.log('MSG: ', JSON.stringify(data))
-    this.performAction(client, data)
+    if(data.action && data.action === 'gameStart'){
+      this.performAction(client, data)
+    }else{
+      this.game.onMessage(client, data)
+    }
   }
 
   onDispose() {
@@ -112,7 +100,7 @@ class WarGame extends colyseus.Room {
   }
 
   onGameStart() {
-    
+
   }
 
 }

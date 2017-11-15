@@ -11,7 +11,9 @@ const randomName = () =>
   [1, 2, 3].map(() => Math.floor(Math.random() * 25 + 65)).map((e) => String.fromCharCode(e)).join('')
 
 const condition = (state, client) => new Promise((resolve, reject) => {
-  if (client.id !== state.host) {
+  if(state.started){
+    reject(`Game already started.`)
+  } else if (client.id !== state.host) {
     reject(`Client '${client.id}' is not a host: '${state.host}'`)
   } else if (state.clients.length < 1) {
     reject(`Not enough clients: only '${state.clients.length}' clients in the room`)
@@ -28,6 +30,7 @@ const command = class GameStartCommand extends Command {
     })
   }
 
+  // TODO: move all that init to the gameroom itself.
   execute(invoker, state, reducer) {
     return new Promise((resolve/*, reject*/) => {
       // Gather players
@@ -78,10 +81,13 @@ const command = class GameStartCommand extends Command {
         mainDeck.addChild(card)
       })
 
+      state.started = true
+
       resolve()
 
       // Deal all cards to players after delay
       /*
+      TODO: Bring me back to life!
       setTimeout(() => {
         // Get players decks
         const decks = state.players.list.map(player => player.getAllByType('deck').first)
