@@ -83,16 +83,12 @@ const command = class GameStartCommand extends Command {
 
       state.started = true
 
-      resolve()
-
       // Deal all cards to players after delay
-      /*
-      TODO: Bring me back to life!
       setTimeout(() => {
         // Get players decks
         const decks = state.players.list.map(player => player.getAllByType('deck').first)
         mainDeck.deal(decks)
-      }, 1000)
+      }, 500)
       mainDeck.on(Deck.events.DEALT, () => {
         setTimeout(() => {
           state.players.list.map(player => {
@@ -100,12 +96,9 @@ const command = class GameStartCommand extends Command {
             const myHand = player.getByType('hand')
             myDeck.deal(myHand, 3)
           })
-          // FIXME: now it's fire and forget. I should listen until myDeck
-          // finished dealing cards to each player
-          console.log('resolving inside gameStart.js')
           resolve()
         }, 500)
-      })*/
+      })
     })
   }
 
