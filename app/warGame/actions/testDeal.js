@@ -12,17 +12,17 @@ const command = class TestDealCommand extends Command {
       })
       console.log(`found ${contsCards.length} potential FROM candidates`)
       /** @type {Deck} */
-      let idx = Math.floor(Math.random() * (contsCards.length-1))
+      let idx = Math.floor(Math.random() * (contsCards.length - 1))
       const cont = contsCards[idx]
-      console.log(`  choosing ${idx}: ${JSON.stringify(cont)}`)
+      // console.log(`  choosing ${idx}: ${JSON.stringify(cont)}`)
 
-      idx = Math.floor(Math.random() * (state.containers.length-1))
+      idx = Math.floor(Math.random() * (state.containers.length - 1))
       const targetCont = state.containers[idx]
 
-      if(cont){
-        cont.deal(targetCont, Math.floor(Math.random()*3))
+      if (cont) {
+        cont.deal(targetCont, Math.floor(Math.random() * 3))
         cont.on(Deck.events.DEALT, () => resolve())
-      }else{
+      } else {
         reject(`couldn't find cont :(`)
       }
     })

@@ -1,8 +1,9 @@
 module.exports = {
-  createContainer: require('./createContainer'),
-  moveCardToContainer: require('./moveCardToContainer'),
-  nextPlayer: require('./nextPlayer'),
-  prevPlayer: require('./prevPlayer'),
-  // createContainer: require('./createContainer'),
-  // createContainer: require('./createContainer'),
+  CreateContainer: require('./createContainer'),
+  DrawUpToX: require('./drawUpToX'),
+  MoveCardToContainer: require('./moveCardToContainer'),
+  NextPlayer: require('./nextPlayer'),
+  PrevPlayer: require('./prevPlayer'),
+  // CreateContainer: require('./createContainer'),
+  // CreateContainer: require('./createContainer'),
 }

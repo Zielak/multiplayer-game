@@ -62,6 +62,20 @@ class Game extends EventEmitter {
 
     this.commandManager = new CommandManager()
   }
+  
+  actionCompleted(resolve, actionName) {
+    return status => {
+      resolve(status)
+      this.emit(Game.events.ACTION_COMPLETED, actionName, status)
+    }
+  }
+  
+  actionFailed(reject, actionName) {
+    return status => {
+      reject(status)
+      this.emit(Game.events.ACTION_FAILED, actionName, status)
+    }
+  }
 
   /**
    * Check conditions and perform given action
@@ -72,58 +86,59 @@ class Game extends EventEmitter {
    * @returns {Promise}
    * @memberof Game
    */
-  performAction(client, actionName, state) {
+  performAction(client, data, state) {
     if (client === null || typeof client !== 'object') {
       client = Game.id
     }
+
+    // Get action object, if its simple action or user interaction?
+    const action = data.action ?
+      this.actions[data.action] :
+      this.mapEventToIntention(data)
+
+    const actionName = data.action // TODO: OR????
+
+    console.info(`-= performAction("${client.id}",`, data, `)`)
+    if (!data.action) {
+      console.info(`   User Event:`, data)
+      console.info(`   Found intentions: ${action.length}`)
+    }
+
     return new Promise((resolve, reject) => {
-      console.info(`performAction(${JSON.stringify(client)}, "${actionName}", state)`)
       if (!state.clients || state.clients.length <= 0) {
         reject(`There are no clients.`)
       }
+
       if (state.clients.includes(client)) {
         reject(`This client doesn't exist "${client}".`)
       }
 
-      if (this.actions[actionName] === undefined) {
-        reject(`Unknown action "${actionName}".`)
-      }
-
-      if (this.actions[actionName] === undefined) {
+      if (action === undefined) {
         reject(`Unknown action.`)
+      }
+      
+      const context = {
+        data: data,
+        ...action.context
       }
 
       // Doesn't have condition, just run it
-      if (this.actions[actionName].condition === undefined) {
-        console.info(`  action ${actionName} has no conditions`)
+      if (action.condition === undefined) {
+        console.info(`action has no conditions`)
         this.commandManager.execute(
-          this.actions[actionName].command, client, state, this.reducer
+          action.command, context, client, state, this.reducer
         )
-          .then(status => {
-            resolve(status)
-            this.emit(Game.events.ACTION_COMPLETED, actionName, status)
-          })
-          .catch(status => {
-            reject(`FAIL, something went wrong: ${status}`)
-            this.emit(Game.events.ACTION_FAILED, actionName, status)
-          })
-        return
+          .then(this.actionCompleted(resolve, actionName))
+          .catch(this.actionFailed(reject, actionName))
+      } else {
+        // Run conditions if it's possible to do it now
+        action.condition(state, client)
+          .then(() => this.commandManager.execute(
+            action.command, context, client, state, this.reducer
+          ))
+          .then(this.actionCompleted(resolve, actionName))
+          .catch(this.actionFailed(reject, actionName))
       }
-
-      // Run conditions if it's possible to do it now
-
-      this.actions[actionName].condition(state, client)
-        .then(() => this.commandManager.execute(
-          this.actions[actionName].command, client, state, this.reducer
-        ))
-        .then(status => {
-          resolve(status)
-          this.emit(Game.events.ACTION_COMPLETED, actionName, status)
-        })
-        .catch(status => {
-          reject(`FAIL, something went wrong: ${status}`)
-          this.emit(Game.events.ACTION_FAILED, actionName, status)
-        })
     })
   }
 
@@ -133,12 +148,6 @@ class Game extends EventEmitter {
 
   getCurrentPossibleMoves() {
 
-  }
-
-  onMessage(client, data) {
-    const intentions = this.mapEventToIntention(data)
-    console.info(`User Event:`, data)
-    console.info(`Found intentions: ${intentions.length}`)
   }
 
   /**
@@ -151,6 +160,7 @@ class Game extends EventEmitter {
     const actionKeys = Object.keys(actions)
 
     const matchedContext = actionKeys.filter(actionName => {
+      console.log('actionName: ',actionName)
       if (typeof actions[actionName].context === 'undefined' || typeof actions[actionName].context !== 'object') {
         return false
       }

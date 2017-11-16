@@ -11,7 +11,7 @@ const randomName = () =>
   [1, 2, 3].map(() => Math.floor(Math.random() * 25 + 65)).map((e) => String.fromCharCode(e)).join('')
 
 const condition = (state, client) => new Promise((resolve, reject) => {
-  if(state.started){
+  if (state.started) {
     reject(`Game already started.`)
   } else if (client.id !== state.host) {
     reject(`Client '${client.id}' is not a host: '${state.host}'`)
@@ -23,11 +23,9 @@ const condition = (state, client) => new Promise((resolve, reject) => {
 
 const command = class GameStartCommand extends Command {
 
-  constructor() {
-    super({
-      createdPlayers: [],
-      createdContainers: [],
-    })
+  prepare() {
+    this.context.createdPlayers = []
+    this.context.createdContainers = []
   }
 
   // TODO: move all that init to the gameroom itself.
