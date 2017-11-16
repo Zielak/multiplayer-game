@@ -51,8 +51,8 @@ export default ({ room, updateCallback }) => {
   containersListener(room)
   playersListener(room)
 
-  room.listen('gameStart', () => {
-    console.log('gameStart!? ', arguments)
+  room.listen('GameStart', () => {
+    console.log('GameStart!? ', arguments)
   })
 
   return {

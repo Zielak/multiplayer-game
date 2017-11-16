@@ -4,6 +4,8 @@ class Command {
     this.context = context
   }
 
+  prepare() { }
+
   execute(/*invoker, state, reducer*/) { }
 
   undo() { }

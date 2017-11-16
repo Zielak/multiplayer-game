@@ -45,7 +45,7 @@ class Deck extends Container {
 
   onCardsDealt() {
     this.emit(Deck.events.DEALT)
-    console.info('Done dealing cards.')
+    console.log('Deck: Done dealing cards.')
   }
 
 }

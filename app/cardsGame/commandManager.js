@@ -12,10 +12,11 @@ class CommandManager {
    * @param {*} state 
    * @param {*} reducer 
    */
-  execute(command, invoker, state, reducer) {
-    const newCommand = new command()
+  execute(command, context, invoker, state, reducer) {
+    const newCommand = new command(context)
     this.commands.push(newCommand)
     this.lastCommand = newCommand
+    newCommand.prepare()
     return newCommand.execute(invoker, state, reducer)
   }
 

@@ -1,13 +1,13 @@
 const defaultCommands = require('../../cardsGame/commands/index')
 
 module.exports = {
-  gameStart: require('./gameStart'),
+  GameStart: require('./gameStart'),
 
-  playCard: require('./playCard'),
-  nextPlayer: defaultCommands.nextPlayer,
-  prevPlayer: defaultCommands.prevPlayer,
+  PlayCard: require('./playCard'),
+  NextPlayer: defaultCommands.NextPlayer,
+  PrevPlayer: defaultCommands.PrevPlayer,
 
-  drawUpToThree: require('./drawUpToThree'),
+  DrawUpToThree: require('./drawUpToThree'),
 
-  testDeal: require('./testDeal'),
+  TestDeal: require('./testDeal'),
 }

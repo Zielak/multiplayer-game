@@ -19,7 +19,7 @@ const render = (getState, testAngle = 0) => {
   ReactDOM.render(
     <WarGame
       testDealHandler={() =>
-        warGameRoom.send({ action: 'testDeal' })
+        warGameRoom.send({ action: 'TestDeal' })
       }
       interactionHandler={(player, reporter, element) =>
         warGameRoom.send({ action: 'interaction', player, reporter, element })
@@ -43,7 +43,7 @@ warGameRoom.onJoin.add(function () {
   setTimeout(() => {
     // Testing, just init with players
     console.log('GO NOW!')
-    warGameRoom.send({ action: 'gameStart' })
+    warGameRoom.send({ action: 'GameStart' })
   }, 100)
 })
 

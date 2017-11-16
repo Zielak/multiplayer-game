@@ -56,11 +56,7 @@ class WarGame extends colyseus.Room {
 
   onMessage(client, data) {
     console.log('MSG: ', JSON.stringify(data))
-    if(data.action && data.action === 'gameStart'){
-      this.performAction(client, data)
-    }else{
-      this.game.onMessage(client, data)
-    }
+    this.performAction(client, data)
   }
 
   onDispose() {
@@ -76,7 +72,7 @@ class WarGame extends colyseus.Room {
    * @memberof WarGame
    */
   performAction(client, data) {
-    this.game.performAction(client, data.action, this.state)
+    this.game.performAction(client, data, this.state)
       .then(status => {
         console.log('action resolved!', status)
       })
