@@ -1,10 +1,12 @@
 const uuid = require('uuid/v4')
 const utils = require('../../shared/utils')
 const EventEmitter = require('events')
+const { nosync } = require('colyseus')
 
 const objects = new Map()
 
 class Base extends EventEmitter {
+
   constructor(options = {}) {
     super()
     this.id = uuid()
@@ -247,5 +249,11 @@ class Base extends EventEmitter {
 Base.events = {
   TEST: 'test'
 }
+
+// Get rid of EventEmitter stuff from the client
+nosync(Base.prototype, '_events')
+nosync(Base.prototype, '_eventsCount')
+nosync(Base.prototype, '_maxListeners')
+nosync(Base.prototype, 'domain')
 
 module.exports = Base
