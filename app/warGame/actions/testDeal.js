@@ -11,8 +11,8 @@ const command = class TestDealCommand extends Command {
         return container.children.length > 0 && container.type === 'deck'
       })
       console.log(`found ${contsCards.length} potential FROM candidates`)
-      /** @type {Deck} */
       let idx = Math.floor(Math.random() * (contsCards.length - 1))
+      /** @type {Deck} */
       const cont = contsCards[idx]
       // console.log(`  choosing ${idx}: ${JSON.stringify(cont)}`)
 
