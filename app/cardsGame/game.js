@@ -65,6 +65,7 @@ class Game extends EventEmitter {
   
   actionCompleted(resolve, actionName) {
     return status => {
+      console.info('Action complete:', status)
       resolve(status)
       this.emit(Game.events.ACTION_COMPLETED, actionName, status)
     }
@@ -72,6 +73,7 @@ class Game extends EventEmitter {
   
   actionFailed(reject, actionName) {
     return status => {
+      console.warn('Action failed:', status)
       reject(status)
       this.emit(Game.events.ACTION_FAILED, actionName, status)
     }
