@@ -256,4 +256,6 @@ nosync(Base.prototype, '_eventsCount')
 nosync(Base.prototype, '_maxListeners')
 nosync(Base.prototype, 'domain')
 
+nosync(Base.prototype, 'onUpdate')
+
 module.exports = Base

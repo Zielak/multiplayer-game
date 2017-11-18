@@ -30,6 +30,10 @@ class Deck extends Container {
 
     const dealOne = () => {
       const card = this.top()
+      if(!card) {
+        this.onCardsDealt(containers)
+        return 
+      }
       card.moveTo(containers[i % containers.length])
       i++
       if (this.children.length > 0 && i < maxDeals) {
