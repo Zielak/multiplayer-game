@@ -25,10 +25,7 @@ class WarGame extends React.Component {
           players={this.props.players}
           cards={this.props.cards}
           containers={this.props.containers}
-          eventHandlers={{
-            cardPicked: this.props.cardPickedHandler,
-            containerPicked: this.props.containerPickedHandler,
-          }}
+          interactionHandler={this.props.interactionHandler}
         ></Table>
         <PlayersList
           title='Players'
@@ -42,8 +39,7 @@ class WarGame extends React.Component {
 
 WarGame.propTypes = {
   testDealHandler: PropTypes.func,
-  cardPickedHandler: PropTypes.func,
-  containerPickedHandler: PropTypes.func,
+  interactionHandler: PropTypes.func,
 
   players: PropTypes.object,
   cards: PropTypes.array,

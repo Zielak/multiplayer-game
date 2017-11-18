@@ -13,9 +13,10 @@ class Deck extends React.Component {
 
     return (
       <div className="Deck" style={this.parseStyle()}>
-        <div>
+        <div className="bg">
           <div className="label">{countCards} cards</div>
         </div>
+        <div className="click-area"></div>
       </div>
     )
   }
@@ -47,6 +48,8 @@ Deck.propTypes = {
   y: PropTypes.number,
   angle: PropTypes.number,
   zIndex: PropTypes.number,
+
+  interactionHandler: PropTypes.func,
 }
 
 export default Deck

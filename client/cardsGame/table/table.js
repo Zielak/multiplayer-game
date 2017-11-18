@@ -134,15 +134,14 @@ const stripUndefinedChildren = element => {
   }
 }
 
-// Passes the event up to the game controller (i hope)
-/*const addEventHandlers = context => {
-  element => {
-    element.interactionHandler = (event) => {
-      context.interactionHandler(event)
+const addInteractionHandler = handler => {
+  return element => {
+    element.interactionHandler = event => {
+      handler(event)
     }
     return element
   }
-}*/
+}
 
 const renderElements = (element, idx) => {
   // Finally render them all to React components
@@ -180,7 +179,8 @@ class Table extends React.Component {
       .map(applyParentTransform)
       .map(setWorldCoordinates)
       .map(stripUndefinedChildren)
-      // .map(addEventHandlers(this))
+      .map( addInteractionHandler(this.props.interactionHandler)
+      )
       .map(renderElements)
 
     return (

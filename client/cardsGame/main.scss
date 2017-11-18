@@ -5,3 +5,8 @@
   --player-icon-size: calc((6vh + 6vw) / 3);
   --line-size: calc((1vh + 1vw) / 5);
 }
+
+.click-area {
+  z-index: 5000; // this fails right now
+  cursor: pointer;
+}
