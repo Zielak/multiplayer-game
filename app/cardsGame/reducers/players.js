@@ -5,13 +5,8 @@ const playersReducer = {
   },
 
   update: (state, player) => {
-    state.players.list.forEach(element => {
-      if (element.id === player.id) {
-        for (const key in player) {
-          element[key] = player[key]
-        }
-      }
-    })
+    const idx = state.players.list.indexOf(player)
+    state.players.list[idx] = player
   },
 
   next: (state) => {
