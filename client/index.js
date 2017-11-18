@@ -1,11 +1,9 @@
 import { Client } from 'colyseus.js'
-import React from 'react'
-import ReactDOM from 'react-dom'
-
-require('./styles.scss')
 
 // import Lobby from './lobby/index'
-import WarGame from './warGame/index'
+// import WarGame from './warGame/index'
+
+require('./styles.scss')
 
 // === === === === === === == = -
 
@@ -14,28 +12,14 @@ const client = new Client('ws://' + host + (location.port ? ':' + 2657 : ''))
 
 const warGameRoom = client.join('warGame')
 
-const render = (getState, testAngle = 0) => {
-  const state = getState ? getState() : {}
-  ReactDOM.render(
-    <WarGame
-      testDealHandler={() =>
-        warGameRoom.send({ action: 'TestDeal' })
-      }
-      interactionHandler={(player, reporter, element) =>
-        warGameRoom.send({ action: 'interaction', player, reporter, element })
-      }
-      testAngle={testAngle}
-      {...state}
-    />,
-    document.getElementById('root')
-  )
-}
-
 /*const warGameController = */
 import warGameController from './warGame/controller'
 warGameController({
   room: warGameRoom,
-  updateCallback: render,
+  updateCallback: (getState) => {
+    const state = getState ? getState() : {}
+    state
+  }
 })
 
 warGameRoom.onJoin.add(function () {
@@ -61,26 +45,4 @@ warGameRoom.onError.add(function () {
 })
 
 // Initial render plz
-render()
-
-// Keep updating 
-// warGameRoom.onUpdate.add(function(state) {
-//   if(page === 'warGame') render()
-// })
-
-// warGameRoom.onData.add(e => {
-//   if(e.event === 'game.error'){
-//     console.error('game.error: ', e.data)
-//   }
-// })
-
-// warGameRoom.listen('clients', change => {
-//   console.log('clients changed', change)
-// })
-// warGameRoom.listen('host', change => {
-//   console.log('host changed', change)
-// })
-
-// chatRoom.listen(function(change) {
-//   console.log('patch:', change.path, change.operation, change.value)
-// })
+// render()
