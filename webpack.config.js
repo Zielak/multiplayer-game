@@ -2,7 +2,7 @@ const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const webpack = require('webpack')
 
-const main = { // eslint-disable-line no-unused-vars
+const main = {
   entry: './client/index.js',
   output: {
     filename: 'index.js',
@@ -41,34 +41,6 @@ const main = { // eslint-disable-line no-unused-vars
       template: 'client/index.ejs'
     }),
     new webpack.HotModuleReplacementPlugin()
-  ]
-}
-
-const positionTest = { // eslint-disable-line no-unused-vars
-  entry: './client/testPositions.js',
-  output: {
-    filename: 'testPositions.js',
-    path: path.resolve(__dirname, 'dist')
-  },
-  devtool: 'inline-source-map',
-  devServer: {
-    contentBase: './dist',
-    // hot: true
-  },
-  module: {
-    loaders: [
-      {
-        test: /\.js$/,
-        exclude: /node_modules/,
-        loaders: ['babel-loader'],
-      },
-    ],
-  },
-  plugins: [
-    new HtmlWebpackPlugin({
-      template: 'client/testPositions.ejs'
-    }),
-    // new webpack.HotModuleReplacementPlugin()
   ]
 }
 

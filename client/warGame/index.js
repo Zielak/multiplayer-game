@@ -50,7 +50,6 @@ WarGame.propTypes = {
   containers: PropTypes.array,
 
   host: PropTypes.string,
-  testScore: PropTypes.number,
 }
 
 export default WarGame
