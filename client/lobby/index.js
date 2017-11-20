@@ -2,8 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Redux from 'redux'
 
-import ClientsList from './../components/clientsList'
-import Messages from './messages'
+// import ClientsList from './../components/clientsList'
+// import Messages from './messages'
 
 // TODO: don't load styles when not in view?
 require('./styles.scss')

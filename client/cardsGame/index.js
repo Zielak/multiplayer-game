@@ -5,6 +5,8 @@ export { default as Pile } from './containers/pile/pile'
 export { default as Row } from './containers/row/row'
 export { default as Table } from './table/table'
 
+export { default as Player } from './player/player'
+
 export { default as PlayerEvent } from './events/playerEvent'
 
 import './main.scss'
