@@ -1,8 +1,6 @@
+import PIXI from 'pixi.js'
 
-import React from 'react'
 import PropTypes from 'prop-types'
-
-import './player.scss'
 
 // const positionFromAngle = (angle, distance) => {
 //   const x = distance * Math.cos(angle * (Math.PI * 2 / 360))
@@ -10,24 +8,20 @@ import './player.scss'
 //   return {left: x+50+'%', top: y+50+'%'}
 // }
 
-class Player extends React.Component {
+class Player extends PIXI.Container {
 
-  render() {
-    return (
-      <div className="Player" style={this.parseStyle()}>
-        <div className="icon">
-          <div className="name">{this.props.name}</div>
-        </div>
-      </div>
-    )
-  }
+  constructor(props) {
+    super()
+    this.props = props
+    this.icon = new PIXI.Sprite()
+    this.label = new PIXI.Text(this.props.name, {
+      fill: ['#ffffff', '#00ff99'],
+      stroke: '#4a1850',
+      strokeThickness: 5,
+    })
 
-  parseStyle() {
-    return {
-      left: this.props.x + '%',
-      top: this.props.y + '%',
-      '--angle': this.props.angle + 'deg',
-    }
+    this.addChild(this.icon)
+    this.addChild(this.label)
   }
 
 }

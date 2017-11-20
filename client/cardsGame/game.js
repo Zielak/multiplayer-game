@@ -11,6 +11,10 @@ class Game {
     // can then insert into the DOM.
     document.body.appendChild(this.app.view)
   }
+
+  get stage() {
+    return this.app.stage
+  }
 }
 
 export default Game

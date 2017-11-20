@@ -1,24 +1,25 @@
+import PIXI from 'pixi.js'
+
 /**
  * Decides where each part of the game should be placed,
  * RWD
  */
-import React from 'react'
 import PropTypes from 'prop-types'
-import { rotateDEG, translate, transform, identity, applyToPoint } from 'transformation-matrix'
+/*
+import { rotateDEG, translate, transform, identity } from 'transformation-matrix'
 
-import ClassicCard from '../card/classicCard'
+// import ClassicCard from '../card/classicCard'
 import {
-  findAllParents,
+  // findAllParents,
   findAllChildren,
   def,
 } from '../../../shared/utils.js'
 
-import Player from '../player/player'
+// import Player from '../player/player'
 import Deck from '../containers/deck/deck'
 import Pile from '../containers/pile/pile'
 import Hand from '../containers/hand/hand'
-
-import './table.scss'
+*/
 
 // TODO: align angle to the current player
 // const startingAngle = 90
@@ -30,7 +31,7 @@ const getOwnerId = (element) => {
     return element
   }
 }
-
+/*
 const addRenderingProps = (element) => {
   return {
     ...element,
@@ -76,6 +77,7 @@ const parentTransforms = {
   hand: Hand.restyleChild,
   pile: Pile.restyleChild,
 }
+
 const applyParentTransform = (element, idx, everything) => {
   // This method is only for parents
   if (!element.children || element.children.length === 0 || !parentTransforms[element.type]) {
@@ -105,89 +107,18 @@ const applyParentTransform = (element, idx, everything) => {
       child.zIndex += def(newTransform.zIndex, 0)
     })
   return element
-}
-
-const setWorldCoordinates = (element, idx, everything) => {
-  const allParents = findAllParents(element, everything)
-  const parentTransforms = allParents.map(el => el.localTransform)
-  const resultTransform = transform([
-    ...parentTransforms,
-    element.localTransform,
-  ])
-  const point = applyToPoint(resultTransform, { x: 0, y: 0 })
-  const angle = allParents.reduce((acc, el) => acc + el._local.angle + el.angle, element.angle)
-  return {
-    ...element,
-    x: point.x,
-    y: point.y,
-    angle: angle,
-  }
-}
-
-const stripUndefinedChildren = element => {
-  if (!element.children) {
-    return element
-  }
-  return {
-    ...element,
-    children: element.children.filter(child => typeof child !== 'undefined' && child !== null)
-  }
-}
-
-// Passes the event up to the game controller (i hope)
-/*const addEventHandlers = context => {
-  element => {
-    element.interactionHandler = (event) => {
-      context.interactionHandler(event)
-    }
-    return element
-  }
 }*/
 
-const renderElements = (element, idx) => {
-  // Finally render them all to React components
+class Table extends PIXI.Container {
 
-  switch (element.type) {
-  case 'player':
-    return <Player key={'player' + idx} {...element} />
-  case 'deck':
-    return <Deck key={'deck' + idx} {...element} />
-  case 'hand':
-    return <Hand key={'hand' + idx} {...element} />
-  case 'pile':
-    return <Pile key={'pile' + idx} {...element} />
-  case 'card':
-    return <ClassicCard key={'card' + idx} {...element} />
+  constructor(props){
+    super()
+    this.props = props
+    
   }
-}
 
-class Table extends React.Component {
+  updatePlayers() {
 
-  render() {
-
-    // Parse all current objects from props
-    // Returns renderable html elements
-    const players = (this.props.players ? [...this.props.players.list] : [])
-      .map(addTransformForPlayers)
-
-    const elements = [
-      ...this.props.cards || [],
-      ...this.props.containers || [],
-      ...players,
-    ]
-      .map(addRenderingProps)
-      .map(addLocalTransform)
-      .map(applyParentTransform)
-      .map(setWorldCoordinates)
-      .map(stripUndefinedChildren)
-      // .map(addEventHandlers(this))
-      .map(renderElements)
-
-    return (
-      <div className='Table'>
-        {elements}
-      </div>
-    )
   }
 
 }

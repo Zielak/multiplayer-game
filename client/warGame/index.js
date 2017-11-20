@@ -1,49 +1,81 @@
 import PropTypes from 'prop-types'
-import {
-  Game//, Table
-} from '../cardsGame/index'
+import store from './store'
 
-require('./game.scss')
+import {
+  cardsListener,
+  containersListener,
+  playersListener,
+} from './listeners/index'
+
+import {
+  Game, Table
+} from '../cardsGame/index'
 
 class WarGame extends Game {
 
-  constructor({ players, cards, containers, host }) {
+  constructor(props) {
     super()
-    this.players = players
-    this.cards = cards
-    this.containers = containers
-    this.host = host
+    this.props = props
+
+    this.table = new Table(props)
+
+    this.startListening()
   }
 
-  render() {
-    // return (
-    //   <div className='game'>
-    //     <div className='flex header'>
-    //       <div>
-    //         <h1>WarGame</h1>
-    //       </div>
-    //       <div>
-    //         <button onClick={() => this.props.testDealHandler()}>
-    //           Test Deal
-    //         </button>
-    //       </div>
-    //     </div>
-    //     <Table
-    //       players={this.props.players}
-    //       cards={this.props.cards}
-    //       containers={this.props.containers}
-    //       eventHandlers={{
-    //         cardPicked: this.props.cardPickedHandler,
-    //         containerPicked: this.props.containerPickedHandler,
-    //       }}
-    //     ></Table>
-    //     <PlayersList
-    //       title='Players'
-    //       players={this.props.players}
-    //       host={this.props.host}
-    //     ></PlayersList>
-    //   </div>
-    // )
+  startListening() {
+    const room = this.props.room
+    console.log('creating controller, listening for new stuff')
+
+    room.onUpdate.addOnce(state => {
+      console.log('initial lobby data:', state)
+      state.clients.forEach((el, idx) => store.dispatch({
+        type: 'clients.add',
+        data: {
+          idx, name: el
+        },
+      }))
+      store.dispatch({
+        type: 'host.set',
+        data: state.host,
+      })
+    })
+
+    // room.onUpdate.add(state => {
+    //   console.log('UPDATE', state)
+    //   updateCallback.call(null, store.getState)
+    // })
+
+    // listen to patches coming from the server
+    room.listen('clients/:number', (change) => {
+      console.log('new client change arrived: ', change)
+      store.dispatch({
+        type: 'clients.' + change.operation,
+        data: {
+          idx: parseInt(change.path.number),
+          name: change.value,
+        }
+      })
+    })
+
+    room.listen('host', (change) => {
+      console.log('host changed: ', change)
+      store.dispatch({
+        type: 'host.' + change.operation,
+        data: change.value
+      })
+    })
+
+    cardsListener(room)
+    containersListener(room)
+    playersListener(room)
+
+    room.listen('GameStart', () => {
+      console.log('GameStart!? ', arguments)
+    })
+  }
+
+  storeToTable() {
+    
   }
 }
 
@@ -53,6 +85,7 @@ WarGame.propTypes = {
   players: PropTypes.object,
   cards: PropTypes.array,
   containers: PropTypes.array,
+  room: PropTypes.object,
 
   host: PropTypes.string,
 }

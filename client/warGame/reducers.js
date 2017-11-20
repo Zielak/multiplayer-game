@@ -1,5 +1,10 @@
+import { Player } from '../cardsGame/index'
+import { Container } from 'pixi.js' // eslint-disable-line no-unused-vars
 
-module.exports.players = (state, action) => {
+/**
+ * @param {Container} stage 
+ */
+module.exports.players = (stage) => (state, action) => {
   let newList
   if (state === undefined) {
     return {
@@ -12,12 +17,14 @@ module.exports.players = (state, action) => {
   switch (action.type) {
   case 'players.add':
     newList = [...state.list]
-    newList[action.data.idx] = action.data.player
+    newList[action.data.idx] = new Player(action.data.player)
+    stage.addChild(newList[action.data.idx])
     return {
       ...state,
       list: [...newList]
     }
   case 'players.remove':
+    stage.removeChild(state.list[action.data.idx])
     return {
       ...state,
       list: [
@@ -30,6 +37,7 @@ module.exports.players = (state, action) => {
       ...state,
       list: state.list.map(player => {
         if (action.data.idx !== player.idx) {
+          stage.removeChild(state.list[action.data.idx])
           return player
         }
         return {
@@ -38,20 +46,20 @@ module.exports.players = (state, action) => {
         }
       })
     }
-    // case 'players.update':
-    //   return {
-    //     ...state,
-    //     list: state.list.map(player => {
-    //       if(player.id === action.data.player.id){
-    //         return {
-    //           ...player,
-    //           ...action.data.player
-    //         }
-    //       } else {
-    //         return player
-    //       }
-    //     })
-    //   }
+  // case 'players.update':
+  //   return {
+  //     ...state,
+  //     list: state.list.map(player => {
+  //       if(player.id === action.data.player.id){
+  //         return {
+  //           ...player,
+  //           ...action.data.player
+  //         }
+  //       } else {
+  //         return player
+  //       }
+  //     })
+  //   }
   case 'players.reversed':
     return {
       ...state,
@@ -62,7 +70,11 @@ module.exports.players = (state, action) => {
   }
 }
 
-module.exports.containers = (state = [], action) => {
+/**
+ * @param {Container} stage 
+ */
+module.exports.containers = (stage) => (state = [], action) => {
+  stage
   let newState
   switch (action.type) {
   case 'containers.add':
@@ -125,7 +137,11 @@ module.exports.containers = (state = [], action) => {
   }
 }
 
-module.exports.cards = (state = [], action) => {
+/**
+ * @param {Container} stage 
+ */
+module.exports.cards = (stage) => (state = [], action) => {
+  stage
   let newState
   switch (action.type) {
   case 'cards.add':
@@ -160,7 +176,11 @@ module.exports.cards = (state = [], action) => {
   }
 }
 
-module.exports.host = (state = null, action) => {
+/**
+ * @param {Container} stage 
+ */
+module.exports.host = (stage) => (state = null, action) => {
+  stage
   action.type === 'host.add'
   switch (action.type) {
   case 'host.add':
@@ -171,19 +191,15 @@ module.exports.host = (state = null, action) => {
   }
 }
 
-module.exports.gameState = (state = {}/*, action*/) => {
+/**
+ * @param {Container} stage 
+ */
+module.exports.gameState = (stage) => (state = {}/*, action*/) => {
+  stage
   if (state === undefined) {
     return {
       started: false,
     }
-  } else {
-    return state
-  }
-}
-
-module.exports.testScore = (state = 0, action) => {
-  if (action.type === 'testScore.replace' || action.type === 'testScore.add') {
-    return action.data
   } else {
     return state
   }
