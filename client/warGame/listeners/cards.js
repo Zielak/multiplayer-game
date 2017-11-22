@@ -1,4 +1,4 @@
-export default ({room, store}) => {
+export default ({ room, store }) => {
   room.listen('cards/:idx', (change) => {
     store.dispatch({
       type: 'cards.' + change.operation,
@@ -10,7 +10,7 @@ export default ({room, store}) => {
   })
 
   room.listen('cards/:idx/:attribute', (change) => {
-    console.log(`card ${change.path.idx} changed attribute ${change.path.attribute} to ${change.value} (${change.operation})`)
+    // console.log(`card ${change.path.idx} changed attribute ${change.path.attribute} to ${change.value} (${change.operation})`)
     store.dispatch({
       type: 'cards.update',
       data: {
