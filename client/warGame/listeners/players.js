@@ -1,6 +1,4 @@
-import store from '../store'
-
-export default room => {
+export default ({room, store}) => {
   room.listen('players/list/:idx', (change) => {
     console.log('player list changed: ', change)
     store.dispatch({

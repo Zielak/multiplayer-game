@@ -1,4 +1,4 @@
-import PIXI from 'pixi.js'
+import { Container, Sprite, Text } from 'pixi.js'
 import PropTypes from 'prop-types'
 
 // const positionFromAngle = (angle, distance) => {
@@ -7,13 +7,13 @@ import PropTypes from 'prop-types'
 //   return {left: x+50+'%', top: y+50+'%'}
 // }
 
-class Player extends PIXI.Container {
+class Player extends Container {
 
   constructor(props) {
     super()
     this.props = props
-    this.icon = new PIXI.Sprite()
-    this.label = new PIXI.Text(this.props.name, {
+    this.icon = new Sprite()
+    this.label = new Text(this.props.name, {
       fill: ['#ffffff', '#00ff99'],
       stroke: '#4a1850',
       strokeThickness: 5,

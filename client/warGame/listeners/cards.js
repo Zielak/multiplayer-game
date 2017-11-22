@@ -1,6 +1,4 @@
-import store from '../store'
-
-export default room => {
+export default ({room, store}) => {
   room.listen('cards/:idx', (change) => {
     store.dispatch({
       type: 'cards.' + change.operation,

@@ -1,4 +1,4 @@
-import PIXI from 'pixi.js'
+import { Container } from 'pixi.js'
 
 /**
  * Decides where each part of the game should be placed,
@@ -109,7 +109,7 @@ const applyParentTransform = (element, idx, everything) => {
   return element
 }*/
 
-class Table extends PIXI.Container {
+class Table extends Container {
 
   constructor(props){
     super()
