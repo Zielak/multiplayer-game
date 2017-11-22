@@ -1,13 +1,7 @@
-export default ({room, store}) => {
+export default ({ room, game }) => {
   room.listen('players/list/:idx', (change) => {
     console.log('player list changed: ', change)
-    store.dispatch({
-      type: 'players.' + change.operation,
-      data: {
-        idx: parseInt(change.path.idx),
-        player: change.value,
-      }
-    })
+    game.table.updatePlayer(change.operation, parseInt(change.path.idx), change.value)
   })
   room.listen('players/reversed', (change) => {
     console.log('player reversed changed: ', change)

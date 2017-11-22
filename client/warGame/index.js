@@ -7,29 +7,13 @@ import {
 } from './listeners/index'
 
 import {
-  players,
-  host,
-  containers,
-  cards,
-  gameState,
-} from './reducers'
-
-import {
   Game
 } from '../cardsGame/index'
 
 class WarGame extends Game {
 
   constructor(props) {
-    super({
-      reducers: {
-        players,
-        host,
-        containers,
-        cards,
-        gameState,
-      }
-    })
+    super()
     this.props = props
 
     this.startListening()
@@ -41,7 +25,7 @@ class WarGame extends Game {
 
     room.onUpdate.addOnce(state => {
       console.log('initial lobby data:', state)
-      state.clients.forEach((el, idx) => this.store.dispatch({
+      /*state.clients.forEach((el, idx) => this.store.dispatch({
         type: 'clients.add',
         data: {
           idx, name: el
@@ -50,7 +34,7 @@ class WarGame extends Game {
       this.store.dispatch({
         type: 'host.set',
         data: state.host,
-      })
+      })*/
     })
 
     room.onUpdate.add(state => {
@@ -61,32 +45,26 @@ class WarGame extends Game {
     // listen to patches coming from the server
     room.listen('clients/:number', (change) => {
       console.log('new client change arrived: ', change)
-      this.store.dispatch({
+      /*this.store.dispatch({
         type: 'clients.' + change.operation,
         data: {
           idx: parseInt(change.path.number),
           name: change.value,
         }
-      })
+      })*/
     })
 
     room.listen('host', (change) => {
       console.log('host changed: ', change)
-      this.store.dispatch({
+      /*this.store.dispatch({
         type: 'host.' + change.operation,
         data: change.value
-      })
+      })*/
     })
 
-    cardsListener({
-      room, store: this.store
-    })
-    containersListener({
-      room, store: this.store
-    })
-    playersListener({
-      room, store: this.store
-    })
+    cardsListener({ room, game: this })
+    containersListener({ room, game: this })
+    playersListener({ room, game: this })
 
     room.listen('GameStart', () => {
       console.log('GameStart!? ', arguments)
@@ -94,7 +72,7 @@ class WarGame extends Game {
   }
 
   storeToTable() {
-    
+
   }
 }
 
