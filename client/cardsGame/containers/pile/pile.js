@@ -5,28 +5,41 @@
 /**
  * Container of neatly packed cards in one column.
  */
-import React from 'react'
+import PIXI from 'pixi.js'
 import PropTypes from 'prop-types'
+import ClassicCard from '../../card/classicCard'
 import { procNumberFromString } from '../../../../shared/utils'
 
-import './pile.scss'
+const labelText = (children) => `PILE of ${children.length} cards`
 
-class Pile extends React.Component {
+class Pile extends PIXI.Container {
+  
+  constructor(props) {
+    super()
+    this.props = props
 
-  render() {
-    return (
-      <div className="Pile" style={this.parseStyle()}>
-        <div className="label">PILE</div>
-      </div>
-    )
+    this.draw()
   }
+  
+  draw() {
+    this.bg = new PIXI.Graphics()
+    const radius = Math.max(ClassicCard.width, ClassicCard.height) / 2
 
-  parseStyle() {
-    return {
-      left: this.props.x + '%',
-      top: this.props.y + '%',
-      '--angle': this.props.angle + 'deg',
-    }
+    this.bg.beginFill(0x491008, 0.1)
+    this.bg.lineStyle(3, 0xff754a, 1)
+    this.bg.drawCircle(0, 0, radius)
+    this.label = new PIXI.Text(labelText(this.props.children), {
+      fill: ['#ffffff', '#00ff99'],
+      stroke: '#ff6600',
+      strokeThickness: 1,
+    })
+
+    this.addChild(this.bg)
+    this.addChild(this.label)
+  }
+  
+  redraw() {
+    this.label.text = labelText(this.props.children)
   }
 }
 
