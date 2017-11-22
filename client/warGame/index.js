@@ -41,10 +41,10 @@ class WarGame extends Game {
       })
     })
 
-    // room.onUpdate.add(state => {
-    //   console.log('UPDATE', state)
-    //   updateCallback.call(null, this.store.getState)
-    // })
+    room.onUpdate.add(state => {
+      console.log('UPDATE', state)
+      // updateCallback.call(null, this.store.getState)
+    })
 
     // listen to patches coming from the server
     room.listen('clients/:number', (change) => {
@@ -66,9 +66,15 @@ class WarGame extends Game {
       })
     })
 
-    cardsListener(room)
-    containersListener(room)
-    playersListener(room)
+    cardsListener({
+      room, store: this.store
+    })
+    containersListener({
+      room, store: this.store
+    })
+    playersListener({
+      room, store: this.store
+    })
 
     room.listen('GameStart', () => {
       console.log('GameStart!? ', arguments)

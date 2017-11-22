@@ -1,13 +1,13 @@
 /**
  * Container of neatly packed cards in one column.
  */
-import PIXI from 'pixi.js'
+import { Container, Text, Graphics } from 'pixi.js'
 import PropTypes from 'prop-types'
 import ClassicCard from '../../card/classicCard'
 
 const labelText = (children) => `DECK of ${children.length} cards`
 
-class Deck extends PIXI.Container {
+class Deck extends Container {
 
   constructor(props) {
     super()
@@ -17,7 +17,7 @@ class Deck extends PIXI.Container {
   }
 
   draw() {
-    this.bg = new PIXI.Graphics()
+    this.bg = new Graphics()
 
     this.bg.beginFill(0x491008, 0.1)
     this.bg.lineStyle(3, 0xff754a, 1)
@@ -28,7 +28,7 @@ class Deck extends PIXI.Container {
       ClassicCard.height,
       8
     )
-    this.label = new PIXI.Text(labelText(this.props.children), {
+    this.label = new Text(labelText(this.props.children), {
       fill: ['#ffffff', '#00ff99'],
       stroke: '#4a1850',
       strokeThickness: 5,

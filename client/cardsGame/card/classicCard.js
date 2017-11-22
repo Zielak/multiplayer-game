@@ -1,7 +1,7 @@
-import PIXI from 'pixi.js'
+import { Container, Graphics, Text } from 'pixi.js'
 import PropTypes from 'prop-types'
 
-class ClassicCard extends PIXI.Container {
+class ClassicCard extends Container {
 
   constructor(props) {
     super()
@@ -11,7 +11,7 @@ class ClassicCard extends PIXI.Container {
   }
 
   draw() {
-    this.bg = new PIXI.Graphics()
+    this.bg = new Graphics()
 
     this.bg.beginFill(0xFFFFFF, 1)
     this.bg.drawRoundedRect(
@@ -21,11 +21,11 @@ class ClassicCard extends PIXI.Container {
       ClassicCard.height,
       8
     )
-    this.rank = new PIXI.Text(
+    this.rank = new Text(
       this.getRankText(this.props.rank),
       this.getRankStyle(this.props.rank)
     )
-    this.suit = new PIXI.Text(
+    this.suit = new Text(
       this.getSuitText(this.props.suit),
       this.getSuitStyle(this.props.suit)
     )
