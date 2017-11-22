@@ -1,5 +1,4 @@
 import PIXI from 'pixi.js'
-
 import PropTypes from 'prop-types'
 
 // const positionFromAngle = (angle, distance) => {

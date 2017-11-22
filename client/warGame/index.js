@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types'
-import store from './store'
+import Store from './store'
 
 import {
   cardsListener,
@@ -18,6 +18,7 @@ class WarGame extends Game {
     this.props = props
 
     this.table = new Table(props)
+    this.store = new Store(this.stage)
 
     this.startListening()
   }
@@ -28,13 +29,13 @@ class WarGame extends Game {
 
     room.onUpdate.addOnce(state => {
       console.log('initial lobby data:', state)
-      state.clients.forEach((el, idx) => store.dispatch({
+      state.clients.forEach((el, idx) => this.store.dispatch({
         type: 'clients.add',
         data: {
           idx, name: el
         },
       }))
-      store.dispatch({
+      this.store.dispatch({
         type: 'host.set',
         data: state.host,
       })
@@ -42,13 +43,13 @@ class WarGame extends Game {
 
     // room.onUpdate.add(state => {
     //   console.log('UPDATE', state)
-    //   updateCallback.call(null, store.getState)
+    //   updateCallback.call(null, this.store.getState)
     // })
 
     // listen to patches coming from the server
     room.listen('clients/:number', (change) => {
       console.log('new client change arrived: ', change)
-      store.dispatch({
+      this.store.dispatch({
         type: 'clients.' + change.operation,
         data: {
           idx: parseInt(change.path.number),
@@ -59,7 +60,7 @@ class WarGame extends Game {
 
     room.listen('host', (change) => {
       console.log('host changed: ', change)
-      store.dispatch({
+      this.store.dispatch({
         type: 'host.' + change.operation,
         data: change.value
       })

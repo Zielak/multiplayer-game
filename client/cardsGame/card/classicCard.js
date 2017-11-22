@@ -1,56 +1,55 @@
-import React from 'react'
+import PIXI from 'pixi.js'
 import PropTypes from 'prop-types'
 
-require('./classicCard.scss')
+class ClassicCard extends PIXI.Container {
 
-class ClassicCard extends React.Component {
+  constructor(props) {
+    super()
+    this.props = props
 
-  render() {
-    const render = this.props.state.faceUp ?
-      this.renderFrontGraphics(this.props.suit, this.props.rank) :
-      this.renderBackGraphics()
+    this.draw()
+  }
 
-    return (
-      <div className="ClassicCard" style={this.parseStyle()}>
-        {render}
-        <span className="debug">{this.props.name}</span>
-      </div>
+  draw() {
+    this.bg = new PIXI.Graphics()
+
+    this.bg.beginFill(0xFFFFFF, 1)
+    this.bg.drawRoundedRect(
+      -ClassicCard.width / 2,
+      -ClassicCard.height / 2,
+      ClassicCard.width,
+      ClassicCard.height,
+      8
     )
+    this.rank = new PIXI.Text(
+      this.getRankText(this.props.rank),
+      this.getRankStyle(this.props.rank)
+    )
+    this.suit = new PIXI.Text(
+      this.getSuitText(this.props.suit),
+      this.getSuitStyle(this.props.suit)
+    )
+
+    this.addChild(this.bg)
+    this.addChild(this.rank)
+    this.addChild(this.suit)
   }
 
-  parseStyle() {
-    return {
-      left: this.props.x + '%',
-      top: this.props.y + '%',
-      '--angle': this.props.angle + 'deg',
-      zIndex: this.props.zIndex,
-    }
+  redraw() {
+    this.rank.text = this.getRankText(this.props.rank)
+    this.rank.style = this.getRankStyle(this.props.rank)
+
+    this.suit.text = this.getSuitText(this.props.suit)
+    this.suit.style = this.getSuitStyle(this.props.suit)
+    
+    this.rank.visible = this.suit.visible = this.props.state.faceUp
   }
 
-  renderFrontGraphics(suit, rank) {
-    return <div className={`front suit-${suit}`} onClick={e => this.props.interactionHandler(e)}>
-      <div className="icons">
-        <div className="rank">{this.renderRank(rank)}</div>
-        <div className="suit">{this.renderSuit(suit)}</div>
-      </div>
-      <div className="icons reverse">
-        <div className="rank">{this.renderRank(rank)}</div>
-        <div className="suit">{this.renderSuit(suit)}</div>
-      </div>
-    </div>
-  }
-
-  renderBackGraphics() {
-    return <div className="back">
-
-    </div>
-  }
-
-  renderRank(rank) {
+  getRankText(rank) {
     return rank
   }
 
-  renderSuit(suit) {
+  getSuitText(suit) {
     switch (suit) {
     case 'D': return '♦'
     case 'C': return '♣'
@@ -59,7 +58,25 @@ class ClassicCard extends React.Component {
     }
   }
 
+  getRankStyle() {
+    return {
+      fill: '#000000',
+    }
+  }
+
+  getSuitStyle(suit) {
+    switch (suit) {
+    case 'D': return { fill: ['#66ccff', '#0066ff'] }
+    case 'C': return { fill: ['#66ff66', '#00ff00'] }
+    case 'H': return { fill: ['#ff6666', '#ff0000'] }
+    case 'S': return { fill: ['#666666', '#000000'] }
+    }
+  }
+
 }
+
+ClassicCard.width = 6.35
+ClassicCard.height = 8.89
 
 ClassicCard.propTypes = {
   id: PropTypes.string,
