@@ -1,4 +1,5 @@
 import { Container } from 'pixi.js'
+import { Player } from '../index'
 
 /**
  * Decides where each part of the game should be placed,
@@ -111,7 +112,7 @@ const applyParentTransform = (element, idx, everything) => {
 
 class Table extends Container {
 
-  constructor(props){
+  constructor(props) {
     super()
     this.name = 'table'
     this.props = props
@@ -119,8 +120,23 @@ class Table extends Container {
     this.players = new Container()
   }
 
-  updatePlayers() {
-
+  updatePlayer(operation, idx, data) {
+    switch (operation) {
+    case 'add':
+      this.players.addChildAt(new Player(data), idx)
+      break
+    case 'remove':
+      // TODO: confirm that players always have the same idx
+      this.players.removeChildAt(idx)
+      break
+    case 'replace':
+      this.players.removeChildAt(idx)
+      this.players.addChildAt(new Player(data), idx)
+      break
+    case 'update':
+      this.players.getChildAt(idx).props = data
+      break
+    }
   }
 
 }

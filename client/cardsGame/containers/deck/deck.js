@@ -1,18 +1,22 @@
 /**
  * Container of neatly packed cards in one column.
  */
-import { Container, Text, Graphics } from 'pixi.js'
+import { Text, Graphics } from 'pixi.js'
 import PropTypes from 'prop-types'
-import ClassicCard from '../../card/classicCard'
+import { ClassicCard, Component } from '../../index'
 
 const labelText = (children) => `DECK of ${children.length} cards`
 
-class Deck extends Container {
+/**
+ * 
+ * 
+ * @class Deck
+ * @extends {Component}
+ */
+class Deck extends Component {
 
   constructor(props) {
-    super()
-    this.props = props
-
+    super(props)
     this.draw()
   }
 
@@ -41,6 +45,11 @@ class Deck extends Container {
   redraw() {
     this.label.text = labelText(this.props.children)
   }
+
+  didReceiveProps() {
+    this.redraw()
+  }
+
 }
 
 Deck.restyleChild = (child, idx/*, length*/) => {

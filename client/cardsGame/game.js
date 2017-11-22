@@ -1,14 +1,8 @@
 import { Application } from 'pixi.js'
-import {
-  combineReducers,
-  createStore,
-  Store // eslint-disable-line no-unused-vars
-} from 'redux'
-
 import Table from './table/table'
 
 class Game {
-  constructor({ reducers }) {
+  constructor() {
     // The application will create a renderer using WebGL, if possible,
     // with a fallback to a canvas render. It will also setup the ticker
     // and the root stage PIXI.Container.
@@ -19,10 +13,6 @@ class Game {
     document.body.appendChild(this.app.view)
 
     this.table = new Table()
-
-    this.store = createStore(combineReducers(
-      Object.keys(reducers).map(key => reducers[key](this))
-    ))
   }
 
   get stage() {
