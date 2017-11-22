@@ -113,8 +113,10 @@ class Table extends Container {
 
   constructor(props){
     super()
+    this.name = 'table'
     this.props = props
-    
+
+    this.players = new Container()
   }
 
   updatePlayers() {

@@ -1,5 +1,4 @@
 import PropTypes from 'prop-types'
-import Store from './store'
 
 import {
   cardsListener,
@@ -8,17 +7,30 @@ import {
 } from './listeners/index'
 
 import {
-  Game, Table
+  players,
+  host,
+  containers,
+  cards,
+  gameState,
+} from './reducers'
+
+import {
+  Game
 } from '../cardsGame/index'
 
 class WarGame extends Game {
 
   constructor(props) {
-    super()
+    super({
+      reducers: {
+        players,
+        host,
+        containers,
+        cards,
+        gameState,
+      }
+    })
     this.props = props
-
-    this.table = new Table(props)
-    this.store = new Store(this.stage)
 
     this.startListening()
   }
