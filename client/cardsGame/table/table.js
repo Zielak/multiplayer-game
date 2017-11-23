@@ -118,12 +118,18 @@ class Table extends Container {
     this.props = props
 
     this.players = new Container()
+
+    this.addChild(this.players)
   }
 
   updatePlayer(operation, idx, data) {
+    const _data = {
+      ...data,
+      idx
+    }
     switch (operation) {
     case 'add':
-      this.players.addChildAt(new Player(data), idx)
+      this.players.addChild(new Player(_data))
       break
     case 'remove':
       // TODO: confirm that players always have the same idx
@@ -131,7 +137,7 @@ class Table extends Container {
       break
     case 'replace':
       this.players.removeChildAt(idx)
-      this.players.addChildAt(new Player(data), idx)
+      this.players.addChild(new Player(_data))
       break
     case 'update':
       this.players.getChildAt(idx).props = data

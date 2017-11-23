@@ -13,6 +13,7 @@ class Game {
     document.body.appendChild(this.app.view)
 
     this.table = new Table()
+    this.stage.addChild(this.table)
   }
 
   get stage() {

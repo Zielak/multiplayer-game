@@ -17,6 +17,10 @@ class Component extends Container {
     super()
     this.props = props
   }
+  
+  get idx() {
+    return this.props.idx
+  }
 
   set props(value) {
     const newProps = Object.assign({}, value)
