@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 export default ({ room, game }) => {
   room.listen('players/list/:idx', (change) => {
     console.log('player list changed: ', change)

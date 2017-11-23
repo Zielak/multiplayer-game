@@ -7,12 +7,6 @@ import { ClassicCard, Component } from '../../index'
 
 const labelText = (children) => `DECK of ${children.length} cards`
 
-/**
- * 
- * 
- * @class Deck
- * @extends {Component}
- */
 class Deck extends Component {
 
   constructor(props) {
