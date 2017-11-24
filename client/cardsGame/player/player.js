@@ -1,12 +1,6 @@
 import { Container, Sprite, Text } from 'pixi.js'
 import PropTypes from 'prop-types'
 
-// const positionFromAngle = (angle, distance) => {
-//   const x = distance * Math.cos(angle * (Math.PI * 2 / 360))
-//   const y = distance * Math.sin(angle * (Math.PI * 2 / 360))
-//   return {left: x+50+'%', top: y+50+'%'}
-// }
-
 class Player extends Container {
 
   constructor(props) {
@@ -30,7 +24,6 @@ Player.propTypes = {
   name: PropTypes.string,
   children: PropTypes.array,
 
-  localTransform: PropTypes.object,
   x: PropTypes.number,
   y: PropTypes.number,
   angle: PropTypes.number,
