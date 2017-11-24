@@ -1,5 +1,5 @@
 import { Container } from 'pixi.js'
-import { Player } from '../index'
+import { Player, Game } from '../index'
 
 /**
  * Decides where each part of the game should be placed,
@@ -32,6 +32,24 @@ const getOwnerId = (element) => {
     return element
   }
 }
+
+/**
+ * 
+ * @param {Player} player 
+ * @param {*} idx 
+ * @param {*} players 
+ */
+const positionPlayers = (player, idx, players) => {
+  const angle = Math.PI * 2 / players.length * idx
+  const point = {
+    x: Game.width / 2 + Math.sin(angle) * (Game.width * 0.4),
+    y: Game.height / 2 + Math.cos(angle) * (Game.height * 0.4),
+  }
+  player.rotation = -angle
+  player.x = point.x
+  player.y = point.y
+}
+
 /*
 const addRenderingProps = (element) => {
   return {
@@ -143,6 +161,12 @@ class Table extends Container {
       this.players.getChildAt(idx).props = data
       break
     }
+
+    this.update()
+  }
+
+  update() {
+    this.players.children.forEach(positionPlayers)
   }
 
 }
