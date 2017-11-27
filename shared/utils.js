@@ -98,9 +98,11 @@ const procNumberFromString = (str, min = 0, max = 1) => {
     return limit(output, bMin, bMax)
   }, Math.abs(bMax - bMin) / 2 + bMin)
 
-  const percent = (result-bMin) / Math.abs(bMax-bMin) * Math.abs(min-max) - Math.abs(min)
+  const percent = (result - bMin) / Math.abs(bMax - bMin) * Math.abs(min - max) - Math.abs(min)
   return percent
 }
+
+const appendIdx = (object, idx) => ({ ...object, idx })
 
 module.exports = {
   float,
@@ -117,4 +119,5 @@ module.exports = {
   deg2rad,
   string2bytes,
   procNumberFromString,
+  appendIdx,
 }

@@ -1,7 +1,8 @@
-import { Container, Sprite, Text } from 'pixi.js'
+import { Sprite, Text } from 'pixi.js'
 import PropTypes from 'prop-types'
+import { Component } from '../index'
 
-class Player extends Container {
+class Player extends Component {
 
   constructor(props) {
     super()
@@ -15,6 +16,10 @@ class Player extends Container {
 
     this.addChild(this.icon)
     this.addChild(this.label)
+  }
+  
+  willReceiveProps(props) {
+    this.label.text = props.name
   }
 
 }

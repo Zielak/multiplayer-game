@@ -17,7 +17,7 @@ class Component extends Container {
     super()
     this.props = props
   }
-  
+
   get idx() {
     return this.props.idx
   }
