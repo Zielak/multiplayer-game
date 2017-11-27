@@ -10,11 +10,11 @@ import './hand.scss'
 class Hand extends React.Component {
 
   render() {
-    return (
-      <div className="Hand" style={this.parseStyle()}>
+    // return (
+    //   <div className="Hand" style={this.parseStyle()}>
 
-      </div>
-    )
+    //   </div>
+    // )
   }
 
   parseStyle() {

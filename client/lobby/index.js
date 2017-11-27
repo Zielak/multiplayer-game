@@ -106,20 +106,20 @@ class Lobby extends React.Component{
   }
 
   render() {
-    return (
-      <div className="flex">
-        <Messages
-          messages={store.getState().messages}
-          sendMessageHandler={message => {
-            this.props.room.send({ message })
-          }}
-        ></Messages>
-        <ClientsList
-          title="Clients"
-          clients={store.getState().clients}
-        ></ClientsList>
-      </div>
-    )
+    // return (
+    //   <div className="flex">
+    //     <Messages
+    //       messages={store.getState().messages}
+    //       sendMessageHandler={message => {
+    //         this.props.room.send({ message })
+    //       }}
+    //     ></Messages>
+    //     <ClientsList
+    //       title="Clients"
+    //       clients={store.getState().clients}
+    //     ></ClientsList>
+    //   </div>
+    // )
   }
 }
 

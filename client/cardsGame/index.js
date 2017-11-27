@@ -1,5 +1,6 @@
 export { default as Game } from './game'
 export { default as Component } from './component'
+export { default as Listeners } from './listeners/index'
 
 export { default as Deck } from './containers/deck/deck'
 export { default as Pile } from './containers/pile/pile'

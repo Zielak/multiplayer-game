@@ -1,5 +1,5 @@
 import { Container } from 'pixi.js'
-import { Player, Game } from '../index'
+import { Component, Player, Game } from '../index'
 
 /**
  * Decides where each part of the game should be placed,
@@ -128,44 +128,45 @@ const applyParentTransform = (element, idx, everything) => {
   return element
 }*/
 
-class Table extends Container {
+const playerIdx = (idx) => (player) => player.idx === idx
+
+class Table extends Component {
 
   constructor(props) {
     super()
     this.name = 'table'
     this.props = props
 
+    this.preparePlayers()
+  }
+  
+  preparePlayers() {
     this.players = new Container()
-
-    this.addChild(this.players)
+    
+    this.on('players.add', data => {
+      this.players.addChild(new Player(data.player))
+      this.updatePlayers()
+    })
+    this.on('players.remove', data => {
+      const player = this.players.children.find(playerIdx(data.idx))
+      this.players.removeChild(player)
+      this.updatePlayers()
+    })
+    this.on('players.replace', data => {
+      const player = this.players.children.find(playerIdx(data.idx))
+      this.players.removeChild(player)
+      this.players.addChild(new Player(data.player))
+      this.updatePlayers()
+    })
+    this.on('players.update', data => {
+      const player = this.players.children.find(playerIdx(data.idx))
+      player.props = data.player
+      this.updatePlayers()
+    })
   }
-
-  updatePlayer(operation, idx, data) {
-    const _data = {
-      ...data,
-      idx
-    }
-    switch (operation) {
-    case 'add':
-      this.players.addChild(new Player(_data))
-      break
-    case 'remove':
-      // TODO: confirm that players always have the same idx
-      this.players.removeChildAt(idx)
-      break
-    case 'replace':
-      this.players.removeChildAt(idx)
-      this.players.addChild(new Player(_data))
-      break
-    case 'update':
-      this.players.getChildAt(idx).props = data
-      break
-    }
-
-    this.update()
-  }
-
-  update() {
+  
+  updatePlayers() {
+    console.log('TABLE: updating all players')
     this.players.children.forEach(positionPlayers)
   }
 

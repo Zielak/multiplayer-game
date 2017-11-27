@@ -1,8 +1,12 @@
-/* eslint-disable no-unused-vars */
-export default ({ room, game }) => {
+import { appendIdx } from '../../../shared/utils'
+
+export default (target, room) => {
   room.listen('players/list/:idx', (change) => {
     console.log('player list changed: ', change)
-    game.table.updatePlayer(change.operation, parseInt(change.path.idx), change.value)
+    target.emit('players.' + change.operation, {
+      idx: parseInt(change.path.idx),
+      player: appendIdx(change.value, parseInt(change.path.idx)),
+    })
   })
   room.listen('players/reversed', (change) => {
     console.log('player reversed changed: ', change)
