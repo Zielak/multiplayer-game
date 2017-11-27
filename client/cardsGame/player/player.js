@@ -8,6 +8,7 @@ class Player extends Component {
     super(props)
     this.icon = new Sprite()
     this.label = new Text(this.props.name, {
+      align: 'center',
       fill: ['#ffffff', '#00ff99'],
       stroke: '#4a1850',
       strokeThickness: 5,

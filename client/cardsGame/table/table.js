@@ -1,4 +1,4 @@
-import { Container } from 'pixi.js'
+import { Container, Text } from 'pixi.js'
 import { Player, Game } from '../index'
 import Component from '../component'
 
@@ -135,6 +135,15 @@ class Table extends Component {
 
   constructor(props = {}) {
     super(props)
+
+    const testText = new Text('table added!', {
+      fill: 0xffaa66,
+      fontSize: 12
+    })
+    testText.x = 5
+    testText.y = 25
+    this.addChild(testText)
+
     this.name = 'table'
 
     this.preparePlayers()
@@ -168,7 +177,6 @@ class Table extends Component {
   }
 
   updatePlayers() {
-    console.log('TABLE: updating all players')
     this.players.children.forEach(positionPlayers)
   }
 

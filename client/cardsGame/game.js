@@ -1,4 +1,4 @@
-import { Application } from 'pixi.js'
+import { Application, Text } from 'pixi.js'
 import Table from './table/table'
 import EventEmitter from 'eventemitter3'
 
@@ -15,7 +15,7 @@ class Game extends EventEmitter {
     // The application will create a renderer using WebGL, if possible,
     // with a fallback to a canvas render. It will also setup the ticker
     // and the root stage PIXI.Container.
-    this.app = new Application(Game.width, Game.height)
+    this.app = new Application(Game.width, Game.height, {backgroundColor: 0x1099bb})
 
     // The application will create a canvas element for you that you
     // can then insert into the DOM.
@@ -25,8 +25,16 @@ class Game extends EventEmitter {
     this.client = client
     this.host = null
 
-    this.table = new Table({})
-    this.stage.addChild(this.table)
+    this.table = new Table()
+    this.app.stage.addChild(this.table)
+    
+    const testText = new Text('Testing!', {
+      fill: 0xffffff,
+      fontSize: 12
+    })
+    testText.x = 5
+    testText.y = 5
+    this.app.stage.addChild(testText)
 
     this.serverListeners()
   }

@@ -22,11 +22,11 @@ class Component extends Container {
 
     this.props = new Proxy(this._props, {
       set: (target, prop, value) => {
-        const newProps = { ...target.props }
+        const newProps = { ...target }
         newProps[prop] = value
         willReceiveProps(newProps)
         target[prop] = value
-        didReceiveProps(target._props)
+        didReceiveProps(target)
         return true
       }
     })
