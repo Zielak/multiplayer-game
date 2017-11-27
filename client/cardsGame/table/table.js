@@ -1,11 +1,12 @@
 import { Container } from 'pixi.js'
-import { Component, Player, Game } from '../index'
+import { Player, Game } from '../index'
+import Component from '../component'
 
 /**
  * Decides where each part of the game should be placed,
  * RWD
  */
-import PropTypes from 'prop-types'
+// import PropTypes from 'prop-types'
 /*
 import { rotateDEG, translate, transform, identity } from 'transformation-matrix'
 
@@ -132,17 +133,17 @@ const playerIdx = (idx) => (player) => player.idx === idx
 
 class Table extends Component {
 
-  constructor(props) {
-    super()
+  constructor(props = {}) {
+    super(props)
     this.name = 'table'
-    this.props = props
 
     this.preparePlayers()
   }
-  
+
   preparePlayers() {
     this.players = new Container()
-    
+    this.addChild(this.players)
+
     this.on('players.add', data => {
       this.players.addChild(new Player(data.player))
       this.updatePlayers()
@@ -159,25 +160,18 @@ class Table extends Component {
       this.updatePlayers()
     })
     this.on('players.update', data => {
+      console.log('players.update!', data)
       const player = this.players.children.find(playerIdx(data.idx))
-      player.props = data.player
+      player.props[data.attribute] = data.value
       this.updatePlayers()
     })
   }
-  
+
   updatePlayers() {
     console.log('TABLE: updating all players')
     this.players.children.forEach(positionPlayers)
   }
 
-}
-
-Table.propTypes = {
-  players: PropTypes.object,
-  cards: PropTypes.array,
-  containers: PropTypes.array,
-
-  interactionHandler: PropTypes.func,
 }
 
 export default Table

@@ -7,8 +7,8 @@ import {
 
 class WarGame extends Game {
 
-  constructor(room) {
-    super(room)
+  constructor(room, client) {
+    super(room, client)
   }
 
   storeToTable() {

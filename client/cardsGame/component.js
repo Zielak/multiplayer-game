@@ -13,21 +13,37 @@ class Component extends Container {
    * @param {any} props 
    * @memberof Component
    */
-  constructor(props) {
+  constructor(props = {}) {
     super()
-    this.props = props
+    this._props = { ...props }
+
+    const willReceiveProps = this.willReceiveProps.bind(this)
+    const didReceiveProps = this.didReceiveProps.bind(this)
+
+    this.props = new Proxy(this._props, {
+      set: (target, prop, value) => {
+        const newProps = { ...target.props }
+        newProps[prop] = value
+        willReceiveProps(newProps)
+        target[prop] = value
+        didReceiveProps(target._props)
+        return true
+      }
+    })
+
+    // TODO: ? what if whole props will be overriden?
   }
 
   get idx() {
     return this.props.idx
   }
 
-  set props(value) {
-    const newProps = Object.assign({}, value)
-    this.willReceiveProps(newProps)
-    this.props = newProps
-    this.didReceiveProps(newProps)
-  }
+  // set props(value) {
+  //   const newProps = Object.assign({}, value)
+  //   this.willReceiveProps(newProps)
+  //   this._props = newProps
+  //   this.didReceiveProps(newProps)
+  // }
 
   willReceiveProps(props) { } // eslint-disable-line no-unused-vars
   didReceiveProps(props) { } // eslint-disable-line no-unused-vars

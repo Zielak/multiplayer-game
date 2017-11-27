@@ -11,7 +11,7 @@ import {
 class Game extends EventEmitter {
   constructor(room, client) {
     super()
-    
+
     // The application will create a renderer using WebGL, if possible,
     // with a fallback to a canvas render. It will also setup the ticker
     // and the root stage PIXI.Container.
@@ -20,12 +20,12 @@ class Game extends EventEmitter {
     // The application will create a canvas element for you that you
     // can then insert into the DOM.
     document.body.appendChild(this.app.view)
-    
+
     this.room = room
     this.client = client
     this.host = null
 
-    this.table = new Table()
+    this.table = new Table({})
     this.stage.addChild(this.table)
 
     this.serverListeners()
@@ -34,7 +34,7 @@ class Game extends EventEmitter {
   serverListeners() {
     const room = this.room
 
-    room.onJoin.add(function () {
+    room.onJoin.add(() => {
       console.log(this.client.id, 'joined', room.name)
       setTimeout(() => {
         // Testing, just init with players
@@ -43,7 +43,7 @@ class Game extends EventEmitter {
       }, 100)
     })
 
-    room.onLeave.add(function () {
+    room.onLeave.add(() => {
       console.info('ON: Leave!')
       room.removeAllListeners()
       room.leave()
@@ -53,7 +53,7 @@ class Game extends EventEmitter {
       }, 250)
     })
 
-    room.onError.add(function () {
+    room.onError.add(() => {
       console.info('ON: Error!')
     })
 

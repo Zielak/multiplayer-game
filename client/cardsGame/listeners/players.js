@@ -8,6 +8,14 @@ export default (target, room) => {
       player: appendIdx(change.value, parseInt(change.path.idx)),
     })
   })
+  room.listen('players/list/:idx/:attribute', (change) => {
+    console.log('player list changed: ', change)
+    target.emit('players.update', {
+      idx: parseInt(change.path.idx),
+      attribute: change.path.attribute,
+      value: change.value,
+    })
+  })
   room.listen('players/reversed', (change) => {
     console.log('player reversed changed: ', change)
   })

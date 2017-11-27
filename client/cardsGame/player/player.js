@@ -5,8 +5,7 @@ import { Component } from '../index'
 class Player extends Component {
 
   constructor(props) {
-    super()
-    this.props = props
+    super(props)
     this.icon = new Sprite()
     this.label = new Text(this.props.name, {
       fill: ['#ffffff', '#00ff99'],
@@ -17,7 +16,7 @@ class Player extends Component {
     this.addChild(this.icon)
     this.addChild(this.label)
   }
-  
+
   willReceiveProps(props) {
     this.label.text = props.name
   }
