@@ -10,6 +10,7 @@ require('./styles.scss')
 const host = window.document.location.host.replace(/:.*/, '')
 const client = new Client('ws://' + host + (location.port ? ':' + 2657 : ''))
 
-const gameRoom = client.join('warGame')
-
-/*const game = */new WarGame(gameRoom, client)
+client.onOpen.add(() => {
+  const gameRoom = client.join('warGame')
+  /*const game = */new WarGame(gameRoom, client)
+})
