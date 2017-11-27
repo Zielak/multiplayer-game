@@ -9,7 +9,7 @@ export default (target, room) => {
     })
   })
   room.listen('players/list/:idx/:attribute', (change) => {
-    console.log('player list changed: ', change)
+    console.log('player attrib changed: ', change)
     target.emit('players.update', {
       idx: parseInt(change.path.idx),
       attribute: change.path.attribute,

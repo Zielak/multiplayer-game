@@ -36,11 +36,8 @@ class Game extends EventEmitter {
 
     room.onJoin.add(() => {
       console.log(this.client.id, 'joined', room.name)
-      setTimeout(() => {
-        // Testing, just init with players
-        console.log('GO NOW!')
-        room.send({ action: 'GameStart' })
-      }, 100)
+      // Testing, just init with players
+      room.send({ action: 'GameStart' })
     })
 
     room.onLeave.add(() => {
