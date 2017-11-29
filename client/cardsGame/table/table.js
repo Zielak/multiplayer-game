@@ -1,5 +1,9 @@
-import { Container, Text } from 'pixi.js'
-import { Player, Game } from '../index'
+import { Text } from 'pixi.js'
+import {
+  Player,
+  Game,
+  // Deck, Pile, Row 
+} from '../index'
 import Component from '../component'
 
 /**
@@ -129,12 +133,14 @@ const applyParentTransform = (element, idx, everything) => {
   return element
 }*/
 
-const playerIdx = (idx) => (player) => player.idx === idx
+// const playerIdx = (idx) => (player) => player.idx === idx
 
 class Table extends Component {
 
   constructor(props = {}) {
     super(props)
+
+    this.elements = new ElementsMap()
 
     const testText = new Text('table added!', {
       fill: 0xffaa66,
@@ -147,39 +153,106 @@ class Table extends Component {
     this.name = 'table'
 
     this.preparePlayers()
+    this.prepareContainers()
   }
 
   preparePlayers() {
-    this.players = new Container()
-    this.addChild(this.players)
+    // this.players = new Container()
+    // this.addChild(this.players)
 
     this.on('players.add', data => {
-      this.players.addChild(new Player(data.player))
+      const newPlayer = new Player(data.player)
+      this.elements.add(newPlayer)
+      this.addChild(newPlayer)
       this.updatePlayers()
     })
     this.on('players.remove', data => {
-      const player = this.players.children.find(playerIdx(data.idx))
-      this.players.removeChild(player)
+      const player = this.elements.getByType('player')
+        .find(el => el.idx === data.idx)
+      this.elements.remove(player.id)
+      this.removeChild(player)
       this.updatePlayers()
     })
     this.on('players.replace', data => {
-      const player = this.players.children.find(playerIdx(data.idx))
-      this.players.removeChild(player)
-      this.players.addChild(new Player(data.player))
+      const player = this.elements.getByType('player')
+        .find(el => el.idx === data.idx)
+      this.removeChild(player)
+      this.addChild(new Player(data.player))
       this.updatePlayers()
     })
     this.on('players.update', data => {
       console.log('players.update!', data)
-      const player = this.players.children.find(playerIdx(data.idx))
+      const player = this.elements.getByType('player')
+        .find(el => el.idx === data.idx)
       player.props[data.attribute] = data.value
       this.updatePlayers()
     })
   }
 
-  updatePlayers() {
-    this.players.children.forEach(positionPlayers)
+  prepareContainers() {
+    /* TODO: FIXME:
+    this.on('containers.add', data => {
+      const newContainer = new Deck(data.container)
+      this.elements.add(newContainer)
+
+      const parent = this.elements.getById(newContainer.parent) || this
+      parent.addChild(newContainer)
+    })
+    this.on('containers.remove', data => {
+      const container = this.elements.getByType('player')
+        .find(el => el.idx === data.idx)
+      this.elements.remove(player.id)
+      this.removeChild(player)
+      this.updatePlayers()
+    })
+    this.on('containers.replace', data => {
+      const player = this.elements.getByType('player')
+        .find(el => el.idx === data.idx)
+      this.removeChild(player)
+      this.addChild(new Player(data.player))
+      this.updatePlayers()
+    })
+    this.on('containers.update', data => {
+      console.log('players.update!', data)
+      const player = this.elements.getByType('player')
+        .find(el => el.idx === data.idx)
+      player.props[data.attribute] = data.value
+      this.updatePlayers()
+    })*/
   }
 
+  updatePlayers() {
+    this.elements.getByType('player').forEach(positionPlayers)
+  }
+
+}
+
+class ElementsMap {
+  constructor() {
+    this._idList = new Map()
+    this._elements = []
+  }
+  add(element) {
+    this._idList.set(element.id, element)
+    this._elements.push(element)
+  }
+  remove(id) {
+    this._idList.delete(id)
+    this._elements = this._elements.filter(el => el.id !== id)
+  }
+
+  getById(id) {
+    return this._idList.get(id)
+  }
+  getByType(type) {
+    return this._elements.filter(element => element.type === type)
+  }
+  filter(fn) {
+    return this._elements.filter(fn)
+  }
+  map(fn) {
+    return this._elements.map(fn)
+  }
 }
 
 export default Table

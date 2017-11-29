@@ -37,6 +37,12 @@ class Component extends Container {
   get idx() {
     return this.props.idx
   }
+  get id() {
+    return this.props.id
+  }
+  get type() {
+    return this.props.type
+  }
 
   // set props(value) {
   //   const newProps = Object.assign({}, value)

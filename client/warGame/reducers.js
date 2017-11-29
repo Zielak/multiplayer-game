@@ -3,6 +3,8 @@ import {
   Game // eslint-disable-line no-unused-vars
 } from '../cardsGame/index'
 
+// TODO: Those reducers are not even used anymore.
+
 /**
  * @param {Game} game 
  */
