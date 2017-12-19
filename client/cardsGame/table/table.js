@@ -2,9 +2,13 @@ import { Text } from 'pixi.js'
 import {
   Player,
   Game,
-  // Deck, Pile, Row 
+  Deck//, Pile, Row 
 } from '../index'
 import Component from '../component'
+
+const containers = {
+  deck: Deck,
+}
 
 /**
  * Decides where each part of the game should be placed,
@@ -190,35 +194,38 @@ class Table extends Component {
   }
 
   prepareContainers() {
-    /* TODO: FIXME:
+    // /* TODO: FIXME:
     this.on('containers.add', data => {
-      const newContainer = new Deck(data.container)
+      const constructor = containers[data.container.type]
+      if(newContainer === undefined) return
+      const newContainer = new constructor(data.container)
       this.elements.add(newContainer)
 
       const parent = this.elements.getById(newContainer.parent) || this
       parent.addChild(newContainer)
     })
-    this.on('containers.remove', data => {
-      const container = this.elements.getByType('player')
-        .find(el => el.idx === data.idx)
-      this.elements.remove(player.id)
-      this.removeChild(player)
-      this.updatePlayers()
-    })
-    this.on('containers.replace', data => {
-      const player = this.elements.getByType('player')
-        .find(el => el.idx === data.idx)
-      this.removeChild(player)
-      this.addChild(new Player(data.player))
-      this.updatePlayers()
-    })
-    this.on('containers.update', data => {
-      console.log('players.update!', data)
-      const player = this.elements.getByType('player')
-        .find(el => el.idx === data.idx)
-      player.props[data.attribute] = data.value
-      this.updatePlayers()
-    })*/
+    // this.on('containers.remove', data => {
+    //   const container = this.elements.getByType('player')
+    //     .find(el => el.idx === data.idx)
+    //   this.elements.remove(player.id)
+    //   this.removeChild(player)
+    //   this.updatePlayers()
+    // })
+    // this.on('containers.replace', data => {
+    //   const player = this.elements.getByType('player')
+    //     .find(el => el.idx === data.idx)
+    //   this.removeChild(player)
+    //   this.addChild(new Player(data.player))
+    //   this.updatePlayers()
+    // })
+    // this.on('containers.update', data => {
+    //   console.log('players.update!', data)
+    //   const player = this.elements.getByType('player')
+    //     .find(el => el.idx === data.idx)
+    //   player.props[data.attribute] = data.value
+    //   this.updatePlayers()
+    // })
+    //*/
   }
 
   updatePlayers() {
