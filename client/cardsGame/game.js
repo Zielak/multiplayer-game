@@ -27,7 +27,7 @@ class Game extends EventEmitter {
 
     this.table = new Table()
     this.app.stage.addChild(this.table)
-    
+
     const testText = new Text('Testing!', {
       fill: 0xffffff,
       fontSize: 12
@@ -64,7 +64,7 @@ class Game extends EventEmitter {
 
     // =======================
 
-    room.onUpdate.addOnce(state => {
+    room.onStateChange.addOnce(state => {
       console.log('initial lobby data:', state)
       /*state.clients.forEach((el, idx) => this.store.dispatch({
         type: 'clients.add',
@@ -78,7 +78,7 @@ class Game extends EventEmitter {
       })*/
     })
 
-    room.onUpdate.add(state => {
+    room.onStateChange.add(state => {
       console.log('UPDATE', state)
       // updateCallback.call(null, this.store.getState)
     })

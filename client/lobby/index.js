@@ -66,7 +66,7 @@ class Lobby extends React.Component{
   constructor(props) {
     super(props)
     // Listen for initial state
-    props.room.onUpdate.addOnce(state => {
+    props.room.onStateChange.addOnce(state => {
       console.log('initial lobby data:', state)
       state.clients.forEach((el, idx) => store.dispatch({
         type: 'client.add',
