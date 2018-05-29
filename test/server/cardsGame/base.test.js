@@ -32,7 +32,7 @@ test.beforeEach('prepares some dummie children', t => {
   children.forEach(el => t.context.things.addChild(el))
 })
 
-test.afterEach('clears all objects from Base', () => {
+test.afterEach.always('clears all objects from Base', () => {
   Base._clear()
 })
 

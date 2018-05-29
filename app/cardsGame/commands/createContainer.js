@@ -1,3 +1,5 @@
+// TODO: whats that even?
+
 const Command = require('./command')
 const containerClasses = {
   'container': require('../container'),
@@ -14,11 +16,11 @@ class CreateContainer extends Command {
    * Creates an instance of CreateContainer.
    * @param {array} conditions list of conditions to check before executing
    * @param {CreateContainerContext} context
-   * 
+   *
    * @typedef {object} CreateContainerContext
    * @property {string} type kind of container to create (lowercase name)
    * @property {object} options for containers constructor
-   * 
+   *
    * @memberof CreateContainer
    */
   constructor(invoker, conditions, context) {

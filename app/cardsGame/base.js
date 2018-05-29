@@ -54,7 +54,7 @@ class Base extends EventEmitter {
 
   /**
    * Get the real owner of this container, by traversing `this.parent` chain.
-   * 
+   *
    * @readonly
    * @return {Player|null} `Player` or `null` if this container doesn't belong to anyone
    * @memberof Base
@@ -76,7 +76,7 @@ class Base extends EventEmitter {
 
   /**
    * Gives you the topmost element in this container
-   * 
+   *
    * @return {object}
    */
   top() {
@@ -85,7 +85,7 @@ class Base extends EventEmitter {
 
   /**
    * Gives you an element from the bottom
-   * 
+   *
    * @return {object}
    */
   bottom() {
@@ -96,8 +96,8 @@ class Base extends EventEmitter {
    * Move this element to a different `parent`.
    * addChild method ensures that both new and old parents are
    * updated with the change.
-   * 
-   * @param {any} newParent 
+   *
+   * @param {any} newParent
    * @returns this
    * @memberof Base
    */
@@ -109,7 +109,7 @@ class Base extends EventEmitter {
   /**
    * Adds new child to this element, ensuring that its last parent
    * knows about this change.
-   * 
+   *
    * @param {any|string} element reference to an object or its ID
    * @returns this
    * @memberof Base
@@ -136,7 +136,7 @@ class Base extends EventEmitter {
 
   /**
    * Removes one child
-   * 
+   *
    * @param {any|string} element reference to an object or its ID
    * @returns this
    * @memberof Base
@@ -166,7 +166,7 @@ class Base extends EventEmitter {
 
   /**
    * Get every child of a certain type
-   * 
+   *
    * @param {string} type what kind of elements do you want
    * @param {boolean} [deep=true] deep search?
    * @returns {Array<object>} list of found elements
@@ -189,8 +189,8 @@ class Base extends EventEmitter {
    * Get only one child of a certain type
    * Order or lookup is not defined
    * (you should be certain that there's only one element of that type)
-   * 
-   * @param {string} type 
+   *
+   * @param {string} type
    * @returns {pbject}
    * @memberof Base
    */
@@ -200,9 +200,9 @@ class Base extends EventEmitter {
 
   /**
    * Get a reference to the object by its ID
-   * 
+   *
    * @static
-   * @param {string} id 
+   * @param {string} id
    * @returns {any}
    * @memberof Base
    */
@@ -212,7 +212,7 @@ class Base extends EventEmitter {
 
   /**
    * Maps an ID to object reference
-   * 
+   *
    * @static
    * @param {any} element preferably string ID
    * @returns {object}
@@ -222,22 +222,9 @@ class Base extends EventEmitter {
     return typeof element === 'string' ? Base.get(element) : element
   }
 
-  // /**
-  //  * Maps all ID strings to an array of objects
-  //  * 
-  //  * @static
-  //  * @param {array} [elements=[]] array of strings
-  //  * @returns {array}
-  //  */
-  // static mapToObject(elements = []) {
-  //   console.warn('typeof elements: ', typeof elements)
-  //   console.warn(elements)
-  //   return elements.map(Base.toObject)
-  // }
-
   /**
    * Only for testing. Do not use while playing
-   * 
+   *
    * @static
    * @memberof Base
    */
