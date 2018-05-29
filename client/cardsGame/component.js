@@ -1,8 +1,10 @@
 import { Container } from 'pixi.js'
+// import PropTypes from 'prop-types'
+import checkPropTypes from 'prop-types/checkPropTypes'
 
 /**
- * 
- * 
+ *
+ *
  * @class Component
  * @extends {Container}
  */
@@ -10,28 +12,59 @@ class Component extends Container {
 
   /**
    * Creates an instance of Component.
-   * @param {any} props 
+   * @param {any} props
    * @memberof Component
    */
   constructor(props = {}) {
     super()
     this._props = { ...props }
+    this._updateScheduled = false
+  }
 
-    const willReceiveProps = this.willReceiveProps.bind(this)
-    const didReceiveProps = this.didReceiveProps.bind(this)
-
-    this.props = new Proxy(this._props, {
-      set: (target, prop, value) => {
-        const newProps = { ...target }
+  _generatePropsProxy() {
+    const myself = this
+    this._propsProxy = new Proxy(this._props, {
+      set: (target, prop, value, receiver) => {
+        if (receiver[prop] === value) {
+          return true
+        }
+        const newProps = { ...receiver }
         newProps[prop] = value
-        willReceiveProps(newProps)
-        target[prop] = value
-        didReceiveProps(target)
+        checkPropTypes(myself.propTypes, newProps, 'prop', myself._componentName)
+        receiver = newProps
+        myself._scheduleUpdate(myself, receiver)
         return true
       }
     })
+  }
 
-    // TODO: ? what if whole props will be overriden?
+  _scheduleUpdate(myself, receiver) {
+    if (!this._updateScheduled) {
+      this._updateScheduled = true
+      console.log('update scheduled for later')
+      setTimeout(() => {
+        console.log('update!')
+        myself.componentDidUpdate.apply(myself, receiver)
+        this._updateScheduled = false
+      }, 0)
+    }
+  }
+
+  get props() {
+    if (!this._propsProxy) {
+      this._generatePropsProxy()
+    }
+    return this._propsProxy
+  }
+
+  set props(newProps) {
+    for (const prop in newProps) {
+      this.props[prop] = newProps[prop]
+    }
+  }
+
+  get _componentName() {
+    return 'Component'
   }
 
   get idx() {
@@ -44,15 +77,7 @@ class Component extends Container {
     return this.props.type
   }
 
-  // set props(value) {
-  //   const newProps = Object.assign({}, value)
-  //   this.willReceiveProps(newProps)
-  //   this._props = newProps
-  //   this.didReceiveProps(newProps)
-  // }
-
-  willReceiveProps(props) { } // eslint-disable-line no-unused-vars
-  didReceiveProps(props) { } // eslint-disable-line no-unused-vars
+  componentDidUpdate(props) { } // eslint-disable-line no-unused-vars
 
 }
 

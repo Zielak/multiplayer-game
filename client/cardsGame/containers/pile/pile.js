@@ -14,14 +14,13 @@ import { procNumberFromString } from '../../../../shared/utils'
 const labelText = (children) => `PILE of ${children.length} cards`
 
 class Pile extends Component {
-  
+
   constructor(props) {
-    super()
-    this.props = props
+    super(props)
 
     this.draw()
   }
-  
+
   draw() {
     this.bg = new Graphics()
     const radius = Math.max(ClassicCard.width, ClassicCard.height) / 2
@@ -38,7 +37,7 @@ class Pile extends Component {
     this.addChild(this.bg)
     this.addChild(this.label)
   }
-  
+
   redraw() {
     this.label.text = labelText(this.props.children)
   }
