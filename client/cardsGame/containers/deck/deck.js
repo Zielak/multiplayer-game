@@ -3,7 +3,8 @@
  */
 import { Text, Graphics } from 'pixi.js'
 import PropTypes from 'prop-types'
-import { ClassicCard, Component } from '../../index'
+import ClassicCard from '../../card/classicCard'
+import Component from '../../component'
 
 const labelText = (children) => `DECK of ${children.length} cards`
 

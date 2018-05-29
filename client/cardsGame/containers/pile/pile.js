@@ -5,14 +5,15 @@
 /**
  * Container of neatly packed cards in one column.
  */
-import { Container, Graphics, Text } from 'pixi.js'
+import { Graphics, Text } from 'pixi.js'
 import PropTypes from 'prop-types'
 import ClassicCard from '../../card/classicCard'
+import Component from '../../component'
 import { procNumberFromString } from '../../../../shared/utils'
 
 const labelText = (children) => `PILE of ${children.length} cards`
 
-class Pile extends Container {
+class Pile extends Component {
   
   constructor(props) {
     super()

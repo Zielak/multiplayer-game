@@ -2,12 +2,10 @@
  * Container of cards that are visible only to the
  * player who owns them
  */
-import React from 'react'
 import PropTypes from 'prop-types'
+import Component from '../../component'
 
-import './hand.scss'
-
-class Hand extends React.Component {
+class Hand extends Component {
 
   render() {
     // return (

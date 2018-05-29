@@ -1,13 +1,17 @@
 import { Text } from 'pixi.js'
 import {
   Player,
-  Game,
-  Deck//, Pile, Row 
+  Game
 } from '../index'
+import Deck from '../containers/deck/deck'
+import Pile from '../containers/pile/pile'
+import Hand from '../containers/hand/hand'
 import Component from '../component'
 
-const containers = {
+const containerTypeMap = {
   deck: Deck,
+  pile: Pile,
+  hand: Hand,
 }
 
 /**
@@ -185,7 +189,7 @@ class Table extends Component {
       this.updatePlayers()
     })
     this.on('players.update', data => {
-      console.log('players.update!', data)
+      // console.log('players.update!', data)
       const player = this.elements.getByType('player')
         .find(el => el.idx === data.idx)
       player.props[data.attribute] = data.value
@@ -194,23 +198,22 @@ class Table extends Component {
   }
 
   prepareContainers() {
-    // /* TODO: FIXME:
     this.on('containers.add', data => {
-      const constructor = containers[data.container.type]
-      if(newContainer === undefined) return
-      const newContainer = new constructor(data.container)
+      const type = data.container.type
+      const newContainer = new containerTypeMap[type](data.container)
       this.elements.add(newContainer)
 
       const parent = this.elements.getById(newContainer.parent) || this
       parent.addChild(newContainer)
     })
-    // this.on('containers.remove', data => {
-    //   const container = this.elements.getByType('player')
-    //     .find(el => el.idx === data.idx)
-    //   this.elements.remove(player.id)
-    //   this.removeChild(player)
-    //   this.updatePlayers()
-    // })
+    this.on('containers.remove', data => {
+      const container = this.elements.getByType(data.container.type)
+        .find(el => el.idx === data.idx)
+        
+      this.elements.remove(player.id)
+      this.removeChild(player)
+      this.updatePlayers()
+    })
     // this.on('containers.replace', data => {
     //   const player = this.elements.getByType('player')
     //     .find(el => el.idx === data.idx)
@@ -225,7 +228,6 @@ class Table extends Component {
     //   player.props[data.attribute] = data.value
     //   this.updatePlayers()
     // })
-    //*/
   }
 
   updatePlayers() {

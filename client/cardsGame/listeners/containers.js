@@ -2,7 +2,7 @@ import { appendIdx } from '../../../shared/utils'
 
 export default (target, room) => {
   room.listen('containers/:idx', (change) => {
-    // console.log('container changed: ', change)
+    console.log('container changed: ', change)
     target.emit('containers.' + change.operation, {
       idx: parseInt(change.path.idx),
       container: appendIdx(change.value, parseInt(change.path.idx)),
