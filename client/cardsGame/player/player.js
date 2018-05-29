@@ -18,7 +18,7 @@ class Player extends Component {
     this.addChild(this.label)
   }
 
-  willReceiveProps(props) {
+  componentDidUpdate(props) {
     this.label.text = props.name
   }
 

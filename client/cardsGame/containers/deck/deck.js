@@ -41,7 +41,7 @@ class Deck extends Component {
     this.label.text = labelText(this.props.children)
   }
 
-  didReceiveProps() {
+  componentDidUpdate() {
     this.redraw()
   }
 

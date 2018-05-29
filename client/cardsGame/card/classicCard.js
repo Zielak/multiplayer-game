@@ -10,6 +10,10 @@ class ClassicCard extends Container {
     this.draw()
   }
 
+  get _componentName() {
+    return 'ClassicCard'
+  }
+
   draw() {
     this.bg = new Graphics()
 
@@ -41,7 +45,7 @@ class ClassicCard extends Container {
 
     this.suit.text = this.getSuitText(this.props.suit)
     this.suit.style = this.getSuitStyle(this.props.suit)
-    
+
     this.rank.visible = this.suit.visible = this.props.state.faceUp
   }
 
