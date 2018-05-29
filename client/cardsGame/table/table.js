@@ -206,14 +206,14 @@ class Table extends Component {
       const parent = this.elements.getById(newContainer.parent) || this
       parent.addChild(newContainer)
     })
-    this.on('containers.remove', data => {
-      const container = this.elements.getByType(data.container.type)
-        .find(el => el.idx === data.idx)
+    // this.on('containers.remove', data => {
+    //   const container = this.elements.getByType(data.container.type)
+    //     .find(el => el.idx === data.idx)
         
-      this.elements.remove(player.id)
-      this.removeChild(player)
-      this.updatePlayers()
-    })
+    //   this.elements.remove(player.id)
+    //   this.removeChild(player)
+    //   this.updatePlayers()
+    // })
     // this.on('containers.replace', data => {
     //   const player = this.elements.getByType('player')
     //     .find(el => el.idx === data.idx)
