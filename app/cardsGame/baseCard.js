@@ -22,6 +22,16 @@ class BaseCard extends Base {
     }, options.state)
   }
 
+  show() {
+    this.state.faceUp = true
+  }
+  hide() {
+    this.state.faceUp = false
+  }
+  flip() {
+    this.state.faceUp = !this.state.faceUp
+  }
+
   canBeTakenBy() { }
 
 }

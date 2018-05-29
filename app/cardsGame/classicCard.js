@@ -14,13 +14,6 @@ class ClassicCard extends BaseCard {
     this.name = this.rank + this.suit
   }
 
-  show() {
-    this.state.faceUp = true
-  }
-  hide() {
-    this.state.faceUp = false
-  }
-
 }
 
 module.exports = ClassicCard

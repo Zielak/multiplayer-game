@@ -17,8 +17,8 @@ class Deck extends Container {
   /**
    * Deals `count` cards from this container to other containers.
    * Eg. hands
-   * 
-   * @param {array|Container} containers 
+   *
+   * @param {array|Container} containers
    * @param {[number]} count how many cards should I deal for each player?
    * @returns {Deck} this for chaining
    */
@@ -30,9 +30,9 @@ class Deck extends Container {
 
     const dealOne = () => {
       const card = this.top()
-      if(!card) {
+      if (!card) {
         this.onCardsDealt(containers)
-        return 
+        return
       }
       card.moveTo(containers[i % containers.length])
       i++
