@@ -1,15 +1,16 @@
 import { appendIdx } from '../../../shared/utils'
+import { log } from '../utils'
 
 export default (target, room) => {
   room.listen('players/list/:idx', (change) => {
-    // console.log('player list changed: ', change)
+    // log('player list changed: ', change)
     target.emit('players.' + change.operation, {
       idx: parseInt(change.path.idx),
       player: appendIdx(change.value, parseInt(change.path.idx)),
     })
   })
   room.listen('players/list/:idx/:attribute', (change) => {
-    // console.log('player attrib changed: ', change)
+    // log('player attrib changed: ', change)
     target.emit('players.update', {
       idx: parseInt(change.path.idx),
       attribute: change.path.attribute,
@@ -17,15 +18,15 @@ export default (target, room) => {
     })
   })
   room.listen('players/reversed', (change) => {
-    console.log('player reversed changed: ', change)
+    log('player reversed changed: ', change)
     // target.emit('players.reversed', {})
   })
   room.listen('players/currentPlayerIdx', (change) => {
-    console.log('player currentPlayerIdx changed: ', change)
+    log('player currentPlayerIdx changed: ', change)
     // target.emit('players.currentPlayerIdx', {})
   })
   room.listen('players/currentPlayer', (change) => {
-    console.log('player currentPlayer changed: ', change)
+    log('player currentPlayer changed: ', change)
     // target.emit('players.currentPlayer', {})
   })
 }

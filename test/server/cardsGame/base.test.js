@@ -62,7 +62,7 @@ test('parent is updated with new child', t => {
   t.true(parent.children.length === 0, `children array isn't empty`)
   const child = new Base({
     name: 'child',
-    parent: parent,
+    parentId: parent.id,
   })
   t.true(parent.children.length === 1, `children array doesn't have only 1 child`)
   t.deepEqual(parent.children[0], child.id, `first child id doesn't match`)
