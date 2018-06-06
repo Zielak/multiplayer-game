@@ -1,6 +1,5 @@
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-const webpack = require('webpack')
 
 module.exports = env => {
   return {
@@ -12,8 +11,7 @@ module.exports = env => {
     mode: env === 'production' ? 'production' : 'development',
     devtool: 'inline-source-map',
     devServer: {
-      contentBase: './dist',
-      hot: true
+      contentBase: './dist'
     },
     module: {
       rules: [
@@ -41,8 +39,7 @@ module.exports = env => {
     plugins: [
       new HtmlWebpackPlugin({
         template: 'client/index.ejs'
-      }),
-      new webpack.HotModuleReplacementPlugin()
+      })
     ]
   }
 }
