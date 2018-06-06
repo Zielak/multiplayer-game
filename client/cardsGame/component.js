@@ -43,7 +43,7 @@ class Component extends Container {
       this._updateScheduled = true
       console.log('update scheduled for later')
       setTimeout(() => {
-        console.log('update!')
+        console.log('componentDidUpdate!')
         myself.componentDidUpdate.apply(myself, receiver)
         this._updateScheduled = false
       }, 0)

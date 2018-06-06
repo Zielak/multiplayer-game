@@ -31,21 +31,13 @@ class Base extends EventEmitter {
 
     this.onUpdate = utils.def(options.onUpdate || utils.noop)
 
-    // Sanitize parent to ID
-    if (
-      typeof options.parent === 'object' &&
-      options.parent.id && typeof options.parent.id === 'string'
-    ) {
-      // console.log('Parent was object', options.parent)
-      options.parent = options.parent.id
-    } else {
-      // console.log('Parent was nothing?', options.parent)
-      options.parent = null
-    }
+    // ParentID, no object reference
+    // console.info('typeof options.parentId === '+typeof options.parentId)
+    this.parentId = typeof options.parentId === 'string' ? options.parentId : null
 
     // Add myself to my new parent element
-    if (options.parent !== null) {
-      const parent = objects.get(options.parent)
+    if (options.parentId !== null) {
+      const parent = Base.get(options.parentId)
       parent && parent.addChild(this.id)
     }
 
@@ -60,12 +52,12 @@ class Base extends EventEmitter {
    * @memberof Base
    */
   get owner() {
-    if (typeof Base.get(this.parent) === 'object') {
-      return this.parent
-    } else if (this.parent === null) {
+    if (typeof this.parentId === 'string') {
+      return Base.get(this.parentId)
+    } else if (this.parentId === null) {
       return null
     } else {
-      return Base.get(this.parent.owner)
+      return Base.get(this.parentId).owner
     }
   }
 
@@ -97,11 +89,14 @@ class Base extends EventEmitter {
    * addChild method ensures that both new and old parents are
    * updated with the change.
    *
-   * @param {any} newParent
+   * @param {any|string} newParent
    * @returns this
    * @memberof Base
    */
   moveTo(newParent) {
+    if (typeof newParent === 'string') {
+      newParent = Base.get(newParent)
+    }
     newParent.addChild(this)
     return this
   }
@@ -115,17 +110,17 @@ class Base extends EventEmitter {
    * @memberof Base
    */
   addChild(element) {
-    const child = typeof element === 'string' ? objects.get(element) : element
+    const child = typeof element === 'string' ? Base.get(element) : element
 
     // Notify element's last parent of change
-    const lastParent = objects.get(child.parent)
+    const lastParent = Base.get(child.parentId)
     if (lastParent) {
       // this.emit('child.removes', this.id)
       lastParent.removeChild(child)
     }
 
     // Change child's parent element
-    child.parent = this.id
+    child.parentId = this.id
 
     // Add to this list
     this.children.push(child.id)
@@ -154,7 +149,7 @@ class Base extends EventEmitter {
     }
 
     // Nullify its parent
-    child.parent = null
+    child.parentId = null
 
     this.children = this.children.filter(id => id !== child.id)
     this.onUpdate(this)

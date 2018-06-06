@@ -1,6 +1,7 @@
 import { Application, Text } from 'pixi.js'
 import Table from './table/table'
 import EventEmitter from 'eventemitter3'
+import { log } from './utils'
 
 import {
   cardsListener,
@@ -15,7 +16,7 @@ class Game extends EventEmitter {
     // The application will create a renderer using WebGL, if possible,
     // with a fallback to a canvas render. It will also setup the ticker
     // and the root stage PIXI.Container.
-    this.app = new Application(Game.width, Game.height, {backgroundColor: 0x1099bb})
+    this.app = new Application(Game.width, Game.height, { backgroundColor: 0x1099bb })
 
     // The application will create a canvas element for you that you
     // can then insert into the DOM.
@@ -43,7 +44,7 @@ class Game extends EventEmitter {
     const room = this.room
 
     room.onJoin.add(() => {
-      console.log(this.client.id, 'joined', room.name)
+      log(this.client.id, 'joined', room.name)
       // Testing, just init with players
       room.send({ action: 'GameStart' })
     })
@@ -65,7 +66,7 @@ class Game extends EventEmitter {
     // =======================
 
     room.onStateChange.addOnce(state => {
-      console.log('initial lobby data:', state)
+      log('initial lobby data:', state)
       /*state.clients.forEach((el, idx) => this.store.dispatch({
         type: 'clients.add',
         data: {
@@ -78,14 +79,14 @@ class Game extends EventEmitter {
       })*/
     })
 
-    room.onStateChange.add(state => {
-      console.log('UPDATE', state)
-      // updateCallback.call(null, this.store.getState)
-    })
+    // room.onStateChange.add(state => {
+    //   log('UPDATE', state)
+    //   // updateCallback.call(null, this.store.getState)
+    // })
 
     // listen to patches coming from the server
     room.listen('clients/:number', (change) => {
-      console.log('new client change arrived: ', change)
+      log('new client change arrived: ', change)
       /*this.store.dispatch({
         type: 'clients.' + change.operation,
         data: {
@@ -96,7 +97,7 @@ class Game extends EventEmitter {
     })
 
     room.listen('host', (change) => {
-      console.log('host changed: ', change)
+      log('host changed: ', change)
       this.host = change.value
     })
 
@@ -105,7 +106,7 @@ class Game extends EventEmitter {
     cardsListener(this.table, room)
 
     room.listen('GameStart', () => {
-      console.log('GameStart!? ', arguments)
+      log('GameStart!? ', arguments)
     })
   }
 

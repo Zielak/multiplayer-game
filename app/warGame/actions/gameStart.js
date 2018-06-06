@@ -53,18 +53,18 @@ const command = class GameStartCommand extends Command {
         // TODO: remember all other created stuff, so we could undo() that later
         reducer.containers.add(state, new Deck({
           x: 20,
-          parent: player,
+          parentId: player.id,
         }))
         reducer.containers.add(state, new Hand({
-          parent: player,
+          parentId: player.id,
         }))
         reducer.containers.add(state, new Pile({
-          parent: player,
+          parentId: player.id,
           name: 'stage',
           y: -20,
         }))
         reducer.containers.add(state, new Pile({
-          parent: player,
+          parentId: player.id,
           name: 'dead heat',
           // a situation in or result of a race
           // in which two or more competitors are exactly even.

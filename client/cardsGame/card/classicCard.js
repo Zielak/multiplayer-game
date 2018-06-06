@@ -1,7 +1,8 @@
-import { Container, Graphics, Text } from 'pixi.js'
+import { Graphics, Text } from 'pixi.js'
+import Component from '../component'
 import PropTypes from 'prop-types'
 
-class ClassicCard extends Container {
+class ClassicCard extends Component {
 
   constructor(props) {
     super()
@@ -84,7 +85,7 @@ ClassicCard.height = 8.89
 
 ClassicCard.propTypes = {
   id: PropTypes.string,
-  parent: PropTypes.string,
+  parentId: PropTypes.string,
 
   localTransform: PropTypes.object,
 

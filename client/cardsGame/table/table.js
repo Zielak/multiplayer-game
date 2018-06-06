@@ -1,7 +1,8 @@
 import { Text } from 'pixi.js'
 import {
   Player,
-  Game
+  Game,
+  ClassicCard
 } from '../index'
 import Deck from '../containers/deck/deck'
 import Pile from '../containers/pile/pile'
@@ -38,19 +39,19 @@ import Hand from '../containers/hand/hand'
 // TODO: align angle to the current player
 // const startingAngle = 90
 
-const getOwnerId = (element) => {
-  if (element.parent) {
-    return getOwnerId(element.parent)
-  } else {
-    return element
-  }
-}
+// const getOwnerId = (element) => {
+//   if (element.parent) {
+//     return getOwnerId(element.parent)
+//   } else {
+//     return element
+//   }
+// }
 
 /**
- * 
- * @param {Player} player 
- * @param {*} idx 
- * @param {*} players 
+ *
+ * @param {Player} player
+ * @param {*} idx
+ * @param {*} players
  */
 const positionPlayers = (player, idx, players) => {
   const angle = Math.PI * 2 / players.length * idx
@@ -162,6 +163,7 @@ class Table extends Component {
 
     this.preparePlayers()
     this.prepareContainers()
+    this.addCardsListeners()
   }
 
   preparePlayers() {
@@ -203,13 +205,13 @@ class Table extends Component {
       const newContainer = new containerTypeMap[type](data.container)
       this.elements.add(newContainer)
 
-      const parent = this.elements.getById(newContainer.parent) || this
+      const parent = this.elements.getById(newContainer.parentId) || this
       parent.addChild(newContainer)
     })
     // this.on('containers.remove', data => {
     //   const container = this.elements.getByType(data.container.type)
     //     .find(el => el.idx === data.idx)
-        
+
     //   this.elements.remove(player.id)
     //   this.removeChild(player)
     //   this.updatePlayers()
@@ -228,6 +230,15 @@ class Table extends Component {
     //   player.props[data.attribute] = data.value
     //   this.updatePlayers()
     // })
+  }
+
+  addCardsListeners() {
+    this.on('cards.add', data => {
+      // idx, card
+      const card = new ClassicCard(data.card)
+      this.addChild(card)
+      this.elements.add(card)
+    })
   }
 
   updatePlayers() {
