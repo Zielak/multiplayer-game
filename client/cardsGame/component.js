@@ -25,13 +25,13 @@ class Component extends Container {
     const myself = this
     this._propsProxy = new Proxy(this._props, {
       set: (target, prop, value, receiver) => {
-        if (receiver[prop] === value) {
+        if (myself._props[prop] === value) {
           return true
         }
-        const newProps = { ...receiver }
+        const newProps = { ...myself._props }
         newProps[prop] = value
         checkPropTypes(myself.propTypes, newProps, 'prop', myself._componentName)
-        receiver = newProps
+        myself._props = newProps
         myself._scheduleUpdate(myself, receiver)
         return true
       }
