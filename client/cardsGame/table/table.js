@@ -239,6 +239,12 @@ class Table extends Component {
       this.addChild(card)
       this.elements.add(card)
     })
+    this.on('cards.attribute.update', data => {
+      // idx, attribute, value
+      const card = new ClassicCard(data.card)
+      this.addChild(card)
+      this.elements.add(card)
+    })
   }
 
   updatePlayers() {

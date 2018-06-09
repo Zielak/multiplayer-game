@@ -3,7 +3,7 @@ import { log } from '../utils'
 
 export default (target, room) => {
   room.listen('cards/:idx', (change) => {
-    log('cards => ', change)
+    log('cards => ', change.operation)
     target.emit('cards.' + change.operation, {
       idx: parseInt(change.path.idx),
       card: appendIdx(change.value, parseInt(change.path.idx)),

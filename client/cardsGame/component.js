@@ -19,41 +19,36 @@ class Component extends Container {
     super()
     this._props = { ...props }
     this._updateScheduled = false
+    this._generatePropsProxy()
   }
 
   _generatePropsProxy() {
-    const myself = this
     this._propsProxy = new Proxy(this._props, {
-      set: (target, prop, value, receiver) => {
-        if (myself._props[prop] === value) {
+      set: (target, prop, value) => {
+        if (target[prop] === value) {
           return true
         }
-        const newProps = { ...myself._props }
-        newProps[prop] = value
-        checkPropTypes(myself.propTypes, newProps, 'prop', myself._componentName)
-        myself._props = newProps
-        myself._scheduleUpdate(myself, receiver)
+        target[prop] = value
+        checkPropTypes(this.propTypes, target, 'prop', this._componentName)
+        this._scheduleUpdate()
         return true
       }
     })
   }
 
-  _scheduleUpdate(myself, receiver) {
+  _scheduleUpdate() {
     if (!this._updateScheduled) {
       this._updateScheduled = true
-      console.log('update scheduled for later')
+      // console.log('update scheduled for later')
       setTimeout(() => {
-        console.log('componentDidUpdate!')
-        myself.componentDidUpdate.apply(myself, receiver)
+        // console.log('componentDidUpdate!')
+        this.componentDidUpdate.call(this, this.props)
         this._updateScheduled = false
       }, 0)
     }
   }
 
   get props() {
-    if (!this._propsProxy) {
-      this._generatePropsProxy()
-    }
     return this._propsProxy
   }
 
