@@ -1,3 +1,14 @@
+# ARCHIVED
+
+This project has been split into 2 seperate libs:
+
+- https://github.com/Zielak/cardsGame-client
+- https://github.com/Zielak/cardsGame-server
+
+I'm continuing my work over there. One major change is the use of TypeScript.
+
+---
+
 # multiplayer-game
 
 ## dev
